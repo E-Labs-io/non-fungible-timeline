@@ -1,6 +1,6 @@
 /** @format */
-import { Button } from "components/common";
-import { ConnectButton, useWeb3Provider } from "hooks/web3";
+import { Button, Modal } from "../common";
+import { ConnectButton, useWeb3Provider } from "../../hooks/web3";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import LoadingNotice from "./components/loadingNotice";
@@ -9,8 +9,9 @@ import TimelineBox from "./components/timelineBox";
 import inboundTransactionData from "../../constants/Inbound-TestData.json";
 import outboundTransactionData from "../../constants/outBound-Testdata.json";
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
-import sortUsersHistory from "helpers/data/sortUsersHistory";
+import sortUsersHistory from "../../helpers/data/sortUsersHistory";
 import SmallTimelineBox from "./components/smallTimelineBox";
+import BlockModal from "./components/BlockModal";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -41,6 +42,11 @@ const ConnectionArea = styled.div`
   padding: 5px;
 `;
 
+const BlockListColum = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 /**
  * @dev : Non-Fungible Timeline Home
  *
@@ -48,7 +54,7 @@ const ConnectionArea = styled.div`
 interface MainPageProps {}
 function MainPage({}: MainPageProps) {
   const [connected, setConnected] = useState<boolean>(false);
-  const [loadingState, setLoadingState] = useState<number>(0);
+  const [loadingState, setLoadingState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [ready, setReady] = useState<boolean>(false);
 
   const [usersAddress, setUsersAddress] = useState<string>();
@@ -58,6 +64,9 @@ function MainPage({}: MainPageProps) {
   const [sortedInHistory, setSortedInHistory] = useState<any>();
   const [rawOutHistory, setRawOutHistory] = useState<any>();
   const [sortedOutHistory, setSortedOutHistory] = useState<any>();
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedBlock, setSelectedBlock] = useState<any>();
 
   const getUsersHistory = async (
     from: string,
@@ -79,6 +88,9 @@ function MainPage({}: MainPageProps) {
     }
   });
 
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
   const searchUsersHistory = async () => {
     setLoadingState(1);
     const inBound = await getUsersHistory("in");
@@ -99,14 +111,18 @@ function MainPage({}: MainPageProps) {
         )}
         <LoadingNotice loadingState={loadingState} />
       </ConnectionArea>
-      {!!sortedInHistory && (
-        <SmallTimelineBox
-          transactionDataBase={
-            sortedInHistory.sorted[sortedInHistory.allBlocks[0][0]]
-          }
-          blockNumber={sortedInHistory.allBlocks[0]}
-        />
-      )}
+      <BlockListColum>
+        {!!sortedInHistory &&
+          sortedInHistory.allBlocks.map((item, key) => (
+            <SmallTimelineBox
+              transactionDataBase={sortedInHistory.sorted[item[0]]}
+              blockCountData={item}
+            />
+          ))}
+      </BlockListColum>
+      <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal}>
+        <BlockModal />
+      </Modal>
     </PageContainer>
   );
 }

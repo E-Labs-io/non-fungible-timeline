@@ -21,11 +21,7 @@ export type sortedDataFormat = {
     [txHash: string]: { [contractAddress: string]: sortedHistoryData };
   };
 };
-export type BlockCounter = {
-  blockNumber: string 
-  hash: string[];
-  contracts: string[];
-};
+export type BlockCounter = [string, { hash: string[]; contracts: string[] }];
 type blockCount = BlockCounter[];
 
 const sortUsersHistory = (
@@ -39,25 +35,30 @@ const sortUsersHistory = (
 
   history.forEach((item) => {
     //  Get block number as string
-    const blkNum = item.blockNum;
+    //  Get the hash
+    //  Get the contract address
+    const blkNum: string = item.blockNum;
+    const contAddr: string = item.rawContract.address
+      ? item.rawContract.address
+      : "";
+    const hash: string = item.hash;
+    const tId: string = item.tokenId ? parseInt(item.tokenId).toString() : "0";
     //  See if block number has had txHash assigned to it
     if (!!sorted[blkNum]) {
       //  See if the TX hash as been assigned
-      if (!!sorted[blkNum][item.hash]) {
+      if (!!sorted[blkNum][hash]) {
         //  See if there is data attached to that contract address
-        if (!!sorted[blkNum][item.hash][item.rawContract.address]) {
+        if (!!sorted[blkNum][hash][contAddr]) {
           //  In here if the block number and TX hash and address have already been assigned
           //  Add the token Ids to the array
           //  Add the count to the array
-          sorted[blkNum][item.hash][
-            item.rawContract.address
-          ].groupedTokenIds.push(parseInt(item.tokenId).toString());
-          sorted[blkNum][item.hash][item.rawContract.address].tokenCount++;
+          sorted[blkNum][hash][contAddr].groupedTokenIds.push(tId);
+          sorted[blkNum][hash][contAddr].tokenCount++;
         } else {
           //  In here if the block number & hash are in use but not the contract address
           const arg = {
             ...sorted[blkNum][item.hash],
-            [item.rawContract.address]: {
+            [contAddr]: {
               hash: item.hash,
               blockNum: blkNum,
               from: item.from,
@@ -65,47 +66,47 @@ const sortUsersHistory = (
               category: item.category,
               timestamp: item.metadata.blockTimestamp,
               contractAddress: item.rawContract.address,
-              tokenId: parseInt(item.tokenId).toString(),
+              tokenId: tId,
               ticker: item.asset,
               tokenCount: 1,
-              groupedTokenIds: [parseInt(item.tokenId).toString()],
+              groupedTokenIds: [tId],
             },
           };
-          sorted[blkNum][item.hash] = arg;
+          sorted[blkNum][hash] = arg;
         }
       } else {
         //  In here if block number exists but hash doesn't
         let arg = {
           ...sorted[blkNum],
           [item.hash]: {
-            [item.rawContract.address]: {
-              hash: item.hash,
+            [contAddr]: {
+              hash: hash,
               blockNum: blkNum,
               from: item.from,
               to: item.to,
               category: item.category,
               timestamp: item.metadata.blockTimestamp,
               contractAddress: item.rawContract.address,
-              tokenId: parseInt(item.tokenId).toString(),
+              tokenId: tId,
               ticker: item.asset,
               tokenCount: 1,
-              groupedTokenIds: [parseInt(item.tokenId).toString()],
+              groupedTokenIds: [tId],
             },
           },
         };
 
         sorted[blkNum] = arg;
         allBlocks.forEach((blk: any, index: number) => {
-          console.log(blk);
           if (blk[0] === blkNum) {
-            allBlocks[index][1].hash.push(item.rawContract.address);
+            allBlocks[index][1].hash.push(hash);
+            allBlocks[index][1].contracts.push(contAddr);
           }
         });
       }
     } else {
       let args = {
-        [item.hash]: {
-          [item.rawContract.address]: {
+        [hash]: {
+          [contAddr]: {
             hash: item.hash,
             blockNum: blkNum,
             from: item.from,
@@ -113,18 +114,16 @@ const sortUsersHistory = (
             category: item.category,
             timestamp: item.metadata.blockTimestamp,
             contractAddress: item.rawContract.address,
-            tokenId: parseInt(item.tokenId).toString(),
+            tokenId: tId,
             ticker: item.asset,
             tokenCount: 1,
-            groupedTokenIds: [parseInt(item.tokenId).toString()],
+            groupedTokenIds: [tId],
           },
         },
       };
       sorted[blkNum] = args;
-      allBlocks.push([
-        blkNum,
-        { hash: [item.hash], contracts: [item.rawContract.address] },
-      ]);
+      let count = [blkNum, { hash: [hash], contracts: [contAddr] }];
+      allBlocks.push(count);
     }
   });
 

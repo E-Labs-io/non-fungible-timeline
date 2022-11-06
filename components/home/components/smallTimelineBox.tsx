@@ -1,13 +1,12 @@
 /** @format */
-import { Button } from "components/common";
-import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
-import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";
+import { Button } from "../../common";
+import { buildNetworkScanLink } from "../../../hooks/web3/helpers/etherscanLink";
+import handleClickOpenURLInNewTab from "../../../hooks/window/openLinkInNewTab";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import testImage from "public/images/neil-thakaria-profile.png";
 import Image from "next/image";
-import { BlockCounter } from "helpers/data/sortUsersHistory";
+import { BlockCounter } from "../../../helpers/data/sortUsersHistory";
 
 const Wrapper = styled.div`
   min-width: 30vw;
@@ -79,20 +78,24 @@ const ImageBox = styled(Image)`
 
 interface SmallTimelineBoxBoxProps {
   transactionDataBase: any;
-  blockNumber: string;
+  blockCountData: BlockCounter;
 }
 const SmallTimelineBox = ({
   transactionDataBase,
-  blockNumber,
+  blockCountData,
 }: SmallTimelineBoxBoxProps) => {
-  console.log(transactionDataBase);
-  console.log(blockNumber);
+  console.log("in Comp Data: ", transactionDataBase);
+  console.log("in comp blockData: ", blockCountData);
   const [ready, setReady] = useState<boolean>(false);
-  const [blockNumbers, setBlockNumbers] = useState<any>();
+  const [blkNumberFormats, setBlkNumberFormats] = useState<any>();
 
   useEffect(() => {
-    if (!blockNumbers && blockNumber && !ready) setBlockNumbers({ hex: blockNumber, number: parseInt(blockNumber) });
-    if(!!blockNumbers && !ready) setReady(true);
+    if (!blkNumberFormats && blockCountData && !ready)
+      setBlkNumberFormats({
+        hex: blockCountData[0],
+        number: parseInt(blockCountData[0]),
+      });
+    if (!!blkNumberFormats && !ready) setReady(true);
   });
 
   return ready ? (
@@ -103,28 +106,29 @@ const SmallTimelineBox = ({
         <BoldText>
           <Link
             href={buildNetworkScanLink({
-              block: blockNumbers.number,
+              block: blkNumberFormats.number,
               network: "eth",
             })}
             target={"blank"}
           >
-            {blockNumbers.number}{" "}
+            {blkNumberFormats.number}{" "}
           </Link>
         </BoldText>
       </BlockData>
       <TransactionDataArea>
         <SingleTransactionItem>
           <BoldText>Transaction: </BoldText>
-          {blockNumber[1].hash.length}
+          {blockCountData[1].hash.length}
         </SingleTransactionItem>
         <SingleTransactionItem>
-          <BoldText>Contracts: </BoldText> {blockNumber[1].contracts.length}
+          <BoldText>Contracts: </BoldText> {blockCountData[1].contracts.length}
         </SingleTransactionItem>
         <SingleTransactionItem>
           <BoldText>Tokens In: </BoldText>{" "}
           {
-            transactionDataBase[blockNumbers.hex][blockNumber[1].contracts[0]]
-              .tokenCount
+            transactionDataBase[blockCountData[1].hash[0]][
+              blockCountData[1].contracts[0]
+            ].tokenCount
           }
         </SingleTransactionItem>
       </TransactionDataArea>

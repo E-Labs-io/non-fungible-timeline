@@ -4,7 +4,7 @@ import React, { ReactElement } from "react";
 import styled, { useTheme } from "styled-components";
 import ReactModal from "react-modal";
 import Confetti from "react-confetti";
-import { Button } from "components/common";
+import { Button } from "./index";
 
 const TitleContainer = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ interface ModalProps {
   customConfetti?: any;
 }
 import { theme } from "../../styles/theme";
-import useWindowSize from "hooks/window/useWindowSize";
+import useWindowSize from "../../hooks/window/useWindowSize";
 function Modal({
   isOpen,
   onRequestClose,
