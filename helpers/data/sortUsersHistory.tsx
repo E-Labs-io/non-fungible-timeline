@@ -14,6 +14,7 @@ export type sortedHistoryData = {
   ticker: string;
   tokenCount?: number;
   groupedTokenIds?: string[];
+  value;
 };
 
 export type sortedDataFormat = {
@@ -22,7 +23,7 @@ export type sortedDataFormat = {
   };
 };
 export type BlockCounter = [string, { hash: string[]; contracts: string[] }];
-type blockCount = BlockCounter[];
+export type blockCount = BlockCounter[];
 
 const sortUsersHistory = (
   history: AssetTransfersWithMetadataResult[]
@@ -52,8 +53,11 @@ const sortUsersHistory = (
           //  In here if the block number and TX hash and address have already been assigned
           //  Add the token Ids to the array
           //  Add the count to the array
+          let value = sorted[blkNum][hash][contAddr].value;
           sorted[blkNum][hash][contAddr].groupedTokenIds.push(tId);
           sorted[blkNum][hash][contAddr].tokenCount++;
+          sorted[blkNum][hash][contAddr].value =
+            sorted[blkNum][hash][contAddr].value + value;
         } else {
           //  In here if the block number & hash are in use but not the contract address
           const arg = {
@@ -70,6 +74,7 @@ const sortUsersHistory = (
               ticker: item.asset,
               tokenCount: 1,
               groupedTokenIds: [tId],
+              vaule: item.value,
             },
           };
           sorted[blkNum][hash] = arg;
@@ -91,6 +96,7 @@ const sortUsersHistory = (
               ticker: item.asset,
               tokenCount: 1,
               groupedTokenIds: [tId],
+              value: item.value,
             },
           },
         };

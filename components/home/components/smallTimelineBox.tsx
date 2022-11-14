@@ -7,6 +7,8 @@ import styled from "styled-components";
 
 import Image from "next/image";
 import { BlockCounter } from "../../../helpers/data/sortUsersHistory";
+import TransactionBox from "./TransactionBox";
+import { ethers } from "ethers";
 
 const Wrapper = styled.div`
   min-width: 30vw;
@@ -20,7 +22,7 @@ const Wrapper = styled.div`
   box-shadow: 17px 33px 53px 4px rgba(0, 0, 0, 0.27);
 `;
 
-const TwoSections = styled.div`
+const TwoColums = styled.div`
   grid-template-columns: 5fr 2fr;
   columns: 2;
   display: grid;
@@ -61,7 +63,9 @@ const TransactionDataArea = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const SingleTransactionItem = styled.span``;
+const SingleTransactionItem = styled.span`
+  width: 45vw;
+`;
 
 const ImageContainer = styled.div`
   display: flex;
@@ -76,18 +80,27 @@ const ImageBox = styled(Image)`
   justify-content: center;
 `;
 
+const SmallButton = styled.button`
+  border-radius: 30px;
+`;
+
 interface SmallTimelineBoxBoxProps {
   transactionDataBase: any;
   blockCountData: BlockCounter;
+  handleOpenModal: Function;
+  contractInstances: {
+    [contractAddress: string]: { instance: ethers.Contract; name: string };
+  };
 }
 const SmallTimelineBox = ({
   transactionDataBase,
   blockCountData,
+  handleOpenModal,
+  contractInstances,
 }: SmallTimelineBoxBoxProps) => {
-  console.log("in Comp Data: ", transactionDataBase);
-  console.log("in comp blockData: ", blockCountData);
   const [ready, setReady] = useState<boolean>(false);
   const [blkNumberFormats, setBlkNumberFormats] = useState<any>();
+  const [value, setValue] = useState<string>();
 
   useEffect(() => {
     if (!blkNumberFormats && blockCountData && !ready)
@@ -95,44 +108,52 @@ const SmallTimelineBox = ({
         hex: blockCountData[0],
         number: parseInt(blockCountData[0]),
       });
+
+    if (!!transactionDataBase && !ready) {
+    }
     if (!!blkNumberFormats && !ready) setReady(true);
   });
 
+  const Block = () => (
+    <BlockData>
+      {" "}
+      Block:
+      <BoldText>
+        <Link
+          href={buildNetworkScanLink({
+            block: blkNumberFormats.number,
+            network: "eth",
+          })}
+          target={"blank"}
+        >
+          {blkNumberFormats.number}{" "}
+        </Link>
+      </BoldText>
+    </BlockData>
+  );
+
   return ready ? (
     <Wrapper>
-      <BlockData>
-        {" "}
-        Block:
-        <BoldText>
-          <Link
-            href={buildNetworkScanLink({
-              block: blkNumberFormats.number,
-              network: "eth",
-            })}
-            target={"blank"}
-          >
-            {blkNumberFormats.number}{" "}
-          </Link>
-        </BoldText>
-      </BlockData>
+      <Block />
       <TransactionDataArea>
+        <br />
         <SingleTransactionItem>
-          <BoldText>Transaction: </BoldText>
-          {blockCountData[1].hash.length}
+          {blockCountData[1].contracts.length > 0 &&
+            blockCountData[1].contracts.map((address) => {
+              return (
+                <TransactionBox
+                  transactionData={
+                    transactionDataBase[blockCountData[1].hash[0]][address]
+                  }
+                  contractConnection={contractInstances[address]?.instance}
+                  contractName={contractInstances[address]?.name}
+                  handleOpenModal={handleOpenModal}
+                />
+              );
+            })}
         </SingleTransactionItem>
-        <SingleTransactionItem>
-          <BoldText>Contracts: </BoldText> {blockCountData[1].contracts.length}
-        </SingleTransactionItem>
-        <SingleTransactionItem>
-          <BoldText>Tokens In: </BoldText>{" "}
-          {
-            transactionDataBase[blockCountData[1].hash[0]][
-              blockCountData[1].contracts[0]
-            ].tokenCount
-          }
-        </SingleTransactionItem>
+        <br />
       </TransactionDataArea>
-      <TwoSections></TwoSections>
     </Wrapper>
   ) : null;
 };

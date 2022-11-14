@@ -9,22 +9,55 @@ import TimelineBox from "./components/timelineBox";
 import inboundTransactionData from "../../constants/Inbound-TestData.json";
 import outboundTransactionData from "../../constants/outBound-Testdata.json";
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
-import sortUsersHistory from "../../helpers/data/sortUsersHistory";
+import sortUsersHistory, {
+  blockCount,
+  BlockCounter,
+} from "../../helpers/data/sortUsersHistory";
 import SmallTimelineBox from "./components/smallTimelineBox";
 import BlockModal from "./components/BlockModal";
+import { ethers } from "ethers";
+import { connectToERC721Contract } from "hooks/web3/utils/interfaces/ERC721Interface";
+import alchemyGetAssetTransfers from "hooks/web3/api/alchemyGetAssetTransfers";
+import zeroAddress from "hooks/web3/data/zeroAddress";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
     theme ? theme.coloredTheme.background : "white"};
   width: 100vw;
   height: 100vh;
+
   align-items: center;
   justify-content: center;
   position: absolute;
   left: 0;
   top: 0;
-  display: flex;
+
   justify-content: center;
+`;
+const HeadArea = styled.div`
+  width: 100%;
+  height: 20%;
+  border-bottom: 2px solid white;
+  box-shadow: 17px 33px 53px 4px rgba(0, 0, 0, 0.094);
+`;
+
+const BodyArea = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+
+  display: flex;
+`;
+
+const PreLoadLayout = styled.div`
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
 `;
 
 const ConnectionArea = styled.div`
@@ -44,7 +77,11 @@ const ConnectionArea = styled.div`
 
 const BlockListColum = styled.div`
   display: flex;
+  direction: flex;
   flex-direction: column;
+  columns: 2;
+  padding: 10px;
+  margin: auto;
 `;
 
 /**
@@ -65,19 +102,34 @@ function MainPage({}: MainPageProps) {
   const [rawOutHistory, setRawOutHistory] = useState<any>();
   const [sortedOutHistory, setSortedOutHistory] = useState<any>();
 
+  const [contractInstances, setContractInstances] = useState<{
+    [contractAddress: string]: { instance: ethers.Contract; name: string };
+  }>();
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedBlock, setSelectedBlock] = useState<any>();
+  const [selectedBlockData, setSelectedBlockData] = useState<any>();
 
-  const getUsersHistory = async (
-    from: string,
-    to?: string
-  ): Promise<AssetTransfersWithMetadataResult[]> => {
+  interface GetUSersHistoryProps {
+    from?: string;
+    to?: string;
+  }
+
+  const getUsersHistory = async ({
+    from,
+    to,
+  }: GetUSersHistoryProps): Promise<AssetTransfersWithMetadataResult[]> => {
     if (from === "in") {
-      setRawInHistory(inboundTransactionData);
-      return inboundTransactionData;
+      //  Inbound
+      const inBound = await alchemyGetAssetTransfers(from, to);
+      setRawInHistory(inBound.result.transfers);
+      console.log("InBounde: ", inBound.result.transfers);
+      return inBound.result.transfers;
     } else {
-      setRawOutHistory(outboundTransactionData);
-      return outboundTransactionData;
+      // Out bounce
+      const outBound = await alchemyGetAssetTransfers(from);
+      setRawOutHistory(outBound.result.transfers);
+      return outBound.result.transfers;
     }
   };
 
@@ -88,40 +140,114 @@ function MainPage({}: MainPageProps) {
     }
   });
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = (transactionData, contractConnection) => {
+    setSelectedBlockData(transactionData);
+    setSelectedBlock(contractConnection);
+    setIsModalOpen(true);
+  };
   const handleCloseModal = () => setIsModalOpen(false);
 
   const searchUsersHistory = async () => {
     setLoadingState(1);
-    const inBound = await getUsersHistory("in");
+    const inBound = await getUsersHistory({
+      from: zeroAddress(),
+      to: usersAddress,
+    });
     setLoadingState(2);
-    const outBound = await getUsersHistory("out");
+    const outBound = await getUsersHistory({ from: usersAddress });
     setLoadingState(3);
-    const sortedData = sortUsersHistory(inboundTransactionData);
-    setSortedInHistory(sortedData);
+    const sortedDataIn = sortUsersHistory(inBound);
+    setSortedInHistory(sortedDataIn);
+    setLoadingState(4);
+    const sortedDataOut = sortUsersHistory(outBound);
+    setSortedOutHistory(sortedDataOut);
     setLoadingState(5);
+    const contracts = await connectToContracts(
+      sortedDataIn.allBlocks,
+      sortedDataOut.allBlocks
+    );
+    setContractInstances(contracts);
+    setReady(true);
+  };
+
+  const connectToContracts = async (
+    blockData1: blockCount[],
+    blockData2: blockCount[]
+  ) => {
+    const instances: {
+      [contractAddress: string]: { instance: ethers.Contract; name: string };
+    } = {};
+
+    let blockData = [];
+    blockData1.forEach((item) => blockData.push(item));
+    blockData2.forEach((item) => blockData.push(item));
+
+    for (let i = 0; i < blockData.length; i++) {
+      const segment = blockData[i];
+      for (let x = 0; x < segment[1].contracts.length; x++) {
+        let address = segment[1].contracts[x];
+        if (!!!instances[address]) {
+          const instance = await connectToERC721Contract({
+            ContractAddress: address,
+            providerOrSigner: userProvider,
+          });
+          const name = await instance.name().catch((error) => {
+            console.log("Error getting name: ", error);
+            return "unknown";
+          });
+
+          instances[address] = { instance, name };
+        }
+      }
+    }
+    return instances;
   };
 
   return (
     <PageContainer>
-      <ConnectionArea>
-        <ConnectButton backgroundColor="#d5d1d16cf" />
-        {connected && !ready && loadingState === 0 && (
-          <Button onClick={searchUsersHistory}>Search</Button>
-        )}
-        <LoadingNotice loadingState={loadingState} />
-      </ConnectionArea>
-      <BlockListColum>
-        {!!sortedInHistory &&
-          sortedInHistory.allBlocks.map((item, key) => (
-            <SmallTimelineBox
-              transactionDataBase={sortedInHistory.sorted[item[0]]}
-              blockCountData={item}
-            />
-          ))}
-      </BlockListColum>
+      {ready && <HeadArea>Header here</HeadArea>}
+      {!ready && (
+        <PreLoadLayout>
+          <ConnectionArea>
+            <ConnectButton />
+            {connected && !ready && loadingState === 0 && (
+              <Button onClick={searchUsersHistory}>Search</Button>
+            )}
+            <LoadingNotice loadingState={loadingState} />
+          </ConnectionArea>
+        </PreLoadLayout>
+      )}
+      <BodyArea>
+        <BlockListColum>
+          {!!sortedInHistory &&
+            ready &&
+            sortedInHistory.allBlocks.map((item, key) => (
+              <SmallTimelineBox
+                transactionDataBase={sortedInHistory.sorted[item[0]]}
+                contractInstances={contractInstances}
+                blockCountData={item}
+                handleOpenModal={handleOpenModal}
+              />
+            ))}
+        </BlockListColum>
+        <BlockListColum>
+          {!!sortedOutHistory &&
+            ready &&
+            sortedOutHistory.allBlocks.map((item, key) => (
+              <SmallTimelineBox
+                transactionDataBase={sortedOutHistory.sorted[item[0]]}
+                contractInstances={sortedOutHistory}
+                blockCountData={item}
+                handleOpenModal={handleOpenModal}
+              />
+            ))}
+        </BlockListColum>
+      </BodyArea>
       <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal}>
-        <BlockModal />
+        <BlockModal
+          selectedData={selectedBlockData}
+          blockCount={selectedBlock}
+        />
       </Modal>
     </PageContainer>
   );

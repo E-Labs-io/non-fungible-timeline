@@ -3,6 +3,20 @@
 const IERC721 = [
   {
     anonymous: false,
+    inputs: [],
+    name: "name",
+    type: "function",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    anonymous: false,
     inputs: [
       {
         indexed: true,

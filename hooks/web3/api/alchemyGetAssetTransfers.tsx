@@ -1,6 +1,5 @@
 /** @format */
 
-
 const alchemyGetAssetTransfers = async (
   from: string,
   to?: string,
@@ -12,13 +11,13 @@ const alchemyGetAssetTransfers = async (
         fromBlock: startingBlock ? startingBlock : "0x0",
         fromAddress: from,
         toAddress: to,
-        category: ["erc721", "internal", "external", "erc1155"],
+        category: ["erc721", "erc1155"],
         withMetadata: true,
       }
     : {
         fromBlock: startingBlock ? startingBlock : "0x0",
         fromAddress: from,
-        category: ["erc721", "internal", "external", "erc1155"],
+        category: ["erc721", "erc1155"],
         withMetadata: true,
       };
 
