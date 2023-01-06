@@ -84,7 +84,6 @@ function TransactionBox({
   const [data, setData] = useState<sortedHistoryData>({
     contractAddress: "....",
     groupedTokenIds: ["..., ..., ...,"],
-    instance: null,
   });
   const [contractInstance, setContractInstance] = useState<ethers.Contract>();
   const [projectDetails, setProjectDetails] = useState({

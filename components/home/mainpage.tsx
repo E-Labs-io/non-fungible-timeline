@@ -48,7 +48,7 @@ const BodyArea = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-
+  padding: 2px;
   display: flex;
 `;
 
