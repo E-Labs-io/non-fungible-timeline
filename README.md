@@ -1,1 +1,1 @@
-# non-fungible-timeline
+# Non-Fungible Timeline (NFTimeline)
