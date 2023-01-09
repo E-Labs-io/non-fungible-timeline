@@ -5,7 +5,6 @@ const alchemyGetAssetTransfers = async (
   to?: string,
   startingBlock?: string
 ) => {
-  console.log("get asst transfers inputs: ", from, to);
   const options = to
     ? {
         fromBlock: startingBlock ? startingBlock : "0x0",
@@ -34,7 +33,6 @@ const alchemyGetAssetTransfers = async (
     body: data,
   };
   const baseURL = `https://eth-mainnet.alchemyapi.io/v2/qrcPcRle3fW-m9Kq27bW7haAq5LaLIqk`;
-  console.log(baseURL);
 
   const returnedData = await fetch(baseURL, requestOptions)
     .then((result) => result.json())

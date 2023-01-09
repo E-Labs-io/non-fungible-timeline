@@ -140,8 +140,6 @@ const sortUsersHistory = (
     }
   });
 
-  console.log("sorted: ", sorted);
-  console.log("count: ", allBlocks);
   return { sorted, allBlocks };
 };
 

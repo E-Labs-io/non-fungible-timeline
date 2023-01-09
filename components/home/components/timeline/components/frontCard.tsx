@@ -6,7 +6,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Image from "next/image";
-import { BlockCounter } from "../../../../../helpers/data/sortUsersHistory";
+import {
+  BlockCounter,
+  sortedHistoryData,
+} from "../../../../../helpers/data/sortUsersHistory";
 import TransactionBox from "../../TransactionBox";
 import { BigNumber, ethers } from "ethers";
 import useWindowSize from "hooks/window/useWindowSize";
@@ -15,6 +18,8 @@ import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import { APIKeys, web3API } from "hooks/web3/userWeb3Provider";
 import { fromBigNumber } from "hooks/web3/utils/ethersUtilities";
 import zeroAddress from "hooks/web3/data/zeroAddress";
+import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
+import { sortedHashData } from "helpers/data/compileHistoryIntoDays";
 
 const Wrapper = styled.div`
   width: 210px;
@@ -59,20 +64,22 @@ const SingleCard = styled.div`
 
   border-radius: 20px;
   border-color: black;
-  border-style: solid;
+  border-style: nonbe;
   border-width: 1px;
 `;
 
 const InfoBox = styled.div`
-  border-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   background-color: #f5f10946;
   border-width: 1px;
   border-style: solid;
+  border-bottom: none;
 
   background-color: #dcd7d795;
   padding: 5px;
 
-  width: 190px;
+  width: 191px;
   height: 50px;
 
   display: flex;
@@ -99,7 +106,8 @@ const MoreText = styled.a`
 `;
 
 const TopImageContainer = styled.div`
-  border-radius: 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   background-color: #f5f10946;
   border-width: 1px;
   border-style: solid;
@@ -111,9 +119,10 @@ const TopImageContainer = styled.div`
 `;
 
 const NFTImage = styled.img`
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   width: 190px;
-  height: 190px;
+  height: 189px;
   overflow: hidden;
   cursor: ${({ cursor }) => cursor || "default"};
   align-items: center;
@@ -121,23 +130,20 @@ const NFTImage = styled.img`
 `;
 
 interface FrontCardProps {
-  transactionDataBase: any;
-  blockCountData: BlockCounter;
+  transactionDataBase: sortedHashData;
+  date: string;
   handleOpenModal: Function;
-  contractInstances: {
-    [contractAddress: string]: { instance: ethers.Contract; name: string };
-  };
+  txHashes: string[];
 }
 const FrontCard = ({
   transactionDataBase,
-  blockCountData,
+  date,
+  txHashes,
   handleOpenModal,
-  contractInstances,
 }: FrontCardProps) => {
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [blkNumberFormats, setBlkNumberFormats] = useState<any>();
   const [txData, settxData] = useState<any>();
 
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
@@ -156,25 +162,21 @@ const FrontCard = ({
     if (!ready && !loading) {
       if (!!transactionDataBase) {
         setLoading(true);
-        const firstKey = Object.keys(transactionDataBase)[0];
-        const firstTX = Object.keys(transactionDataBase[firstKey])[0];
-        const toShow = transactionDataBase[firstKey][firstTX];
+
+        const toShow: sortedHistoryData = transactionDataBase[txHashes[0]][0];
         settxData(toShow);
-        console.log("FRONT CARD CHECK: ", toShow);
         setShowContract(toShow.contractAddress);
         setShowToken(toShow.groupedTokenIds[0]);
         AlchemyGetSingleNFT(
           toShow.contractAddress,
           toShow.groupedTokenIds[0].toString()
         ).then((nft) => {
-          console.log("Returned NFT Data: ", nft);
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
             console.log("Got metadata: ", nft.metadata);
             setImageUrl(nft.metadata.image);
           }
-          setBlkNumberFormats({ number: parseInt(blockCountData[0]) });
           setReady(true);
           setLoading(false);
         });
@@ -200,39 +202,21 @@ const FrontCard = ({
       ? `${tokenId.slice(0, 3)}..${tokenId.slice(-2)}`
       : tokenId;
 
-  const Block = () => (
-    <BlockData>
-      {" "}
-      Block:
-      <BoldText>
-        <Link
-          href={buildNetworkScanLink({
-            block: blkNumberFormats.number,
-            network: "eth",
-          })}
-          target={"blank"}
-        >
-          {blkNumberFormats.number}{" "}
-        </Link>
-      </BoldText>
-    </BlockData>
-  );
-
   return ready ? (
     <Wrapper>
       <SingleCard>
-        <TopImageContainer
-          onClick={() => handleOpenModal(txData, contractInstances)}
-        >
-          <NFTImage alt="An NFT" src={imageUrl}></NFTImage>
+        <TopImageContainer onClick={() => handleOpenModal(txData)}>
+          <NFTImage alt="An NFT" src={checkIfIPFSUrl(imageUrl)}></NFTImage>
         </TopImageContainer>
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>
           <TXData>
             {txData && getTXType(txData)} #{shortenTokenId(showToken)}{" "}
             <MoreText>
-              +{txData && txData.groupedTokenIds.length} Other
-            </MoreText>{" "}
+              {txData &&
+                txData.groupedTokenIds.length > 1 &&
+                `+${txData.groupedTokenIds.length - 1} others`}
+            </MoreText>
           </TXData>
         </InfoBox>
       </SingleCard>
@@ -241,27 +225,3 @@ const FrontCard = ({
 };
 
 export default FrontCard;
-
-/**
- *  
- * 
- *   <br />
-        <SingleTransactionItem>
-          {blockCountData[1].contracts.length > 0 &&
-            blockCountData[1].contracts.map((address) => {
-              return (
-                <TransactionBox
-                  transactionData={
-                    transactionDataBase[blockCountData[1].hash[0]][address]
-                  }
-                  contractConnection={contractInstances[address]?.instance}
-                  contractName={contractInstances[address]?.name}
-                  handleOpenModal={handleOpenModal}
-                />
-              );
-            })}
-        </SingleTransactionItem>
-        <br />
- * 
- * 
- */

@@ -6,8 +6,6 @@ import styled from "styled-components";
 import LoadingNotice from "./components/loadingNotice";
 import TimelineBox from "./components/timelineBox";
 
-import inboundTransactionData from "../../constants/Inbound-TestData.json";
-import outboundTransactionData from "../../constants/outBound-Testdata.json";
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
 import sortUsersHistory, {
   blockCount,
@@ -20,6 +18,9 @@ import { connectToERC721Contract } from "hooks/web3/utils/interfaces/ERC721Inter
 import alchemyGetAssetTransfers from "hooks/web3/api/alchemyGetAssetTransfers";
 import zeroAddress from "hooks/web3/data/zeroAddress";
 import TimeLine from "./components/timeline/TimeLine";
+import compileHistoryIntoDays, {
+  compileHistoryIntoDaysReturn,
+} from "helpers/data/compileHistoryIntoDays";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -98,7 +99,8 @@ function MainPage({}: MainPageProps) {
   const { walletAddress, userProvider } = useWeb3Provider();
 
   const [rawInHistory, setRawInHistory] = useState<any>();
-  const [sortedInHistory, setSortedInHistory] = useState<any>();
+  const [sortedInHistory, setSortedInHistory] =
+    useState<compileHistoryIntoDaysReturn>();
   const [rawOutHistory, setRawOutHistory] = useState<any>();
   const [sortedOutHistory, setSortedOutHistory] = useState<any>();
 
@@ -119,11 +121,10 @@ function MainPage({}: MainPageProps) {
     from,
     to,
   }: GetUSersHistoryProps): Promise<AssetTransfersWithMetadataResult[]> => {
-    if (from === "in") {
+    if (to) {
       //  Inbound
       const inBound = await alchemyGetAssetTransfers(from, to);
       setRawInHistory(inBound.result.transfers);
-      console.log("InBounde: ", inBound.result.transfers);
       return inBound.result.transfers;
     } else {
       // Out bounce
@@ -136,7 +137,11 @@ function MainPage({}: MainPageProps) {
   useEffect(() => {
     if (!connected && userProvider) {
       setConnected(true);
-      setUsersAddress(walletAddress);
+      setUsersAddress("0x4ce0F96C459Df322dF68f393569549d5a54a1929");
+    }
+    if (usersAddress !== walletAddress) {
+      //setReady(false);
+      //setLoadingState(0);
     }
   });
 
@@ -157,16 +162,19 @@ function MainPage({}: MainPageProps) {
     const outBound = await getUsersHistory({ from: usersAddress });
     setLoadingState(3);
     const sortedDataIn = sortUsersHistory(inBound);
-    setSortedInHistory(sortedDataIn);
+    const inByDate = compileHistoryIntoDays(sortedDataIn);
+    setSortedInHistory(inByDate);
     setLoadingState(4);
     const sortedDataOut = sortUsersHistory(outBound);
-    setSortedOutHistory(sortedDataOut);
+    const outByDate = compileHistoryIntoDays(sortedDataOut);
+    setSortedOutHistory(outByDate);
     setLoadingState(5);
-    const contracts = await connectToContracts(
+    /*   const contracts = await connectToContracts(
       sortedDataIn.allBlocks,
       sortedDataOut.allBlocks
-    );
+    ); 
     setContractInstances(contracts);
+    */
     setReady(true);
   };
 
@@ -216,20 +224,20 @@ function MainPage({}: MainPageProps) {
           </ConnectionArea>
         </PreLoadLayout>
       )}
-      <BodyArea>
-        <HeadArea>Header here</HeadArea>
-        <TimeLine
-          sortedInHistory={sortedInHistory}
-          ready={ready}
-          handleOpenModal={handleOpenModal}
-          contractInstances={contractInstances}
-        />
-      </BodyArea>
+      {ready && (
+        <BodyArea>
+          <HeadArea>Header here</HeadArea>
+          <TimeLine
+            sortedInHistory={sortedInHistory}
+            sortedOutHistory={sortedOutHistory}
+            ready={ready}
+            handleOpenModal={handleOpenModal}
+            contractInstances={contractInstances}
+          />
+        </BodyArea>
+      )}
       <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal}>
-        <BlockModal
-          selectedData={selectedBlockData}
-          blockCount={selectedBlock}
-        />
+        <></>
       </Modal>
     </PageContainer>
   );
