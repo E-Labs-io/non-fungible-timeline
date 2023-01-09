@@ -9,9 +9,9 @@ import { useWeb3Provider } from "hooks/web3";
 import { Layout } from "components/common";
 
 const HomeContainer = styled.div`
-  position: relative;
+  position: absolute;
   width: 100vw;
-  height: calc(100vh - 52px);
+  height: 100vh;
 `;
 
 const Home = () => {

@@ -19,23 +19,24 @@ import { ethers } from "ethers";
 import { connectToERC721Contract } from "hooks/web3/utils/interfaces/ERC721Interface";
 import alchemyGetAssetTransfers from "hooks/web3/api/alchemyGetAssetTransfers";
 import zeroAddress from "hooks/web3/data/zeroAddress";
-import TimeLine from "./components/timeline/TimeLine";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
     theme ? theme.coloredTheme.background : "white"};
   width: 100vw;
-  height: 100%;
+  height: 100vh;
 
   align-items: center;
   justify-content: center;
   position: absolute;
   left: 0;
   top: 0;
+
+  justify-content: center;
 `;
 const HeadArea = styled.div`
   width: 100%;
-  height: 150px;
+  height: 20%;
   border-bottom: 2px solid white;
   box-shadow: 17px 33px 53px 4px rgba(0, 0, 0, 0.094);
 `;
@@ -43,13 +44,12 @@ const HeadArea = styled.div`
 const BodyArea = styled.div`
   width: 100%;
   height: 100%;
-
+  overflow: auto;
   align-items: center;
   justify-content: center;
   position: absolute;
-  padding: 5px;
+  padding: 2px;
   display: flex;
-  flex-direction: column;
 `;
 
 const PreLoadLayout = styled.div`
@@ -205,6 +205,7 @@ function MainPage({}: MainPageProps) {
 
   return (
     <PageContainer>
+      {ready && <HeadArea>Header here</HeadArea>}
       {!ready && (
         <PreLoadLayout>
           <ConnectionArea>
@@ -217,13 +218,30 @@ function MainPage({}: MainPageProps) {
         </PreLoadLayout>
       )}
       <BodyArea>
-        <HeadArea>Header here</HeadArea>
-        <TimeLine
-          sortedInHistory={sortedInHistory}
-          ready={ready}
-          handleOpenModal={handleOpenModal}
-          contractInstances={contractInstances}
-        />
+        <BlockListColum>
+          {!!sortedInHistory &&
+            ready &&
+            sortedInHistory.allBlocks.map((item, key) => (
+              <SmallTimelineBox
+                transactionDataBase={sortedInHistory.sorted[item[0]]}
+                contractInstances={contractInstances}
+                blockCountData={item}
+                handleOpenModal={handleOpenModal}
+              />
+            ))}
+        </BlockListColum>
+        <BlockListColum>
+          {!!sortedOutHistory &&
+            ready &&
+            sortedOutHistory.allBlocks.map((item, key) => (
+              <SmallTimelineBox
+                transactionDataBase={sortedOutHistory.sorted[item[0]]}
+                contractInstances={sortedOutHistory}
+                blockCountData={item}
+                handleOpenModal={handleOpenModal}
+              />
+            ))}
+        </BlockListColum>
       </BodyArea>
       <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal}>
         <BlockModal

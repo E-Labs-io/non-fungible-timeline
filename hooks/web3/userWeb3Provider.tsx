@@ -39,7 +39,9 @@ export const UserWeb3Context = createContext({
 
 export const APIKeys = {
   alchemy: {
-    apiKey: process.env.ALCHEMY_KEY,
+
+    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+
     network: Network.ETH_MAINNET,
     maxRetries: 10,
   },

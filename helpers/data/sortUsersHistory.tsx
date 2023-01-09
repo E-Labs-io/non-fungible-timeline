@@ -25,9 +25,16 @@ export type sortedDataFormat = {
 export type BlockCounter = [string, { hash: string[]; contracts: string[] }];
 export type blockCount = BlockCounter[];
 
+
+export type sortUsersHistoryReturn = {
+  sorted: sortedDataFormat;
+  allBlocks: blockCount[];
+};
+
 const sortUsersHistory = (
   history: AssetTransfersWithMetadataResult[]
-): { sorted: sortedDataFormat; allBlocks: blockCount[] } => {
+): sortUsersHistoryReturn => {
+
   //  Counts block numbers & tx Hash within
 
   const allBlocks: blockCount[] = [];
