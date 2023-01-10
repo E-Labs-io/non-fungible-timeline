@@ -68,8 +68,7 @@ function TimeLine({
     if (ready && !!sortedInHistory && !!sortedOutHistory && !isReady) {
       const history = combineHistory(sortedInHistory, sortedOutHistory);
       setSortedData(history);
-      setIsReady(true);
-      if (!firstLoad) console.log("Check Combined: ", history);
+      setIsReady(true);;
       setFirstLoad(true);
     }
   });

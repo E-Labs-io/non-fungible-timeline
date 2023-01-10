@@ -19,6 +19,9 @@ const Title = styled.div`
   color: ${({ theme }) => theme.primaryDark};
 `;
 
+const ChildContainer = styled.div`
+  overflow: scroll;
+`;
 interface ModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -92,7 +95,7 @@ function Modal({
             </Button>
           )}
         </TitleContainer>
-        {children}
+        <ChildContainer>{children}</ChildContainer>
       </>
       {confetti && (
         <Confetti

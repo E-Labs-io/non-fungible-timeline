@@ -163,19 +163,6 @@ function MainPage({}: MainPageProps) {
     setLoadingState(5);
     setReady(true);
   };
-
-  const modalTitle = (data): ReactElement => {
-    console.log("Check Modal Title Data", data);
-    return (
-      <ModalTitleCont>
-        <ModalTitle>{data && data[1]}</ModalTitle>
-        <ModalTitle>
-          {data && data[0] === "left" ? "In-bound" : "Out-bound"}
-        </ModalTitle>
-      </ModalTitleCont>
-    );
-  };
-
   return (
     <PageContainer>
       {!ready && (

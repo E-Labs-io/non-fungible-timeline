@@ -167,7 +167,6 @@ const FrontCard = ({
             setNFTData(nft);
             setMetadata(nft.metadata);
             if (!!nft.metadata.image) {
-              console.log("Got metadata: ", nft.metadata);
               setImageUrl(nft.metadata.image);
             } else {
               console.log("DIDN'T GET METADATA");

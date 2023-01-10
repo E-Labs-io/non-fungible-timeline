@@ -4,6 +4,7 @@ import { sortedHistoryData } from "helpers/data/sortUsersHistory";
 import zeroAddress from "hooks/web3/data/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
+import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SmallNFTCard from "../SmallNFTCard";
@@ -56,9 +57,19 @@ interface TransactionViewProps {
   txHash: string;
   txData: sortedHistoryData[];
   index: number;
+  handleSelectedNFT: (
+    NFTData: SingleNFTDataType,
+    metadata: NFTMetaDataType,
+    transactionData: sortedHistoryData
+  ) => void;
 }
 
-function TransactionView({ txHash, txData, index }: TransactionViewProps) {
+function TransactionView({
+  txHash,
+  txData,
+  index,
+  handleSelectedNFT,
+}: TransactionViewProps) {
   return (
     <Container>
       <InfoArea>
@@ -81,6 +92,7 @@ function TransactionView({ txHash, txData, index }: TransactionViewProps) {
           txData.map((contract, key) =>
             contract.groupedTokenIds.map((id, key) => (
               <SmallNFTCard
+                handleSelectedNFT={handleSelectedNFT}
                 contractAddress={contract.contractAddress}
                 tokenId={id}
                 transactionData={contract}

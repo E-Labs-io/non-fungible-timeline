@@ -50,6 +50,7 @@ const AlchemyGetAddressNFTs = async ({
 const AlchemyGetSingleNFT = async (
   address: string,
   tokenId: string,
+  type?: string,
   api?: any
 ) =>
   api

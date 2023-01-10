@@ -7,6 +7,7 @@ import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import zeroAddress from "hooks/web3/data/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHistoryData } from "helpers/data/sortUsersHistory";
+import getIPFSFormat from "helpers/getIPFSFormat";
 
 //////  CARD BUILD
 const SingleCard = styled.div`
@@ -88,23 +89,40 @@ const NFTImage = styled.img`
   align-items: center;
   justify-content: center;
 `;
+const NFTVideo = styled.video`
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 200px;
+  height: 190px;
+  overflow: hidden;
+  cursor: ${({ cursor }) => cursor || "default"};
+  align-items: center;
+  justify-content: center;
+`;
 
 interface SmallNFTCardProps {
   contractAddress: string;
   tokenId: string;
   transactionData: sortedHistoryData;
+  handleSelectedNFT: (
+    NFTData: SingleNFTDataType,
+    metadata: NFTMetaDataType,
+    transactionData: sortedHistoryData
+  ) => void;
 }
 
 function SmallNFTCard({
   contractAddress,
   tokenId,
   transactionData,
+  handleSelectedNFT,
 }: SmallNFTCardProps) {
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
+  const [mediaFormat, setMediaFormat] = useState("image");
   const [imageUrl, setImageUrl] = useState<string>(
     "/images/placeholder-image.png"
   );
@@ -118,11 +136,25 @@ function SmallNFTCard({
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
-            console.log("Got metadata: ", nft.metadata);
             setImageUrl(nft.metadata.image);
+            const urlParsed = checkIfIPFSUrl(nft.metadata.image);
+            const isIPFS = urlParsed.includes("ipfs.io/ipfs/") ? true : false;
+            if (isIPFS) {
+              getIPFSFormat(urlParsed).then(({ objectUrl, mediaType }) => {
+                setImageUrl(mediaFormat);
+                setMediaFormat(mediaType);
+              });
+            } else {
+              getMediaFormat(urlParsed);
+              setImageUrl(urlParsed);
+              setReady(true);
+              setLoading(false);
+            }
+          } else {
+            getMediaFormat("image");
+            setReady(true);
+            setLoading(false);
           }
-          setReady(true);
-          setLoading(false);
         });
       }
     }
@@ -146,10 +178,31 @@ function SmallNFTCard({
       ? `${tokenId.slice(0, 3)}..${tokenId.slice(-2)}`
       : tokenId;
 
+  const getMediaFormat = (theURL) => {
+    const extension = theURL.split(".").pop();
+    if (
+      extension === "jpg" ||
+      extension === "jpeg" ||
+      extension === "png" ||
+      extension === "gif"
+    ) {
+      setMediaFormat("image");
+    } else if (extension === "mp4") {
+      setMediaFormat("video");
+    } else if (extension === "wav" || extension === "mp3") {
+      setMediaFormat("audio");
+    }
+  };
   return ready ? (
-    <SingleCard>
+    <SingleCard
+      onClick={() => handleSelectedNFT(NFTData, metadata, transactionData)}
+    >
       <TopImageContainer onClick={() => {}}>
-        <NFTImage alt="An NFT" src={checkIfIPFSUrl(imageUrl)}></NFTImage>
+        {mediaFormat && mediaFormat === "image" ? (
+          <NFTImage alt="The NFT" src={imageUrl} />
+        ) : mediaFormat === "video" ? (
+          <NFTVideo alt="The NFT" src={imageUrl} />
+        ) : null}
       </TopImageContainer>
       <InfoBox>
         <DateLine>{getTXDate(transactionData)}</DateLine>
@@ -163,3 +216,5 @@ function SmallNFTCard({
 }
 
 export default SmallNFTCard;
+
+// <NFTImage alt="An NFT" src={checkIfIPFSUrl(imageUrl)}></NFTImage>
