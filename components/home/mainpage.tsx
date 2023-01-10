@@ -1,26 +1,20 @@
 /** @format */
 import { Button, Modal } from "../common";
 import { ConnectButton, useWeb3Provider } from "../../hooks/web3";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement } from "react";
 import styled from "styled-components";
 import LoadingNotice from "./components/loadingNotice";
-import TimelineBox from "./components/timelineBox";
 
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
-import sortUsersHistory, {
-  blockCount,
-  BlockCounter,
-} from "../../helpers/data/sortUsersHistory";
-import SmallTimelineBox from "./components/smallTimelineBox";
-import BlockModal from "./components/BlockModal";
-import { ethers } from "ethers";
-import { connectToERC721Contract } from "hooks/web3/utils/interfaces/ERC721Interface";
+import sortUsersHistory from "../../helpers/data/sortUsersHistory";
+
 import alchemyGetAssetTransfers from "hooks/web3/api/alchemyGetAssetTransfers";
 import zeroAddress from "hooks/web3/data/zeroAddress";
-import TimeLine from "./components/timeline/TimeLine";
+import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
 import compileHistoryIntoDays, {
   compileHistoryIntoDaysReturn,
 } from "helpers/data/compileHistoryIntoDays";
+import DayModal from "./components/modal/DayModal";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -76,14 +70,13 @@ const ConnectionArea = styled.div`
   padding: 5px;
 `;
 
-const BlockListColum = styled.div`
+const ModalTitleCont = styled.div`
   display: flex;
   direction: flex;
-  flex-direction: column;
-  columns: 2;
-  padding: 10px;
-  margin: auto;
+  flex-direction: row;
+  row-gap: 20px;
 `;
+const ModalTitle = styled.div``;
 
 /**
  * @dev : Non-Fungible Timeline Home
@@ -104,13 +97,13 @@ function MainPage({}: MainPageProps) {
   const [rawOutHistory, setRawOutHistory] = useState<any>();
   const [sortedOutHistory, setSortedOutHistory] = useState<any>();
 
-  const [contractInstances, setContractInstances] = useState<{
-    [contractAddress: string]: { instance: ethers.Contract; name: string };
-  }>();
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedBlock, setSelectedBlock] = useState<any>();
-  const [selectedBlockData, setSelectedBlockData] = useState<any>();
+
+  const [selectedDayData, setSelectedDayData] = useState<dailyHistory>();
+
+  const [selectedDate, setSelectedDay] = useState<string>();
+
+  const [otherAddress, setOtherAddress] = useState<boolean>(true);
 
   interface GetUSersHistoryProps {
     from?: string;
@@ -124,12 +117,10 @@ function MainPage({}: MainPageProps) {
     if (to) {
       //  Inbound
       const inBound = await alchemyGetAssetTransfers(from, to);
-      setRawInHistory(inBound.result.transfers);
       return inBound.result.transfers;
     } else {
       // Out bounce
       const outBound = await alchemyGetAssetTransfers(from);
-      setRawOutHistory(outBound.result.transfers);
       return outBound.result.transfers;
     }
   };
@@ -137,17 +128,18 @@ function MainPage({}: MainPageProps) {
   useEffect(() => {
     if (!connected && userProvider) {
       setConnected(true);
-      setUsersAddress("0x4ce0F96C459Df322dF68f393569549d5a54a1929");
+      setUsersAddress("0x59a5493513bA2378Ed57aE5ecfB8A027E9D80365");
     }
-    if (usersAddress !== walletAddress) {
-      //setReady(false);
-      //setLoadingState(0);
+    if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
+      setReady(false);
+      setLoadingState(0);
+      //searchUsersHistory();
     }
   });
 
-  const handleOpenModal = (transactionData, contractConnection) => {
-    setSelectedBlockData(transactionData);
-    setSelectedBlock(contractConnection);
+  const handleOpenModal = (allSelectedData) => {
+    setSelectedDayData(allSelectedData);
+
     setIsModalOpen(true);
   };
   const handleCloseModal = () => setIsModalOpen(false);
@@ -169,46 +161,19 @@ function MainPage({}: MainPageProps) {
     const outByDate = compileHistoryIntoDays(sortedDataOut);
     setSortedOutHistory(outByDate);
     setLoadingState(5);
-    /*   const contracts = await connectToContracts(
-      sortedDataIn.allBlocks,
-      sortedDataOut.allBlocks
-    ); 
-    setContractInstances(contracts);
-    */
     setReady(true);
   };
 
-  const connectToContracts = async (
-    blockData1: blockCount[],
-    blockData2: blockCount[]
-  ) => {
-    const instances: {
-      [contractAddress: string]: { instance: ethers.Contract; name: string };
-    } = {};
-
-    let blockData = [];
-    blockData1.forEach((item) => blockData.push(item));
-    blockData2.forEach((item) => blockData.push(item));
-
-    for (let i = 0; i < blockData.length; i++) {
-      const segment = blockData[i];
-      for (let x = 0; x < segment[1].contracts.length; x++) {
-        let address = segment[1].contracts[x];
-        if (!!!instances[address]) {
-          const instance = await connectToERC721Contract({
-            ContractAddress: address,
-            providerOrSigner: userProvider,
-          });
-          const name = await instance.name().catch((error) => {
-            console.log("Error getting name: ", error);
-            return "unknown";
-          });
-
-          instances[address] = { instance, name };
-        }
-      }
-    }
-    return instances;
+  const modalTitle = (data): ReactElement => {
+    console.log("Check Modal Title Data", data);
+    return (
+      <ModalTitleCont>
+        <ModalTitle>{data && data[1]}</ModalTitle>
+        <ModalTitle>
+          {data && data[0] === "left" ? "In-bound" : "Out-bound"}
+        </ModalTitle>
+      </ModalTitleCont>
+    );
   };
 
   return (
@@ -232,12 +197,20 @@ function MainPage({}: MainPageProps) {
             sortedOutHistory={sortedOutHistory}
             ready={ready}
             handleOpenModal={handleOpenModal}
-            contractInstances={contractInstances}
           />
         </BodyArea>
       )}
-      <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal}>
-        <></>
+      <Modal
+        title={
+          selectedDayData &&
+          `${selectedDayData[1]}  |  ${
+            selectedDayData[0] === "left" ? "In-bound" : "Out-bound"
+          }`
+        }
+        isOpen={isModalOpen}
+        onRequestClose={handleCloseModal}
+      >
+        <DayModal allDayData={selectedDayData}></DayModal>
       </Modal>
     </PageContainer>
   );

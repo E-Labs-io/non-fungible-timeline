@@ -1,25 +1,15 @@
 /** @format */
-import { Button } from "../../../../common";
-import { buildNetworkScanLink } from "../../../../../hooks/web3/helpers/etherscanLink";
-import handleClickOpenURLInNewTab from "../../../../../hooks/window/openLinkInNewTab";
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import Image from "next/image";
-import {
-  BlockCounter,
-  sortedHistoryData,
-} from "../../../../../helpers/data/sortUsersHistory";
-import TransactionBox from "../../TransactionBox";
-import { BigNumber, ethers } from "ethers";
+import { sortedHistoryData } from "../../../../../helpers/data/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
-import { APIKeys, web3API } from "hooks/web3/userWeb3Provider";
-import { fromBigNumber } from "hooks/web3/utils/ethersUtilities";
 import zeroAddress from "hooks/web3/data/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/data/compileHistoryIntoDays";
+import { dailyHistory } from "../TimeLine";
 
 const Wrapper = styled.div`
   width: 210px;
@@ -134,17 +124,19 @@ interface FrontCardProps {
   date: string;
   handleOpenModal: Function;
   txHashes: string[];
+  allData: dailyHistory;
 }
 const FrontCard = ({
   transactionDataBase,
   date,
   txHashes,
   handleOpenModal,
+  allData,
 }: FrontCardProps) => {
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [txData, settxData] = useState<any>();
+  const [txData, setTxData] = useState<any>();
 
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
@@ -164,22 +156,26 @@ const FrontCard = ({
         setLoading(true);
 
         const toShow: sortedHistoryData = transactionDataBase[txHashes[0]][0];
-        settxData(toShow);
+        setTxData(toShow);
         setShowContract(toShow.contractAddress);
         setShowToken(toShow.groupedTokenIds[0]);
         AlchemyGetSingleNFT(
           toShow.contractAddress,
           toShow.groupedTokenIds[0].toString()
-        ).then((nft) => {
-          setNFTData(nft);
-          setMetadata(nft.metadata);
-          if (!!nft.metadata.image) {
-            console.log("Got metadata: ", nft.metadata);
-            setImageUrl(nft.metadata.image);
-          }
-          setReady(true);
-          setLoading(false);
-        });
+        )
+          .then((nft) => {
+            setNFTData(nft);
+            setMetadata(nft.metadata);
+            if (!!nft.metadata.image) {
+              console.log("Got metadata: ", nft.metadata);
+              setImageUrl(nft.metadata.image);
+            } else {
+              console.log("DIDN'T GET METADATA");
+            }
+            setReady(true);
+            setLoading(false);
+          })
+          .catch((error) => console.log("Error getting token data: ", error));
       }
     }
   });
@@ -205,7 +201,7 @@ const FrontCard = ({
   return ready ? (
     <Wrapper>
       <SingleCard>
-        <TopImageContainer onClick={() => handleOpenModal(txData)}>
+        <TopImageContainer onClick={() => handleOpenModal(allData)}>
           <NFTImage alt="An NFT" src={checkIfIPFSUrl(imageUrl)}></NFTImage>
         </TopImageContainer>
         <InfoBox>

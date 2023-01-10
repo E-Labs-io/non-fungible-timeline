@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { ReactElement } from "react";
+import React, { FunctionComponent, ReactElement } from "react";
 import styled, { useTheme } from "styled-components";
 import ReactModal from "react-modal";
 import Confetti from "react-confetti";
@@ -22,7 +22,7 @@ const Title = styled.div`
 interface ModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  title?: string;
+  title?: string | JSX.Element;
   style?: any;
   children: ReactElement;
   removeCross?: boolean;
@@ -42,6 +42,7 @@ function Modal({
   customConfetti,
 }: ModalProps) {
   const { width: windowWidth, height: windowHeight } = useWindowSize();
+  console.log(typeof title);
   const modalStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -70,7 +71,15 @@ function Modal({
     >
       <>
         <TitleContainer>
-          {title ? <Title>{title}</Title> : <div></div>}
+          {title ? (
+            typeof title === "string" ? (
+              <Title>{title}</Title>
+            ) : (
+              { title }
+            )
+          ) : (
+            <div></div>
+          )}
           {!removeCross && (
             <Button
               fontSize="14px"

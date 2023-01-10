@@ -2,27 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSquarePlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faCirclePlus,
+  faCircleMinus,
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import { Contract } from "ethers";
-import {
-  sortedDataFormat,
-  sortedHistoryData,
-  sortUsersHistoryReturn,
-} from "helpers/data/sortUsersHistory";
 import FrontCard from "./components/frontCard";
 import {
   compileHistoryIntoDaysReturn,
   sortedHashData,
-  sortedHistoryIntoDays,
 } from "helpers/data/compileHistoryIntoDays";
+import combineHistory from "helpers/data/combinedSortedHistory";
 
 const Container = styled.div`
   height: 100%;
@@ -32,14 +29,23 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const LoadMoreButton = styled.div`
+  color: #ffffff;
+  align-items: center;
+  justify-content: center;
+  :hover {
+    color: #2d93f8;
+  }
+`;
+
+export type combinedHistory = dailyHistory[];
+export type dailyHistory = ["left" | "right", string, string[], sortedHashData];
+
 interface TimeLineProps {
   sortedInHistory: compileHistoryIntoDaysReturn;
   sortedOutHistory: compileHistoryIntoDaysReturn;
   ready: boolean;
   handleOpenModal: Function;
-  contractInstances: {
-    [contractAddress: string]: { instance: Contract; name: string };
-  };
 }
 
 function TimeLine({
@@ -47,7 +53,6 @@ function TimeLine({
   sortedOutHistory,
   ready,
   handleOpenModal,
-  contractInstances,
 }: TimeLineProps) {
   const [isReady, setIsReady] = useState<boolean>(false);
   const [firstLoad, setFirstLoad] = useState<boolean>(false);
@@ -57,53 +62,6 @@ function TimeLine({
   const loadMore = () => {
     let lastNum = lastItemNumber + 10;
     setLastItemNumber(lastNum);
-  };
-
-  const getHistoryDates = (history) => {
-    const dates = Object.keys(history.history);
-    return dates;
-  };
-
-  const getTXHash = (history, date) => Object.keys(history.history[date]);
-
-  type combinedHistory = dailyHistory[];
-  type dailyHistory = ["left" | "right", string, string[], sortedHashData];
-
-  const combineHistory = (
-    inBound: compileHistoryIntoDaysReturn,
-    outBound: compileHistoryIntoDaysReturn
-  ) => {
-    console.log("combineHistory: Mounted");
-    const finalisedHistory: combinedHistory = [];
-    const inCount = Object.keys(inBound.history).length;
-    const outCount = Object.keys(outBound.history).length;
-    for (let i = 0; i < inCount; i++) {
-      let date = Object.keys(inBound.history)[i];
-      let insert: dailyHistory = [
-        "left",
-        date,
-        inBound.hashes[date],
-        inBound.history[date],
-      ];
-      finalisedHistory.push(insert);
-    }
-
-    for (let i = 0; i < outCount; i++) {
-      let date = Object.keys(outBound.history)[i];
-      let insert: dailyHistory = [
-        "right",
-        date,
-        outBound.hashes[date],
-        outBound.history[date],
-      ];
-      finalisedHistory.push(insert);
-    }
-
-    finalisedHistory.sort(
-      (a, b) => new Date(a[1]).getTime() - new Date(b[1]).getTime()
-    );
-    console.log("FINAL ORDERED HISTORY: ", new Date(finalisedHistory[0][1]));
-    return finalisedHistory;
   };
 
   useEffect(() => {
@@ -116,7 +74,38 @@ function TimeLine({
     }
   });
 
-  const addButton = () => <FontAwesomeIcon icon={faPlusCircle} />;
+  const addButton = () => (
+    <LoadMoreButton>
+      <FontAwesomeIcon swapOpacity={true} size="4x" icon={faPlus} />
+    </LoadMoreButton>
+  );
+
+  const timelineIcon = (dir) =>
+    dir === "left" ? (
+      <>
+        <FontAwesomeIcon size="2xl" icon={faCirclePlus} />
+      </>
+    ) : (
+      <FontAwesomeIcon size="2xl" icon={faCircleMinus} />
+    );
+
+  const timelineElementStyle = (side) =>
+    side === "left"
+      ? {
+          alignItems: "center",
+          justifyContent: "right",
+          background: "transparent",
+          boxShadow: "none",
+          display: "flex",
+        }
+      : {
+          background: "transparent",
+          justifyContent: "left",
+          alignItems: "left",
+          boxShadow: "none",
+          display: "flex",
+        };
+
   return (
     <Container>
       {isReady && (
@@ -124,27 +113,24 @@ function TimeLine({
           {!!sortedData &&
             sortedData.slice(0, lastItemNumber).map((day, key) => (
               <VerticalTimelineElement
-                contentStyle={{
-                  background: "transparent",
-                  boxShadow: "none",
-                }}
+                date={day[1]}
+                contentStyle={timelineElementStyle(day[0])}
                 position={day[0]}
+                iconStyle={{
+                  background: day[0] === "left" ? "#7acd22" : "#e8650e",
+                  color: "#ffffff",
+                }}
                 contentArrowStyle={{
-                  borderRight: "7px solid  rgb(222, 222, 222)",
+                  borderRight: "7px solid  rgb(2, 2, 2)",
                   backgroundColor: "transparent",
-                  iconStyle: {
-                    background: "rgb(33, 150, 243)",
-                    color: "#fff",
-                  },
                 }}
-                style={{
-                  margin: "auto",
-                }}
+                icon={timelineIcon(day[0])}
               >
                 <FrontCard
                   transactionDataBase={day[3]}
                   date={day[1]}
                   txHashes={day[2]}
+                  allData={day}
                   handleOpenModal={handleOpenModal}
                 />
               </VerticalTimelineElement>
@@ -154,6 +140,7 @@ function TimeLine({
             <VerticalTimelineElement
               iconOnClick={loadMore}
               icon={addButton()}
+              iconClassName="vertical-timeline-element-icon--button"
             />
           )}
         </VerticalTimeline>

@@ -1,6 +1,10 @@
 /** @format */
 
-import { sortedHistoryData, sortUsersHistoryReturn } from "./sortUsersHistory";
+import {
+  blockCount,
+  sortedHistoryData,
+  sortUsersHistoryReturn,
+} from "./sortUsersHistory";
 
 export type compileHistoryIntoDaysReturn = {
   history: sortedHistoryIntoDays;
@@ -17,13 +21,13 @@ const compileHistoryIntoDays = (
   history: sortUsersHistoryReturn
 ): compileHistoryIntoDaysReturn => {
   let dateOrderedHistory: sortedHistoryIntoDays = undefined;
-  let dateHashes: { [date: string]: string[] };
+  let dateHashes: daysTXHashCounter;
 
   for (let i = 0; i < history.allBlocks.length; i++) {
-    const blockData = history.allBlocks[i];
+    const blockData: blockCount = history?.allBlocks[i];
 
-    const blockNum = blockData[0];
-    const hashs = blockData[1].hash;
+    const blockNum: string = Object.keys(history.sorted)[i];
+    const hashs: string[] = blockData[1].hash;
     const contracts = blockData[1].contracts;
 
     let date;
@@ -67,10 +71,6 @@ const compileHistoryIntoDays = (
       }
     }
   }
-  console.log("Final Return History combined: ", {
-    history: dateOrderedHistory,
-    hashes: dateHashes,
-  });
   return { history: dateOrderedHistory, hashes: dateHashes };
 };
 

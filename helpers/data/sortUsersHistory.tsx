@@ -2,8 +2,10 @@
 
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
 
+export type HashType = string;
+
 export type sortedHistoryData = {
-  hash: string;
+  hash: HashType;
   blockNum: string;
   from: string;
   to: string;
@@ -19,12 +21,12 @@ export type sortedHistoryData = {
 
 export type sortedDataFormat = {
   [blockNumber: string]: {
-    [txHash: string]: { [contractAddress: string]: sortedHistoryData };
+    [txHash: HashType]: { [contractAddress: string]: sortedHistoryData };
   };
 };
-export type BlockCounter = [string, { hash: string[]; contracts: string[] }];
+export type ContractsToHash = { hash: HashType[]; contracts: string[] };
+export type BlockCounter = [HashType, ContractsToHash];
 export type blockCount = BlockCounter[];
-
 
 export type sortUsersHistoryReturn = {
   sorted: sortedDataFormat;
@@ -34,7 +36,6 @@ export type sortUsersHistoryReturn = {
 const sortUsersHistory = (
   history: AssetTransfersWithMetadataResult[]
 ): sortUsersHistoryReturn => {
-
   //  Counts block numbers & tx Hash within
 
   const allBlocks: blockCount[] = [];
