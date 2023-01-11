@@ -2,6 +2,7 @@
 
 import {
   blockCount,
+  BlockCounter,
   sortedHistoryData,
   sortUsersHistoryReturn,
 } from "./sortUsersHistory";
@@ -24,7 +25,7 @@ const compileHistoryIntoDays = (
   let dateHashes: daysTXHashCounter;
 
   for (let i = 0; i < history.allBlocks.length; i++) {
-    const blockData: blockCount = history?.allBlocks[i];
+    const blockData: BlockCounter = history?.allBlocks[i];
 
     const blockNum: string = Object.keys(history.sorted)[i];
     const hashs: string[] = blockData[1].hash;

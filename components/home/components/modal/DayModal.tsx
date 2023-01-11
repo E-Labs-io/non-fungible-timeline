@@ -17,8 +17,6 @@ const Wrapper = styled.div`
 const TxArea = styled.div``;
 
 const Overlay = styled.div`
-  height: 100%;
-  width: 100%;
   background-color: white;
 `;
 
@@ -58,6 +56,7 @@ const DayModal = ({ allDayData }: DayModalProps) => {
             metadata={selectedNFT.metadata}
             transactionData={selectedNFT.transactionData}
             closeView={handleCloseModal}
+            direction={allDayData[0]}
           />
         </Overlay>
       )}

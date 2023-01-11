@@ -20,17 +20,23 @@ export type sortedHistoryData = {
 };
 
 export type sortedDataFormat = {
-  [blockNumber: string]: {
-    [txHash: HashType]: { [contractAddress: string]: sortedHistoryData };
-  };
+  [blockNumber: string]: HashToContractAddressType;
 };
+
+export type HashToContractAddressType = {
+  [txHash: HashType]: ContractAddressToHistoricDataType;
+};
+export type ContractAddressToHistoricDataType = {
+  [contractAddress: string]: sortedHistoryData;
+};
+
 export type ContractsToHash = { hash: HashType[]; contracts: string[] };
 export type BlockCounter = [HashType, ContractsToHash];
 export type blockCount = BlockCounter[];
 
 export type sortUsersHistoryReturn = {
   sorted: sortedDataFormat;
-  allBlocks: blockCount[];
+  allBlocks: blockCount;
 };
 
 const sortUsersHistory = (
@@ -38,7 +44,7 @@ const sortUsersHistory = (
 ): sortUsersHistoryReturn => {
   //  Counts block numbers & tx Hash within
 
-  const allBlocks: blockCount[] = [];
+  const allBlocks: blockCount = [];
   //  stores all the transaction data [blockNumber][txHash]
   const sorted: sortedDataFormat = {};
 
@@ -51,7 +57,9 @@ const sortUsersHistory = (
       ? item.rawContract.address
       : "";
     const hash: string = item.hash;
-    const tId: string = item.tokenId ? parseInt(item.tokenId).toString() : "0";
+    const tId: string = !!item.erc1155Metadata
+      ? parseInt(item.erc1155Metadata[0]?.tokenId).toString()
+      : parseInt(item.tokenId).toString();
     //  See if block number has had txHash assigned to it
     if (!!sorted[blkNum]) {
       //  See if the TX hash as been assigned
@@ -68,7 +76,7 @@ const sortUsersHistory = (
             sorted[blkNum][hash][contAddr].value + value;
         } else {
           //  In here if the block number & hash are in use but not the contract address
-          const arg = {
+          const arg: any = {
             ...sorted[blkNum][item.hash],
             [contAddr]: {
               hash: item.hash,
@@ -85,7 +93,7 @@ const sortUsersHistory = (
               vaule: item.value,
             },
           };
-          sorted[blkNum][hash] = arg;
+          sorted[blkNum][hash] = arg[item.hash];
         }
       } else {
         //  In here if block number exists but hash doesn't
@@ -118,7 +126,7 @@ const sortUsersHistory = (
         });
       }
     } else {
-      let args = {
+      let args: any = {
         [hash]: {
           [contAddr]: {
             hash: item.hash,
@@ -136,11 +144,14 @@ const sortUsersHistory = (
         },
       };
       sorted[blkNum] = args;
-      let count = [blkNum, { hash: [hash], contracts: [contAddr] }];
+      let count: BlockCounter = [
+        blkNum,
+        { hash: [hash], contracts: [contAddr] },
+      ];
       allBlocks.push(count);
     }
   });
-
+  console.log("Check Sorted: ", sorted);
   return { sorted, allBlocks };
 };
 

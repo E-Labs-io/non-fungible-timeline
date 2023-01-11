@@ -50,7 +50,7 @@ function NFTModal({
   if (!ready) {
     if (address && tokenId) {
       console.log("NFTModal: got Address & Totken ID");
-      AlchemyGetSingleNFT(address, tokenId, web3API).then((tokenInfo) => {
+      AlchemyGetSingleNFT(address, tokenId, null, web3API).then((tokenInfo) => {
         setNFTData(tokenInfo);
         if (tokenInfo?.metadata) {
           const meta = tokenInfo?.metadata;

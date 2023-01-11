@@ -72,7 +72,8 @@ const TopImageContainer = styled.div`
   background-color: #f5f10946;
   border-width: 1px;
   border-style: solid;
-
+  background: solid;
+  background-color: transparent;
   display: flex;
   align-items: left;
   justify-content: center;
@@ -80,6 +81,8 @@ const TopImageContainer = styled.div`
 `;
 
 const NFTImage = styled.img`
+  background: solid;
+  background-color: transparent;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   width: 200px;
@@ -136,10 +139,14 @@ function SmallNFTCard({
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
-            setImageUrl(nft.metadata.image);
+            //setImageUrl(nft.metadata.image);
             const urlParsed = checkIfIPFSUrl(nft.metadata.image);
-            const isIPFS = urlParsed.includes("ipfs.io/ipfs/") ? true : false;
-            if (isIPFS) {
+            setImageUrl(urlParsed);
+            setMediaFormat("image");
+            setReady(true);
+            setLoading(false);
+            /*  if (isIPFS) {
+                const isIPFS = urlParsed.includes("ipfs.io/ipfs/") ? true : false;
               getIPFSFormat(urlParsed).then(({ objectUrl, mediaType }) => {
                 setImageUrl(mediaFormat);
                 setMediaFormat(mediaType);
@@ -149,9 +156,9 @@ function SmallNFTCard({
               setImageUrl(urlParsed);
               setReady(true);
               setLoading(false);
-            }
+            } */
           } else {
-            getMediaFormat("image");
+            setMediaFormat("image");
             setReady(true);
             setLoading(false);
           }

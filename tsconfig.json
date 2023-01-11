@@ -22,7 +22,7 @@
     "**/*.tsx",
     "**/*.d.ts",
     "**/*.js",
-    "types/additional.d.ts",
+    "additional.d.ts",
     "utils/ethersUtilitiestsx"
   ],
   "exclude": ["node_modules"]

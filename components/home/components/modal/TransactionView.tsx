@@ -49,7 +49,7 @@ const CardContainer = styled.div`
 
   border-radius: 10px;
   border-color: black;
-  border-width: 1px;
+  border-width: 0px;
   border-style: solid;
 `;
 

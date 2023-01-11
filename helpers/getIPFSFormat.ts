@@ -17,7 +17,7 @@ const getIPFSFormat = async (url) => {
   console.log("Hash : ", fileHash);
 
   try {
-    const buffer = await ipfs.cat(fileHash);
+    const buffer: any = await ipfs.cat(fileHash);
     const uint8Array = new Uint8Array(buffer);
     const magicNumbers = {
       jpeg: [0xff, 0xd8, 0xff],

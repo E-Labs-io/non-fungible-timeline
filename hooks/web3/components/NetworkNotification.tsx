@@ -2,8 +2,6 @@
 
 import { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { TAcceptedNetworks } from "types/apiTypes";
-import { UserWeb3Context } from "../";
 import { Button } from "../../../components/common";
 import useWeb3Provider from "../hooks/useWeb3Provider";
 import switchMetamaskNetwork from "../utils/metamaskSwitchNetwork";

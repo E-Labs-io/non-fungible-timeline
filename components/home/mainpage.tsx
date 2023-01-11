@@ -103,7 +103,7 @@ function MainPage({}: MainPageProps) {
 
   const [selectedDate, setSelectedDay] = useState<string>();
 
-  const [otherAddress, setOtherAddress] = useState<boolean>(true);
+  const [otherAddress, setOtherAddress] = useState<boolean>(false);
 
   interface GetUSersHistoryProps {
     from?: string;
@@ -116,11 +116,16 @@ function MainPage({}: MainPageProps) {
   }: GetUSersHistoryProps): Promise<AssetTransfersWithMetadataResult[]> => {
     if (to) {
       //  Inbound
-      const inBound = await alchemyGetAssetTransfers(from, to);
+      const inBound = await alchemyGetAssetTransfers(
+        from ? from : null,
+        to,
+        "0xAA2644"
+      );
+      console.log(inBound.result);
       return inBound.result.transfers;
     } else {
       // Out bounce
-      const outBound = await alchemyGetAssetTransfers(from);
+      const outBound = await alchemyGetAssetTransfers(from, null, "0xAA2644");
       return outBound.result.transfers;
     }
   };
@@ -128,7 +133,7 @@ function MainPage({}: MainPageProps) {
   useEffect(() => {
     if (!connected && userProvider) {
       setConnected(true);
-      setUsersAddress("0x59a5493513bA2378Ed57aE5ecfB8A027E9D80365");
+      setUsersAddress(walletAddress);
     }
     if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
       setReady(false);
@@ -145,15 +150,15 @@ function MainPage({}: MainPageProps) {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const searchUsersHistory = async () => {
-    setLoadingState(1);
-    const inBound = await getUsersHistory({
-      from: zeroAddress(),
+    console.log(usersAddress);
+
+    const inBoundTransfers = await getUsersHistory({
       to: usersAddress,
     });
     setLoadingState(2);
     const outBound = await getUsersHistory({ from: usersAddress });
     setLoadingState(3);
-    const sortedDataIn = sortUsersHistory(inBound);
+    const sortedDataIn = sortUsersHistory(inBoundTransfers);
     const inByDate = compileHistoryIntoDays(sortedDataIn);
     setSortedInHistory(inByDate);
     setLoadingState(4);

@@ -1,24 +1,33 @@
 /** @format */
 
 const alchemyGetAssetTransfers = async (
-  from: string,
+  from?: string,
   to?: string,
   startingBlock?: string
 ) => {
-  const options = to
-    ? {
-        fromBlock: startingBlock ? startingBlock : "0x0",
-        fromAddress: from,
-        toAddress: to,
-        category: ["erc721", "erc1155"],
-        withMetadata: true,
-      }
-    : {
-        fromBlock: startingBlock ? startingBlock : "0x0",
-        fromAddress: from,
-        category: ["erc721", "erc1155"],
-        withMetadata: true,
-      };
+  if (!!!to && !!!from) throw "Need to provide an address";
+  const options =
+    !!to && !!from
+      ? {
+          fromBlock: startingBlock ? startingBlock : "0x0",
+          fromAddress: from,
+          toAddress: to,
+          category: ["erc721", "erc1155"],
+          withMetadata: true,
+        }
+      : !!to && !!!from
+      ? {
+          fromBlock: startingBlock ? startingBlock : "0x0",
+          toAddress: to,
+          category: ["erc721", "erc1155"],
+          withMetadata: true,
+        }
+      : {
+          fromBlock: startingBlock ? startingBlock : "0x0",
+          fromAddress: from,
+          category: ["erc721", "erc1155"],
+          withMetadata: true,
+        };
 
   let data = JSON.stringify({
     jsonrpc: "2.0",
@@ -37,7 +46,6 @@ const alchemyGetAssetTransfers = async (
   const returnedData = await fetch(baseURL, requestOptions)
     .then((result) => result.json())
     .then((history) => {
-      console.log(history);
       return history;
     });
 
