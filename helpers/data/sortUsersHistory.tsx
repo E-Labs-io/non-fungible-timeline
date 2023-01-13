@@ -58,8 +58,8 @@ const sortUsersHistory = (
       : "";
     const hash: string = item.hash;
     const tId: string = !!item.erc1155Metadata
-      ? parseInt(item.erc1155Metadata[0]?.tokenId).toString()
-      : parseInt(item.tokenId).toString();
+      ? Number(item.erc1155Metadata[0]?.tokenId).toString()
+      : Number(item.tokenId).toString();
     //  See if block number has had txHash assigned to it
     if (!!sorted[blkNum]) {
       //  See if the TX hash as been assigned
