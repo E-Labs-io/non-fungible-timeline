@@ -1,6 +1,7 @@
 /** @format */
 
 import { sortedHistoryData } from "helpers/data/sortUsersHistory";
+import shortenTokenId from "helpers/shorternTokenId";
 import zeroAddress from "hooks/web3/data/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
@@ -94,7 +95,7 @@ function TransactionView({
               <SmallNFTCard
                 handleSelectedNFT={handleSelectedNFT}
                 contractAddress={contract.contractAddress}
-                tokenId={id}
+                tokenId={txData[key].tokenId}
                 transactionData={contract}
               />
             ))

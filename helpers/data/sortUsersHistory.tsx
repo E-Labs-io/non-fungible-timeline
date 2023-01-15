@@ -12,11 +12,17 @@ export type sortedHistoryData = {
   category: string;
   timestamp: string;
   contractAddress: string;
-  tokenId: string;
+  tokenId: TokenIds;
   ticker: string;
   tokenCount?: number;
-  groupedTokenIds?: string[];
+  groupedTokenIds?: TokenIds[];
   value;
+};
+
+export type TokenIds = {
+  tokenId?: string;
+  hex?: string;
+  balance: number;
 };
 
 export type sortedDataFormat = {
@@ -57,9 +63,16 @@ const sortUsersHistory = (
       ? item.rawContract.address
       : "";
     const hash: string = item.hash;
-    const tId: string = !!item.erc1155Metadata
-      ? Number(item.erc1155Metadata[0]?.tokenId).toString()
-      : Number(item.tokenId).toString();
+    const tId: TokenIds = !!item.erc1155Metadata
+      ? {
+          hex: item.erc1155Metadata[0]?.tokenId,
+          balance: Number(item.erc1155Metadata[0]?.value),
+        }
+      : {
+          tokenId: Number(item.tokenId).toString(),
+          balance: 1,
+          hex: item.tokenId,
+        };
     //  See if block number has had txHash assigned to it
     if (!!sorted[blkNum]) {
       //  See if the TX hash as been assigned

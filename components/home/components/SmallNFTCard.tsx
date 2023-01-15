@@ -6,8 +6,9 @@ import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import zeroAddress from "hooks/web3/data/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
-import { sortedHistoryData } from "helpers/data/sortUsersHistory";
+import { sortedHistoryData, TokenIds } from "helpers/data/sortUsersHistory";
 import getIPFSFormat from "helpers/getIPFSFormat";
+import shortenTokenId from "helpers/shorternTokenId";
 
 //////  CARD BUILD
 const SingleCard = styled.div`
@@ -105,7 +106,7 @@ const NFTVideo = styled.video`
 
 interface SmallNFTCardProps {
   contractAddress: string;
-  tokenId: string;
+  tokenId: TokenIds;
   transactionData: sortedHistoryData;
   handleSelectedNFT: (
     NFTData: SingleNFTDataType,
@@ -135,7 +136,7 @@ function SmallNFTCard({
       if (!!contractAddress) {
         setLoading(true);
 
-        AlchemyGetSingleNFT(contractAddress, tokenId).then((nft) => {
+        AlchemyGetSingleNFT(contractAddress, tokenId.hex).then((nft) => {
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
@@ -180,11 +181,6 @@ function SmallNFTCard({
     return method;
   };
 
-  const shortenTokenId = (tokenId) =>
-    tokenId.length > 6
-      ? `${tokenId.slice(0, 3)}..${tokenId.slice(-2)}`
-      : tokenId;
-
   const getMediaFormat = (theURL) => {
     const extension = theURL.split(".").pop();
     if (
@@ -215,7 +211,9 @@ function SmallNFTCard({
         <DateLine>{getTXDate(transactionData)}</DateLine>
         <TXData>
           {transactionData && getTXType(transactionData)} #
-          {shortenTokenId(tokenId)}{" "}
+          {transactionData.category === "erc721"
+            ? shortenTokenId(tokenId.tokenId)
+            : shortenTokenId(BigInt(parseInt(tokenId.hex, 16)).toString())}{" "}
         </TXData>
       </InfoBox>
     </SingleCard>

@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { sortedHistoryData } from "../../../../../helpers/data/sortUsersHistory";
+import {
+  sortedHistoryData,
+  TokenIds,
+} from "../../../../../helpers/data/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
@@ -10,6 +13,7 @@ import zeroAddress from "hooks/web3/data/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/data/compileHistoryIntoDays";
 import { dailyHistory } from "../TimeLine";
+import shortenTokenId from "helpers/shorternTokenId";
 
 const Wrapper = styled.div`
   width: 210px;
@@ -54,7 +58,7 @@ const SingleCard = styled.div`
 
   border-radius: 20px;
   border-color: black;
-  border-style: nonbe;
+  border-style: none;
   border-width: 1px;
 `;
 
@@ -147,7 +151,7 @@ const FrontCard = ({
   const { width: windowWidth } = useWindowSize();
 
   const [showContract, setShowContract] = useState<string>();
-  const [showToken, setShowToken] = useState<string>();
+  const [showToken, setShowToken] = useState<TokenIds>();
   const network = "mainnet";
 
   useEffect(() => {
@@ -161,7 +165,7 @@ const FrontCard = ({
         setShowToken(toShow.groupedTokenIds[0]);
         AlchemyGetSingleNFT(
           toShow.contractAddress,
-          toShow.groupedTokenIds[0].toString()
+          toShow.groupedTokenIds[0].hex
         )
           .then((nft) => {
             setNFTData(nft);
@@ -192,11 +196,6 @@ const FrontCard = ({
     return method;
   };
 
-  const shortenTokenId = (tokenId) =>
-    tokenId.length > 6
-      ? `${tokenId.slice(0, 3)}..${tokenId.slice(-2)}`
-      : tokenId;
-
   return ready ? (
     <Wrapper>
       <SingleCard>
@@ -206,7 +205,10 @@ const FrontCard = ({
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>
           <TXData>
-            {txData && getTXType(txData)} #{shortenTokenId(showToken)}{" "}
+            {txData && getTXType(txData)} #
+            {txData.category === "erc721"
+              ? shortenTokenId(showToken.tokenId)
+              : shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
             <MoreText>
               {txData &&
                 txData.groupedTokenIds.length > 1 &&
