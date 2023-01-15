@@ -36,7 +36,6 @@ const HeadArea = styled.div`
   width: 100%;
   height: 150px;
   border-bottom: 2px none white;
-  
 
   left: 0;
   top: 0;
@@ -57,9 +56,12 @@ const BodyArea = styled.div`
 const PreLoadLayout = styled.div`
   justify-content: center;
   align-items: center;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   display: flex;
+  column-gap: 30px;
 `;
 
 const ConnectionArea = styled.div`
@@ -89,6 +91,19 @@ const Input = styled.input`
   border-radius: 4px;
   box-sizing: border-box;
   background-color: #ffffff75;
+`;
+
+const PageTitle = styled.div`
+  justify-content: center;
+  align-items: center;
+
+  background: #70ffde;
+  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  font-size: 70px;
+  text-align: center;
 `;
 
 /**
@@ -155,8 +170,9 @@ function MainPage({}: MainPageProps) {
       });
     }
     if (!connected && userProvider) {
-      setConnected(true);
       setUsersAddress(walletAddress);
+      setConnected(true);
+      console.log("UserEffect Check Address: ", walletAddress);
     }
     if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
       setReady(false);
@@ -178,6 +194,7 @@ function MainPage({}: MainPageProps) {
   const handleCloseModal = () => setIsModalOpen(false);
 
   const searchUsersHistory = async () => {
+    if (userProvider && usersAddress !== walletAddress) setOtherAddress(true);
     setLoadingState(1);
     const isEns = EnsResolver.isENS(usersAddress);
     var searchAddress;
@@ -209,24 +226,33 @@ function MainPage({}: MainPageProps) {
   };
 
   const handleIsDisabled = (input: string): boolean => {
-    let result = false;
+    let result = true;
 
     if (!!input && input.length > 5) {
       const isEns =
         input.slice(-4) === ".eth" || input.slice(-4) === ".ETH" ? true : false;
 
       if (isEns) {
-        result = true;
+        result = false;
       } else {
-        result = isAddress(input);
+        result = !isAddress(input);
       }
     }
+    console.log("Is address: ", result, " From : ", input);
     return result;
+  };
+
+  const handleBack = () => {
+    setReady(false);
+    setLoadingState(0);
+    setUsersAddress("");
   };
   return (
     <PageContainer>
       {!ready && (
         <PreLoadLayout>
+          <PageTitle>Non-Fungible Timeline</PageTitle>
+          <br />
           <ConnectionArea>
             {loadingState === 0 && (
               <>
@@ -238,7 +264,7 @@ function MainPage({}: MainPageProps) {
                 />
                 <Button
                   onClick={searchUsersHistory}
-                  disabled={!handleIsDisabled(usersAddress)}
+                  disabled={handleIsDisabled(usersAddress)}
                 >
                   Search
                 </Button>
@@ -251,7 +277,11 @@ function MainPage({}: MainPageProps) {
       {ready && (
         <BodyArea>
           <HeadArea>
-            <Header searchAddress={usersAddress} onReset={() => {}} />
+            <Header
+              searchAddress={usersAddress}
+              onReset={() => {}}
+              onBack={handleBack}
+            />
           </HeadArea>
           <TimeLine
             sortedInHistory={sortedInHistory}

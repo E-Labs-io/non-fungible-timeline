@@ -84,14 +84,9 @@ const UserWeb3Provider = ({ children }) => {
     provider: GivenProviderAllowance,
     network
   ) => {
-    if (userProvider) disconnectProvider();
     let connection;
     if (provider === "alchemy") {
       connection = connectToAlchemyProvider(network);
-    }
-
-    if (connection) {
-      setUserProvider(connection);
     }
 
     return connection;
