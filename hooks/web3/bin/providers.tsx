@@ -5,11 +5,10 @@ import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 const rcps = {
   1: "https://mainnet.infura.io/v3/",
-  4: "https://rinkeby.infura.io/v3/",
+  4: "https://goerli.infura.io/v3/",
 };
 
 const infuraKey = process.env.ALCHEMY_KEY;
-
 
 const walletConnectProviderOption = (chainId: number) => {
   return {

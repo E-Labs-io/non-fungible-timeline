@@ -45,7 +45,6 @@ function Modal({
   customConfetti,
 }: ModalProps) {
   const { width: windowWidth, height: windowHeight } = useWindowSize();
-  console.log(typeof title);
   const modalStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.75)",

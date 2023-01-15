@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
-import zeroAddress from "hooks/web3/data/zeroAddress";
+import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHistoryData, TokenIds } from "helpers/data/sortUsersHistory";
 import getIPFSFormat from "helpers/getIPFSFormat";

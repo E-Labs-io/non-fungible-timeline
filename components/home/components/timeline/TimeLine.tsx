@@ -38,6 +38,8 @@ const LoadMoreButton = styled.div`
   }
 `;
 
+
+
 export type combinedHistory = dailyHistory[];
 export type dailyHistory = ["left" | "right", string, string[], sortedHashData];
 
@@ -68,7 +70,7 @@ function TimeLine({
     if (ready && !!sortedInHistory && !!sortedOutHistory && !isReady) {
       const history = combineHistory(sortedInHistory, sortedOutHistory);
       setSortedData(history);
-      setIsReady(true);;
+      setIsReady(true);
       setFirstLoad(true);
     }
   });

@@ -1,7 +1,8 @@
 /** @format */
 
 import { sortedHistoryData } from "helpers/data/sortUsersHistory";
-import zeroAddress from "hooks/web3/data/zeroAddress";
+import shortenTokenId from "helpers/shorternTokenId";
+import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import buildOpenSeaLink from "hooks/web3/helpers/openseaLink";
@@ -143,8 +144,6 @@ const SingleNFTView = ({
   direction,
 }: SingleNFTViewProps) => {
   //console.log(NFTData, metadata, transactionData);
-  const shorternId = (id) =>
-    id > 8 ? `${id.slice(0, 5)}...${id.slice(-3)}` : id;
 
   const figureMethod = () => {
     let method;
@@ -216,7 +215,7 @@ const SingleNFTView = ({
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>
           <BadgeArea>
-            <InfoBadge># {shorternId(NFTData.token_id)}</InfoBadge>
+            <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
             <InfoBadge>{NFTData.contract_type}</InfoBadge>
             <InfoBadge>Ethereum</InfoBadge>
           </BadgeArea>

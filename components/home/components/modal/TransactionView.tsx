@@ -2,7 +2,7 @@
 
 import { sortedHistoryData } from "helpers/data/sortUsersHistory";
 import shortenTokenId from "helpers/shorternTokenId";
-import zeroAddress from "hooks/web3/data/zeroAddress";
+import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";

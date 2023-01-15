@@ -48,6 +48,12 @@ async function web3Connection(chainId?: number) {
   };
 }
 
+const connectToAlchemyProvider = (requiredNetwork?: string) =>
+  new ethers.providers.AlchemyProvider(
+    requiredNetwork,
+    process.env.NEXT_PUBLIC_ALCHEMY_KEY
+  );
+
 const getSpecificProvider = (providerInstance) =>
   new ethers.providers.Web3Provider(providerInstance);
 
@@ -75,6 +81,7 @@ export {
   getAddresses,
   getBalance,
   signMessage,
+  connectToAlchemyProvider,
 };
 
 function networkName(network: number) {

@@ -1,7 +1,12 @@
 /** @format */
 
 import React, { useEffect, useState, createContext } from "react";
-import { getAddresses, signMessage, web3Connection } from "./utils/connectWeb3";
+import {
+  connectToAlchemyProvider,
+  getAddresses,
+  signMessage,
+  web3Connection,
+} from "./utils/connectWeb3";
 
 import { ethers } from "ethers";
 import connectWeb3Modal from "./components/web3Modal";
@@ -22,7 +27,10 @@ export interface UserWeb3ProviderContextType {
   userSignMessage: Function;
   web3API: any;
   disconnectProvider: Function;
+  connectToGivenProvider: Function;
 }
+
+export type GivenProviderAllowance = "alchemy";
 
 export const UserWeb3Context = createContext({
   walletAddress: "",
@@ -35,11 +43,14 @@ export const UserWeb3Context = createContext({
   web3API: null,
   userSignMessage: (signer: ethers.Signer, message: string) => {},
   disconnectProvider: () => {},
+  connectToGivenProvider: (
+    provider: GivenProviderAllowance,
+    network: string
+  ) => {},
 } as UserWeb3ProviderContextType);
 
 export const APIKeys = {
   alchemy: {
-
     apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
 
     network: Network.ETH_MAINNET,
@@ -67,6 +78,23 @@ const UserWeb3Provider = ({ children }) => {
   const updateAuxStorage = (param: string, value: any) => {
     const preStorage = auxStorage;
     setAuxStorage({ ...preStorage, [param]: value });
+  };
+
+  const connectToGivenProvider = async (
+    provider: GivenProviderAllowance,
+    network
+  ) => {
+    if (userProvider) disconnectProvider();
+    let connection;
+    if (provider === "alchemy") {
+      connection = connectToAlchemyProvider(network);
+    }
+
+    if (connection) {
+      setUserProvider(connection);
+    }
+
+    return connection;
   };
 
   /**
@@ -200,6 +228,7 @@ const UserWeb3Provider = ({ children }) => {
         userSignMessage,
         web3API,
         disconnectProvider,
+        connectToGivenProvider,
       }}
     >
       {children}
