@@ -18,6 +18,7 @@ import DayModal from "./components/modal/DayModal";
 import { isAddress } from "@ethersproject/address";
 import { ethers } from "ethers";
 import ensResolver from "hooks/web3/helpers/ensResolver";
+import Header from "./components/Headder";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -34,8 +35,11 @@ const PageContainer = styled.div`
 const HeadArea = styled.div`
   width: 100%;
   height: 150px;
-  border-bottom: 2px solid white;
-  box-shadow: 17px 33px 53px 4px rgba(0, 0, 0, 0.094);
+  border-bottom: 2px none white;
+  
+
+  left: 0;
+  top: 0;
 `;
 
 const BodyArea = styled.div`
@@ -74,14 +78,6 @@ const ConnectionArea = styled.div`
   row-gap: 20px;
   box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.682);
 `;
-
-const ModalTitleCont = styled.div`
-  display: flex;
-  direction: flex;
-  flex-direction: row;
-  row-gap: 20px;
-`;
-const ModalTitle = styled.div``;
 
 const Input = styled.input`
   width: ${({ width }) => (width ? width : "500px")};
@@ -254,7 +250,9 @@ function MainPage({}: MainPageProps) {
       )}
       {ready && (
         <BodyArea>
-          <HeadArea>Header here</HeadArea>
+          <HeadArea>
+            <Header searchAddress={usersAddress} onReset={() => {}} />
+          </HeadArea>
           <TimeLine
             sortedInHistory={sortedInHistory}
             sortedOutHistory={sortedOutHistory}

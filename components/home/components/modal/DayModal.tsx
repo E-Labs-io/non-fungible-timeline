@@ -9,7 +9,7 @@ import TransactionView from "./TransactionView";
 
 const Wrapper = styled.div`
   width: 70vw;
-  height: 50vh;
+  min-height: 450px;
   padding: 10px;
   color: black;
 `;

@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   border-style: solid;
   border-color: white;
   padding: 5px;
-  box-shadow: 17px 33px 53px 4px rgba(0, 0, 0, 0.27);
+  box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.682);
   overflow: hidden;
 `;
 
@@ -95,7 +95,7 @@ const TXData = styled.div`
 const MoreText = styled.a`
   color: #000000;
   text-align: left;
-  font-size: medium;
+  font-size: small;
   text-decoration: "none";
 `;
 
@@ -211,7 +211,7 @@ const FrontCard = ({
               : shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
             <MoreText>
               {(txData && txData.groupedTokenIds.length > 1) ||
-                (txHashes.length > 1 && `+ others`)}
+                (txHashes.length > 1 && ` + others`)}
             </MoreText>
           </TXData>
         </InfoBox>

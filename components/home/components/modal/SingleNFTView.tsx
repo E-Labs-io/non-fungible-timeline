@@ -40,6 +40,8 @@ const ImageContainer = styled.div`
   border-width: 2px;
   border-style: solid;
 
+  box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.682);
+
   width: 300px;
   height: 300px;
 
@@ -123,6 +125,7 @@ const Icon = styled.img`
   border-color: black;
   border-width: 2px;
   border-style: solid;
+  box-shadow: 0px 0px 42px 2px rgba(112, 110, 110, 0.682);
   :hover {
     cursor: pointer;
     scale: 1.1;

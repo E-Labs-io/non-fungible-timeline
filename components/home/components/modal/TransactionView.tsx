@@ -95,7 +95,7 @@ function TransactionView({
               <SmallNFTCard
                 handleSelectedNFT={handleSelectedNFT}
                 contractAddress={contract.contractAddress}
-                tokenId={txData[key].tokenId}
+                tokenId={txData[key]?.tokenId}
                 transactionData={contract}
               />
             ))

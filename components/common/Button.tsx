@@ -15,7 +15,7 @@ const Wrapper = styled.button<ExtraStyleProps>`
   position: relative;
   border-radius: ${({ borderRadius }) => borderRadius || "8px"};
   border: ${({ color, theme }) =>
-    color ? `4px solid ${color}` : `4px solid ${theme.primaryDark}`};
+    color ? `2px solid ${color}` : `2px solid ${theme.primaryDark}`};
 
   -webkit-appearance: none;
   -webkit-touch-callout: none;
@@ -67,8 +67,8 @@ const Wrapper = styled.button<ExtraStyleProps>`
     borderColor
       ? borderColor
       : color
-      ? `4px solid ${color}`
-      : `4px solid ${theme.primaryDark}`};
+      ? `2px solid ${color}`
+      : `2px solid ${theme.primaryDark}`};
 `;
 
 const ChildrenContainer = styled.span`

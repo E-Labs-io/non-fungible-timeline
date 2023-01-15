@@ -36,7 +36,7 @@ const InfoBox = styled.div`
   background-color: #f5f10946;
   border-width: 1px;
   border-style: solid;
-  border-bottom: none;
+
 
   background-color: #dcd7d795;
   padding: 5px;
@@ -58,13 +58,6 @@ const TXData = styled.div`
   color: #000000;
   text-align: left;
   font-size: medium;
-`;
-
-const MoreText = styled.a`
-  color: #000000;
-  text-align: left;
-  font-size: medium;
-  text-decoration: "none";
 `;
 
 const TopImageContainer = styled.div`
