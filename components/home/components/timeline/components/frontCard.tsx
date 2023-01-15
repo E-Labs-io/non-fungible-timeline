@@ -210,9 +210,8 @@ const FrontCard = ({
               ? shortenTokenId(showToken.tokenId)
               : shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
             <MoreText>
-              {txData &&
-                txData.groupedTokenIds.length > 1 &&
-                `+${txData.groupedTokenIds.length - 1} others`}
+              {(txData && txData.groupedTokenIds.length > 1) ||
+                (txHashes.length > 1 && `+ others`)}
             </MoreText>
           </TXData>
         </InfoBox>

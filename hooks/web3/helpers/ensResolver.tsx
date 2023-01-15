@@ -9,7 +9,8 @@ const ensResolver = async (provider: ethers.providers.Provider) => {
   const addressFromEns = async (ensAddress: string) =>
     await provider.resolveName(ensAddress);
 
-  const isENS = (input: string) => (input.slice(-4) === ".eth" ? true : false);
+  const isENS = (input: string) =>
+    input.slice(-4) === ".eth" || input.slice(-4) === ".ETH" ? true : false;
 
   const switchEnsAndAddress = async (input: string) =>
     isENS(input) ? await addressFromEns(input) : await ensFromAddress(input);

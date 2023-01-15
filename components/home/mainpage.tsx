@@ -187,7 +187,10 @@ function MainPage({}: MainPageProps) {
     var searchAddress;
 
     if (isEns) {
-      EnsResolver.addressFromEns((address) => (searchAddress = address));
+      console.log("Is ENS");
+      await EnsResolver.addressFromEns(usersAddress).then(
+        (address) => (searchAddress = address)
+      );
     } else searchAddress = usersAddress;
 
     console.log(searchAddress);
