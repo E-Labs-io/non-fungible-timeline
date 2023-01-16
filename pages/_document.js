@@ -37,14 +37,11 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="shortcut icon" href="/images/favicon.ico" />
 
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-1DNZFN7WMB"
-          ></script>
           <Script
+            async
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_TAG}`}
-            strategy="afterInteractive"
-          />
+          ></Script>
+
           <Script id="google-analytics" strategy="afterInteractive">
             {`
           window.dataLayer = window.dataLayer || [];
@@ -56,7 +53,10 @@ export default class MyDocument extends Document {
           </Script>
 
           <meta name="description" content="Your Non-Fungible Timeline" />
-          <meta name="keywords" content="NFT timeline non-fungible NFTimeline crypto" />
+          <meta
+            name="keywords"
+            content="NFT timeline non-fungible NFTimeline crypto"
+          />
           <meta name="author" content="e-labs" />
 
           <html lang="en" />
