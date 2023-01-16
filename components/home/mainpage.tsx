@@ -203,7 +203,10 @@ function MainPage({}: MainPageProps) {
       console.log("Is ENS");
       await EnsResolver.addressFromEns(usersAddress).then(
         (address) => (searchAddress = address)
-      );
+      ).catch((error) => {
+        console.log("ENS Doesnt Exsist : ", error);
+        setLoadingState(0);
+      });
     } else searchAddress = usersAddress;
 
     console.log(searchAddress);
