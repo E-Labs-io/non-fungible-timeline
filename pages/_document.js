@@ -55,9 +55,9 @@ export default class MyDocument extends Document {
         `}
           </Script>
 
-          <meta name="description" content="Enabling your web3 Community" />
-          <meta name="keywords" content="m3mb3rs club member drop lab" />
-          <meta name="author" content="Ray Chooi" />
+          <meta name="description" content="Your Non-Fungible Timeline" />
+          <meta name="keywords" content="NFT timeline non-fungible NFTimeline crypto" />
+          <meta name="author" content="e-labs" />
 
           <html lang="en" />
         </Head>
