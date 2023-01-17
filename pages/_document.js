@@ -38,10 +38,9 @@ export default class MyDocument extends Document {
           <link rel="shortcut icon" href="/images/favicon.ico" />
 
           <Script
-            async
+            strategy="afterInteractive"
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_TAG}`}
-          ></Script>
-
+          />
           <Script id="google-analytics" strategy="afterInteractive">
             {`
           window.dataLayer = window.dataLayer || [];
