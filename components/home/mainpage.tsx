@@ -172,7 +172,6 @@ function MainPage({}: MainPageProps) {
     if (!connected && userProvider) {
       setUsersAddress(walletAddress);
       setConnected(true);
-      console.log("UserEffect Check Address: ", walletAddress);
     }
     if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
       setReady(false);
@@ -181,10 +180,7 @@ function MainPage({}: MainPageProps) {
     }
   });
 
-  const handleInputChange = (input) => {
-    console.log("Input Area: ", input.target.value);
-    setUsersAddress(input.target.value);
-  };
+  const handleInputChange = (input) => setUsersAddress(input.target.value);
 
   const handleOpenModal = (allSelectedData) => {
     setSelectedDayData(allSelectedData);
@@ -200,13 +196,12 @@ function MainPage({}: MainPageProps) {
     var searchAddress;
 
     if (isEns) {
-      console.log("Is ENS");
-      await EnsResolver.addressFromEns(usersAddress).then(
-        (address) => (searchAddress = address)
-      ).catch((error) => {
-        console.log("ENS Doesnt Exsist : ", error);
-        setLoadingState(0);
-      });
+      await EnsResolver.addressFromEns(usersAddress)
+        .then((address) => (searchAddress = address))
+        .catch((error) => {
+          console.log("ENS Doesn't Exist : ", error);
+          setLoadingState(0);
+        });
     } else searchAddress = usersAddress;
 
     console.log(searchAddress);
@@ -241,7 +236,6 @@ function MainPage({}: MainPageProps) {
         result = !isAddress(input);
       }
     }
-    console.log("Is address: ", result, " From : ", input);
     return result;
   };
 
