@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ballot {
+  ballotId Int     @id @default(autoincrement())
+  title    String  @unique
+  votes    Votes[]
+  active   Boolean @default(true)
+}
+
+model Votes {
+  voteId         Int      @id @default(autoincrement())
+  voter          String
+  votedFor       String
+  timestamp      DateTime @default(now())
+  Ballot         Ballot?  @relation(fields: [ballotBallotId], references: [ballotId])
+  ballotBallotId Int?
+}
