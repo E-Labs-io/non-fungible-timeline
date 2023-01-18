@@ -1,6 +1,6 @@
 /** @format */
 
-import { sortedHistoryData } from "helpers/data/sortUsersHistory";
+import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 import shortenTokenId from "helpers/shorternTokenId";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";

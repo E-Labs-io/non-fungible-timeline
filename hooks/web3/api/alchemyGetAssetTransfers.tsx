@@ -1,34 +1,28 @@
 /** @format */
 
-const alchemyGetAssetTransfers = async (
-  from?: string,
-  to?: string,
-  startingBlock?: string
-) => {
-  if (!!!to && !!!from) throw "Need to provide an address";
-  const options =
-    !!to && !!from
-      ? {
-          fromBlock: startingBlock ? startingBlock : "0x0",
-          fromAddress: from,
-          toAddress: to,
-          category: ["erc721", "erc1155"],
-          withMetadata: true,
-        }
-      : !!to && !!!from
-      ? {
-          fromBlock: startingBlock ? startingBlock : "0x0",
-          toAddress: to,
-          category: ["erc721", "erc1155"],
-          withMetadata: true,
-        }
-      : {
-          fromBlock: startingBlock ? startingBlock : "0x0",
-          fromAddress: from,
-          category: ["erc721", "erc1155"],
-          withMetadata: true,
-        };
+export interface alchemyGetAssetTransfersOptions {
+  fromAddress?: string;
+  toAddress?: string;
+  toBlock?: string;
+  fromBlock?: string;
+  pageKey?: string;
+  withMetadata?: true;
+  category: alchemyGetAssetTransferCategoryType[];
+  contractAddresses?: string[];
+  maxCount?: string;
+  excludeZeroValue?: true;
+}
 
+export type alchemyGetAssetTransferCategoryType =
+  | "erc721"
+  | "erc1155"
+  | "erc20";
+
+const alchemyGetAssetTransfers = async (
+  options: alchemyGetAssetTransfersOptions
+) => {
+  if (!!!options.fromAddress && !!!options.toAddress)
+    throw "Need to provide at least a To or From";
   let data = JSON.stringify({
     jsonrpc: "2.0",
     id: 0,

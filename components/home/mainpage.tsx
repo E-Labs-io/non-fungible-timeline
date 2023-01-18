@@ -1,24 +1,20 @@
 /** @format */
 import { Button, InputBox, Modal } from "../common";
 import { ConnectButton, useWeb3Provider } from "../../hooks/web3";
-import React, { useState, useEffect, ReactElement } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import LoadingNotice from "./components/loadingNotice";
-
-import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
-import sortUsersHistory from "../../helpers/data/sortUsersHistory";
-
-import alchemyGetAssetTransfers from "hooks/web3/api/alchemyGetAssetTransfers";
-import zeroAddress from "hooks/web3/utils/zeroAddress";
+import sortUsersHistory from "../../helpers/dataSorting/sortUsersHistory";
 import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
 import compileHistoryIntoDays, {
   compileHistoryIntoDaysReturn,
-} from "helpers/data/compileHistoryIntoDays";
+} from "helpers/dataSorting/compileHistoryIntoDays";
 import DayModal from "./components/modal/DayModal";
 import { isAddress } from "@ethersproject/address";
 import { ethers } from "ethers";
 import ensResolver from "hooks/web3/helpers/ensResolver";
 import Header from "./components/Headder";
+import getUsersHistory from "helpers/getters/getUsersHistory";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -68,7 +64,7 @@ const ConnectionArea = styled.div`
   background-color: #86848447;
   border-radius: 20px;
   border-width: 1px;
-  border-style: solid;
+  border-style: none;
   border-color: white;
   display: flex;
   flex-direction: column;
@@ -78,7 +74,7 @@ const ConnectionArea = styled.div`
   justify-content: center;
   padding: 5px;
   row-gap: 20px;
-  box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.682);
+  box-shadow: 0px 0px 42px 5px rgba(207, 207, 207, 0.682);
 `;
 
 const Input = styled.input`
@@ -128,6 +124,10 @@ function MainPage({}: MainPageProps) {
     useState<compileHistoryIntoDaysReturn>();
   const [rawOutHistory, setRawOutHistory] = useState<any>();
   const [sortedOutHistory, setSortedOutHistory] = useState<any>();
+  const [historyDataPageKey, setHistoryDataPageKey] = useState<{
+    in: string;
+    out: string;
+  }>();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -136,31 +136,6 @@ function MainPage({}: MainPageProps) {
   const [selectedDate, setSelectedDay] = useState<string>();
 
   const [otherAddress, setOtherAddress] = useState<boolean>(false);
-
-  interface GetUSersHistoryProps {
-    from?: string;
-    to?: string;
-  }
-
-  const getUsersHistory = async ({
-    from,
-    to,
-  }: GetUSersHistoryProps): Promise<AssetTransfersWithMetadataResult[]> => {
-    if (to) {
-      //  Inbound
-      const inBound = await alchemyGetAssetTransfers(
-        from ? from : null,
-        to,
-        "0xAA2644"
-      );
-      console.log(inBound.result);
-      return inBound.result.transfers;
-    } else {
-      // Out bounce
-      const outBound = await alchemyGetAssetTransfers(from, null, "0xAA2644");
-      return outBound.result.transfers;
-    }
-  };
 
   useEffect(() => {
     if (!internalProvider) {
@@ -180,15 +155,6 @@ function MainPage({}: MainPageProps) {
     }
   });
 
-  const handleInputChange = (input) => setUsersAddress(input.target.value);
-
-  const handleOpenModal = (allSelectedData) => {
-    setSelectedDayData(allSelectedData);
-
-    setIsModalOpen(true);
-  };
-  const handleCloseModal = () => setIsModalOpen(false);
-
   const searchUsersHistory = async () => {
     if (userProvider && usersAddress !== walletAddress) setOtherAddress(true);
     setLoadingState(1);
@@ -203,25 +169,32 @@ function MainPage({}: MainPageProps) {
           setLoadingState(0);
         });
     } else searchAddress = usersAddress;
-
-    console.log(searchAddress);
-
+    setLoadingState(2);
     const inBoundTransfers = await getUsersHistory({
       to: searchAddress,
     });
-    setLoadingState(2);
-    const outBound = await getUsersHistory({ from: searchAddress });
     setLoadingState(3);
+    const outBound = await getUsersHistory({ from: searchAddress });
+    setLoadingState(4);
     const sortedDataIn = sortUsersHistory(inBoundTransfers);
     const inByDate = compileHistoryIntoDays(sortedDataIn);
     setSortedInHistory(inByDate);
-    setLoadingState(4);
+    setLoadingState(5);
     const sortedDataOut = sortUsersHistory(outBound);
     const outByDate = compileHistoryIntoDays(sortedDataOut);
     setSortedOutHistory(outByDate);
-    setLoadingState(5);
+
     setReady(true);
   };
+
+  const handleInputChange = (input) => setUsersAddress(input.target.value);
+
+  const handleOpenModal = (allSelectedData) => {
+    setSelectedDayData(allSelectedData);
+
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleIsDisabled = (input: string): boolean => {
     let result = true;
@@ -285,6 +258,7 @@ function MainPage({}: MainPageProps) {
             sortedOutHistory={sortedOutHistory}
             ready={ready}
             handleOpenModal={handleOpenModal}
+            hasMorePages={!!historyDataPageKey}
           />
         </BodyArea>
       )}

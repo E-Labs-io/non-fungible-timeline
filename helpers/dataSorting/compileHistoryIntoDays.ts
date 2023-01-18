@@ -33,12 +33,15 @@ const compileHistoryIntoDays = (
 
     let date;
 
+    //  For each transaction hash in the block
     for (let h = 0; h < hashs.length; h++) {
       let hash = hashs[h];
+      //  For each contract in the transaction
       for (let c = 0; c < contracts.length; c++) {
         let contract = contracts[c];
-
+        //  Check that the Contract exists on the hash on the blockNum
         if (!!history.sorted[blockNum][hash][contract]) {
+          //  It does
           let data = history.sorted[blockNum][hash][contract];
           if (!date) {
             let fullDate = new Date(data.timestamp);

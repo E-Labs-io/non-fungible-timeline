@@ -1,5 +1,5 @@
 /** @format */
-import { sortedHistoryData } from "helpers/data/sortUsersHistory";
+import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";

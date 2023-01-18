@@ -22,6 +22,7 @@ model Votes {
   voter          String
   votedFor       String
   timestamp      DateTime @default(now())
-  Ballot         Ballot?  @relation(fields: [ballotBallotId], references: [ballotId])
+  ballot         Ballot?  @relation(fields: [ballotBallotId], references: [ballotId])
   ballotBallotId Int?
 }
+

@@ -6,7 +6,10 @@ import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
-import { sortedHistoryData, TokenIds } from "helpers/data/sortUsersHistory";
+import {
+  sortedHistoryData,
+  TokenIds,
+} from "helpers/dataSorting/sortUsersHistory";
 import getIPFSFormat from "helpers/getIPFSFormat";
 import shortenTokenId from "helpers/shorternTokenId";
 
@@ -36,7 +39,6 @@ const InfoBox = styled.div`
   background-color: #f5f10946;
   border-width: 1px;
   border-style: solid;
-
 
   background-color: #dcd7d795;
   padding: 5px;

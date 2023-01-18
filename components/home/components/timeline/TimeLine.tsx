@@ -18,8 +18,8 @@ import FrontCard from "./components/frontCard";
 import {
   compileHistoryIntoDaysReturn,
   sortedHashData,
-} from "helpers/data/compileHistoryIntoDays";
-import combineHistory from "helpers/data/combinedSortedHistory";
+} from "helpers/dataSorting/compileHistoryIntoDays";
+import combineHistory from "helpers/dataSorting/combinedSortedHistory";
 
 const Container = styled.div`
   height: 100%;
@@ -38,8 +38,6 @@ const LoadMoreButton = styled.div`
   }
 `;
 
-
-
 export type combinedHistory = dailyHistory[];
 export type dailyHistory = ["left" | "right", string, string[], sortedHashData];
 
@@ -48,6 +46,7 @@ interface TimeLineProps {
   sortedOutHistory: compileHistoryIntoDaysReturn;
   ready: boolean;
   handleOpenModal: Function;
+  hasMorePages: boolean;
 }
 
 function TimeLine({
@@ -55,6 +54,7 @@ function TimeLine({
   sortedOutHistory,
   ready,
   handleOpenModal,
+  hasMorePages,
 }: TimeLineProps) {
   const [isReady, setIsReady] = useState<boolean>(false);
   const [firstLoad, setFirstLoad] = useState<boolean>(false);
