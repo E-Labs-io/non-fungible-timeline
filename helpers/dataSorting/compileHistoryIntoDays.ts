@@ -40,37 +40,42 @@ const compileHistoryIntoDays = (
       for (let c = 0; c < contracts.length; c++) {
         let contract = contracts[c];
         //  Check that the Contract exists on the hash on the blockNum
-        if (!!history.sorted[blockNum][hash][contract]) {
-          //  It does
-          let data = history.sorted[blockNum][hash][contract];
-          if (!date) {
-            let fullDate = new Date(data.timestamp);
-            date = fullDate.toDateString();
-          }
 
-          if (!!dateOrderedHistory) {
-            if (!!dateOrderedHistory[date]) {
-              if (!!dateOrderedHistory[date][hash]) {
-                //  Date is there & Hash is there
-                dateOrderedHistory[date][hash].push(data);
+        try {
+          if (!!history.sorted[blockNum][hash][contract]) {
+            //  It does
+            let data = history.sorted[blockNum][hash][contract];
+            if (!date) {
+              let fullDate = new Date(data.timestamp);
+              date = fullDate.toDateString();
+            }
+
+            if (!!dateOrderedHistory) {
+              if (!!dateOrderedHistory[date]) {
+                if (!!dateOrderedHistory[date][hash]) {
+                  //  Date is there & Hash is there
+                  dateOrderedHistory[date][hash].push(data);
+                } else {
+                  //  Date is there Hash is NOT there
+                  let newHash = { ...dateOrderedHistory[date], [hash]: [data] };
+                  dateOrderedHistory[date] = newHash;
+                }
               } else {
-                //  Date is there Hash is NOT there
-                let newHash = { ...dateOrderedHistory[date], [hash]: [data] };
-                dateOrderedHistory[date] = newHash;
+                dateOrderedHistory = {
+                  ...dateOrderedHistory,
+                  [date]: { [hash]: [data] },
+                };
               }
             } else {
-              dateOrderedHistory = {
-                ...dateOrderedHistory,
-                [date]: { [hash]: [data] },
-              };
+              dateOrderedHistory = { [date]: { [hash]: [data] } };
             }
-          } else {
-            dateOrderedHistory = { [date]: { [hash]: [data] } };
+            if (dateHashes) {
+              if (!!dateHashes[date]) dateHashes[date].push(hash);
+              else dateHashes = { ...dateHashes, [date]: [hash] };
+            } else dateHashes = { [date]: [hash] };
           }
-          if (dateHashes) {
-            if (!!dateHashes[date]) dateHashes[date].push(hash);
-            else dateHashes = { ...dateHashes, [date]: [hash] };
-          } else dateHashes = { [date]: [hash] };
+        } catch (error) {
+          console.log("Error compiling history into days : ", error);
         }
       }
     }

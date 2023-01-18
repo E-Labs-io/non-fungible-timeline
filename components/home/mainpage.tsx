@@ -177,10 +177,12 @@ function MainPage({}: MainPageProps) {
     const outBound = await getUsersHistory({ from: searchAddress });
     setLoadingState(4);
     const sortedDataIn = sortUsersHistory(inBoundTransfers);
+    console.log("Check Sorted Inbound: ", sortedDataIn);
     const inByDate = compileHistoryIntoDays(sortedDataIn);
     setSortedInHistory(inByDate);
     setLoadingState(5);
     const sortedDataOut = sortUsersHistory(outBound);
+    console.log("Check Sorted Outbound: ", sortedDataOut);
     const outByDate = compileHistoryIntoDays(sortedDataOut);
     setSortedOutHistory(outByDate);
 

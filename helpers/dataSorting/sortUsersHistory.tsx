@@ -164,7 +164,7 @@ const sortUsersHistory = (
       allBlocks.push(count);
     }
   });
-  console.log("Check Sorted: ", sorted);
+
   return { sorted, allBlocks };
 };
 

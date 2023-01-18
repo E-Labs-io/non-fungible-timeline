@@ -39,7 +39,6 @@ const getUsersHistory = async ({
 
   //  Get the first run of data
   const batchedTXData = await search(options);
-  console.log(batchedTXData);
   batchedTXData.transfers.forEach((tx) => transfers.push(tx));
 
   //  Check if there is an other page of data
@@ -49,7 +48,6 @@ const getUsersHistory = async ({
 
   //  While there is another page of data
   while (!!pageKey) {
-    console.log("getting next page of data");
     options.pageKey = pageKey;
     //  Get the next page of data
     await search(options).then((returnedData) => {
