@@ -30,13 +30,11 @@ const PageTitle = styled.text`
   align-items: center;
   display: flex;
 
-  background: #70ffde;
-  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white;
 
-  font-size: 40px;
+  font-size: 30px;
   text-align: center;
+  font-family: "Kanit", sans-serif;
 `;
 
 const BackButton = styled.div`
@@ -69,7 +67,7 @@ function Header({ searchAddress, onReset, onBack }: HeaderProps) {
       </BackButton>
       <MainText>
         <br />
-        <PageTitle>Non-Fungible Timeline</PageTitle>
+        <PageTitle>NON-FUNGIBLE TIMELINE</PageTitle>
       </MainText>
       <MenuArea></MenuArea>
     </HeaderContainer>
@@ -77,3 +75,12 @@ function Header({ searchAddress, onReset, onBack }: HeaderProps) {
 }
 
 export default Header;
+
+/* 
+
+  background: #70ffde;
+  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+*/

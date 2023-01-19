@@ -8,8 +8,10 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
 
+  display: flex;
   align-items: center;
   justify-content: space-around;
+  padding: 5px;
 
   columns: 5;
 `;
@@ -58,24 +60,30 @@ interface UserStatsProps {
   firstAndLast: { first: string; last: string };
   totals: { totalIn: number; totalOut: number };
   totalTX: number;
+  handleOpenModal: (selected: "first" | "last") => void;
 }
-function UserStats({ firstAndLast, totals, totalTX }: UserStatsProps) {
+function UserStats({
+  firstAndLast,
+  totals,
+  totalTX,
+  handleOpenModal,
+}: UserStatsProps) {
   return (
     <Container>
-      <StatBox active={true}>
-        <StatTitle>First Transactions</StatTitle>
+      <StatBox active={true} onClick={() => handleOpenModal("first")}>
+        <StatTitle>First Transaction</StatTitle>
         <Stat>{new Date(firstAndLast.first).toLocaleDateString()}</Stat>
       </StatBox>
-      <StatBox active={true}>
-        <StatTitle>Latest Transactions</StatTitle>
+      <StatBox active={true} onClick={() => handleOpenModal("last")}>
+        <StatTitle>Latest Transaction</StatTitle>
         <Stat>{new Date(firstAndLast.last).toLocaleDateString()}</Stat>
       </StatBox>
       <StatBox>
-        <StatTitle>Total In</StatTitle>
+        <StatTitle>Tokens In</StatTitle>
         <Stat>{totals.totalIn}</Stat>
       </StatBox>
       <StatBox>
-        <StatTitle>Total Out</StatTitle>
+        <StatTitle>Tokens Out</StatTitle>
         <Stat>{totals.totalOut}</Stat>
       </StatBox>
       <StatBox>

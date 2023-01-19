@@ -109,33 +109,20 @@ const PageTitle = styled.div`
  */
 interface MainPageProps {}
 function MainPage({}: MainPageProps) {
+  const { walletAddress, userProvider, connectToGivenProvider } =
+    useWeb3Provider();
   const [internalProvider, setInternalProvider] =
     useState<ethers.providers.Provider>();
   const [EnsResolver, setEnsResolver] = useState<any>();
   const [connected, setConnected] = useState<boolean>(false);
   const [loadingState, setLoadingState] = useState<0 | 1 | 2 | 3 | 4 | 5>(0);
   const [ready, setReady] = useState<boolean>(false);
-
   const [usersAddress, setUsersAddress] = useState<string>();
-  const { walletAddress, userProvider, connectToGivenProvider } =
-    useWeb3Provider();
-
-  const [rawInHistory, setRawInHistory] = useState<any>();
   const [sortedInHistory, setSortedInHistory] =
     useState<compileHistoryIntoDaysReturn>();
-  const [rawOutHistory, setRawOutHistory] = useState<any>();
   const [sortedOutHistory, setSortedOutHistory] = useState<any>();
-  const [historyDataPageKey, setHistoryDataPageKey] = useState<{
-    in: string;
-    out: string;
-  }>();
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
   const [selectedDayData, setSelectedDayData] = useState<dailyHistory>();
-
-  const [selectedDate, setSelectedDay] = useState<string>();
-
   const [otherAddress, setOtherAddress] = useState<boolean>(false);
 
   useEffect(() => {
@@ -152,7 +139,6 @@ function MainPage({}: MainPageProps) {
     if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
       setReady(false);
       setLoadingState(0);
-      //searchUsersHistory();
     }
   });
 
@@ -178,12 +164,10 @@ function MainPage({}: MainPageProps) {
     const outBound = await getUsersHistory({ from: searchAddress });
     setLoadingState(4);
     const sortedDataIn = sortUsersHistory(inBoundTransfers);
-    console.log("Check Sorted Inbound: ", sortedDataIn);
     const inByDate = compileHistoryIntoDays(sortedDataIn);
     setSortedInHistory(inByDate);
     setLoadingState(5);
     const sortedDataOut = sortUsersHistory(outBound);
-    console.log("Check Sorted Outbound: ", sortedDataOut);
     const outByDate = compileHistoryIntoDays(sortedDataOut);
     setSortedOutHistory(outByDate);
 
@@ -194,7 +178,6 @@ function MainPage({}: MainPageProps) {
 
   const handleOpenModal = (allSelectedData) => {
     setSelectedDayData(allSelectedData);
-
     setIsModalOpen(true);
   };
   const handleCloseModal = () => setIsModalOpen(false);
@@ -215,14 +198,52 @@ function MainPage({}: MainPageProps) {
     return result;
   };
 
-  const handleOpenModalFromStats = () => {
-    
-  }
+  const handleOpenModalFromStats = (selected: "first" | "last") => {
+    let dates = [];
+    Object.keys(sortedInHistory.hashes).forEach((date) => dates.push(date));
+    Object.keys(sortedOutHistory.hashes).forEach((date) => dates.push(date));
+
+    const sortedDates = dates.sort(
+      (a, b) => new Date(a).getTime() - new Date(b).getTime()
+    );
+
+    const date =
+      selected === "first"
+        ? sortedDates[0]
+        : sortedDates[sortedDates.length - 1];
+
+    const inOrOut: "left" | "right" = !!sortedInHistory.history[date]
+      ? "left"
+      : "right";
+
+    const hashes =
+      inOrOut === "left"
+        ? sortedInHistory.hashes[date]
+        : sortedOutHistory.hashes[date];
+
+    const transactions =
+      inOrOut === "left"
+        ? sortedInHistory.history[date]
+        : sortedOutHistory.history[date];
+
+    let selectedDay: dailyHistory = [
+      inOrOut,
+      selected === "first"
+        ? sortedDates[0]
+        : sortedDates[sortedDates.length - 1],
+      hashes,
+      transactions,
+    ];
+
+    setSelectedDayData(selectedDay);
+
+    setIsModalOpen(true);
+  };
 
   const handleBack = () => {
     setReady(false);
     setLoadingState(0);
-    setUsersAddress("");
+    setUsersAddress(walletAddress ? walletAddress : "");
   };
   return (
     <PageContainer>
@@ -233,6 +254,7 @@ function MainPage({}: MainPageProps) {
           <ConnectionArea>
             {loadingState === 0 && (
               <>
+                <br />
                 <ConnectButton />
                 Or
                 <Input
@@ -262,6 +284,7 @@ function MainPage({}: MainPageProps) {
           </HeadArea>
           <br />
           <UserInformation
+            handleOpenModal={handleOpenModalFromStats}
             providedAddress={usersAddress}
             ensResolver={EnsResolver && EnsResolver}
             sortedInHistory={sortedInHistory}
@@ -273,7 +296,6 @@ function MainPage({}: MainPageProps) {
             sortedOutHistory={sortedOutHistory}
             ready={ready}
             handleOpenModal={handleOpenModal}
-            hasMorePages={!!historyDataPageKey}
           />
         </BodyArea>
       )}

@@ -46,7 +46,6 @@ interface TimeLineProps {
   sortedOutHistory: compileHistoryIntoDaysReturn;
   ready: boolean;
   handleOpenModal: Function;
-  hasMorePages: boolean;
 }
 
 function TimeLine({
@@ -54,7 +53,6 @@ function TimeLine({
   sortedOutHistory,
   ready,
   handleOpenModal,
-  hasMorePages,
 }: TimeLineProps) {
   const [isReady, setIsReady] = useState<boolean>(false);
   const [firstLoad, setFirstLoad] = useState<boolean>(false);

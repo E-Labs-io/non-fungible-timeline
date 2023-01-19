@@ -76,6 +76,7 @@ interface UserInformationProps {
   ensResolver;
   sortedInHistory: compileHistoryIntoDaysReturn;
   sortedOutHistory: compileHistoryIntoDaysReturn;
+  handleOpenModal: (selected: "first" | "last") => void;
 }
 
 function UserInformation({
@@ -83,6 +84,7 @@ function UserInformation({
   ensResolver,
   sortedInHistory,
   sortedOutHistory,
+  handleOpenModal,
 }: UserInformationProps) {
   const [ready, setReady] = useState<boolean>(false);
   const [addressCheck, setAddressCheck] = useState<{
@@ -137,10 +139,10 @@ function UserInformation({
         sortedInHistory,
         sortedOutHistory
       );
-      setFirstAndLast(dates);
       const totals = countTokens(sortedInHistory, sortedOutHistory);
-      setTotals(totals);
       const totalTXs = countTransactions(sortedInHistory, sortedOutHistory);
+      setFirstAndLast(dates);
+      setTotals(totals);
       setTotalTX(totalTXs);
 
       setStatsCheck({ started: true, finished: true });
@@ -162,6 +164,7 @@ function UserInformation({
         </DisplayAddress>
         <WalletInfo>
           <UserStats
+            handleOpenModal={handleOpenModal}
             firstAndLast={firstAndLast}
             totals={totalTokens}
             totalTX={totalTX}
