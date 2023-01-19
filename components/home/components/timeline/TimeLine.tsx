@@ -145,6 +145,9 @@ function TimeLine({
           )}
         </VerticalTimeline>
       )}
+      <br />
+      <br />
+      <br />
     </Container>
   );
 }

@@ -58,22 +58,6 @@ function FlatMenu({ open, setOpen, ariaControls }: FlatMenuProps) {
   const [toastItem, setToastItem] = useState<any>();
   const { walletAddress } = useWeb3Provider();
 
-  const handleShowWarningMessage = (shouldShow: boolean) => {
-    if (shouldShow) {
-      const warningToast = ToastCall({
-        action: "error",
-        autoClose: 10000,
-        children: (
-          <ToastTransaction
-            title="Do not connect a wallet with your valuable NFTs."
-            messages={["This is always best practice"]}
-          />
-        ),
-      });
-    } else {
-      toastItem ? ToastCall({ action: "dismiss", toastItem: toastItem }) : null;
-    }
-  };
   return (
     <StyledFlatMenu>
       <ButtonContainer isOpen={open}>
@@ -82,7 +66,7 @@ function FlatMenu({ open, setOpen, ariaControls }: FlatMenuProps) {
           backgroundColor={theme.offWhite}
           color={theme.primaryDark}
           showAddressIcon
-          showWarningMessage={handleShowWarningMessage}
+          showDropdown
         />
       </ButtonContainer>
       <Burger open={open} setOpen={setOpen} aria-controls={ariaControls} />

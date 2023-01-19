@@ -21,10 +21,9 @@ const Wrapper = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
   padding: 10px 30px 100px;
-  
 `;
 
 const Title = styled.h2`

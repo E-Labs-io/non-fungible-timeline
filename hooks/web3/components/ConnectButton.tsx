@@ -124,6 +124,7 @@ interface Web3ConnectButtonProps {
   actionLink?: actionLinkTypes[];
   showAddressIcon?: boolean;
   showWarningMessage?: (shouldShow: boolean) => void;
+  showDropdown?: true;
 }
 
 function Web3ConnectButton({
@@ -141,6 +142,7 @@ function Web3ConnectButton({
   actionLink,
   showAddressIcon = false,
   showWarningMessage,
+  showDropdown,
 }: Web3ConnectButtonProps) {
   const {
     connectToUsersProvider,
@@ -189,21 +191,22 @@ function Web3ConnectButton({
 
   return (
     <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      {!!actionText?.length && !!walletAddress && (
+      {showDropdown && !!walletAddress && (
         <ActionListContainer>
-          {actionText.map((item, key) => (
-            <ActionText
-              href={
-                typeof actionLink[key] === "string" ? actionLink[key] : null
-              }
-              onClick={
-                typeof actionLink[key] !== "string" ? actionLink[key] : null
-              }
-              containerHover={containerHover}
-            >
-              {item}
-            </ActionText>
-          ))}
+          {actionText &&
+            actionText.map((item, key) => (
+              <ActionText
+                href={
+                  typeof actionLink[key] === "string" ? actionLink[key] : null
+                }
+                onClick={
+                  typeof actionLink[key] !== "string" ? actionLink[key] : null
+                }
+                containerHover={containerHover}
+              >
+                {item}
+              </ActionText>
+            ))}
           <ActionText onClick={null} href={null}>
             Network: {auxStorage.network.name}
           </ActionText>

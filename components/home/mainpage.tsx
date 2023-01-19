@@ -17,12 +17,14 @@ import Header from "../common/Layout/Header/Header";
 import getUsersHistory from "helpers/getters/getUsersHistory";
 import UserInformation from "./components/userInfo/UserInfo";
 import SearchAndConnectArea from "./components/SearchAndConnectArea";
+import useWindowSize from "hooks/window/useWindowSize";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
     theme ? theme.coloredTheme.background : "white"};
   width: 100vw;
   height: 100%;
+  overflow: hidden;
 
   align-items: center;
   justify-content: center;
@@ -33,7 +35,7 @@ const PageContainer = styled.div`
 
 const BodyArea = styled.div`
   width: 100%;
-  height: 100%;
+  max-height: 100%;
 
   align-items: center;
   justify-content: center;
@@ -43,67 +45,13 @@ const BodyArea = styled.div`
   flex-direction: column;
 `;
 
-const PreLoadLayout = styled.div`
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  column-gap: 30px;
-`;
-
-const ConnectionArea = styled.div`
-  background-color: #86848447;
-  border-radius: 20px;
-  border-width: 1px;
-  border-style: none;
-  border-color: white;
-  display: flex;
-  flex-direction: column;
-  width: 50vw;
-  min-height: 20vh;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  row-gap: 20px;
-  box-shadow: inset 0px 0px 40px 1px rgba(207, 207, 207, 0.682);
-`;
-
-const Input = styled.input`
-  width: ${({ width }) => (width ? width : "500px")};
-  height: ${({ height }) => (height ? height : "50px")};
-  margin-top: 10px;
-  padding: 12px 15px;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  background-color: #ffffff75;
-`;
-
-const PageTitle = styled.div`
-  justify-content: center;
-  align-items: center;
-
-  background: #70ffde;
-  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #000000;
-  font-family: "Kanit", sans-serif;
-  font-size: 70px;
-  text-align: center;
-`;
-
 /**
  * @dev : Non-Fungible Timeline Home
  *
  */
 interface MainPageProps {}
 function MainPage({}: MainPageProps) {
+  const { height } = useWindowSize();
   const { walletAddress, userProvider, connectToGivenProvider } =
     useWeb3Provider();
   const [internalProvider, setInternalProvider] =
@@ -251,27 +199,25 @@ function MainPage({}: MainPageProps) {
           usersAddress={usersAddress}
         />
       )}
+      {ready && <Header onBack={handleBack} />}
       {ready && (
-        <>
-          <Header onBack={handleBack} />
-          <BodyArea>
-            <br />
-            <UserInformation
-              handleOpenModal={handleOpenModalFromStats}
-              providedAddress={usersAddress}
-              ensResolver={EnsResolver && EnsResolver}
-              sortedInHistory={sortedInHistory}
-              sortedOutHistory={sortedOutHistory}
-            />
+        <BodyArea height={height}>
+          <br />
+          <UserInformation
+            handleOpenModal={handleOpenModalFromStats}
+            providedAddress={usersAddress}
+            ensResolver={EnsResolver && EnsResolver}
+            sortedInHistory={sortedInHistory}
+            sortedOutHistory={sortedOutHistory}
+          />
 
-            <TimeLine
-              sortedInHistory={sortedInHistory}
-              sortedOutHistory={sortedOutHistory}
-              ready={ready}
-              handleOpenModal={handleOpenModal}
-            />
-          </BodyArea>
-        </>
+          <TimeLine
+            sortedInHistory={sortedInHistory}
+            sortedOutHistory={sortedOutHistory}
+            ready={ready}
+            handleOpenModal={handleOpenModal}
+          />
+        </BodyArea>
       )}
       <Modal
         title={

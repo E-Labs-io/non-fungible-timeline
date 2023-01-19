@@ -3,7 +3,6 @@
 import React, { Fragment } from "react";
 import styled, { useTheme } from "styled-components";
 
-import { Divider } from "components/common";
 import TextExpand from "./TextExpand";
 import { device } from "config/media";
 
