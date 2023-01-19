@@ -1,6 +1,6 @@
 /** @format */
 import React from "react";
-import { Loader } from "../../common";
+import { Loader } from "../../../common";
 
 interface LoadingNoticeProps {
   loadingState: 0 | 1 | 2 | 3 | 4 | 5;

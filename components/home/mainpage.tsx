@@ -3,7 +3,7 @@ import { Button, InputBox, Modal } from "../common";
 import { ConnectButton, useWeb3Provider } from "../../hooks/web3";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import LoadingNotice from "./components/loadingNotice";
+import LoadingNotice from "./components/SearchAndConnectArea/loadingNotice";
 import sortUsersHistory from "../../helpers/dataSorting/sortUsersHistory";
 import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
 import compileHistoryIntoDays, {
@@ -14,8 +14,10 @@ import { isAddress } from "@ethersproject/address";
 import { ethers } from "ethers";
 import ensResolver from "hooks/web3/helpers/ensResolver";
 import Header from "./components/Headder";
+import Headers from "../common/Layout/Header/Header";
 import getUsersHistory from "helpers/getters/getUsersHistory";
 import UserInformation from "./components/userInfo/UserInfo";
+import SearchAndConnectArea from "./components/SearchAndConnectArea";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -250,39 +252,19 @@ function MainPage({}: MainPageProps) {
   return (
     <PageContainer>
       {!ready && (
-        <PreLoadLayout>
-          <PageTitle>Non-Fungible Timeline</PageTitle>
-          <br />
-          <ConnectionArea>
-            {loadingState === 0 && (
-              <>
-                <br />
-                <ConnectButton />
-                Or
-                <Input
-                  onChange={handleInputChange}
-                  placeholder="Wallet Address or ENS"
-                />
-                <Button
-                  onClick={searchUsersHistory}
-                  disabled={handleIsDisabled(usersAddress)}
-                >
-                  Search
-                </Button>
-              </>
-            )}
-            <LoadingNotice loadingState={loadingState} />
-          </ConnectionArea>
-        </PreLoadLayout>
+        <SearchAndConnectArea
+          handleInputChange={handleInputChange}
+          searchUsersHistory={searchUsersHistory}
+          handleIsDisabled={handleIsDisabled}
+          loadingState={loadingState}
+          usersAddress={usersAddress}
+        />
       )}
       {ready && (
         <BodyArea>
           <HeadArea>
-            <Header
-              searchAddress={usersAddress}
-              onReset={() => {}}
-              onBack={handleBack}
-            />
+            <Header onBack={handleBack} />
+            <Headers />
           </HeadArea>
           <br />
           <UserInformation
