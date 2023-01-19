@@ -138,21 +138,10 @@ function SmallNFTCard({
             //setImageUrl(nft.metadata.image);
             const urlParsed = checkIfIPFSUrl(nft.metadata.image);
             setImageUrl(urlParsed);
-            setMediaFormat("image");
+            const format = getMediaFormat(urlParsed);
+            setMediaFormat(format);
             setReady(true);
             setLoading(false);
-            /*  if (isIPFS) {
-                const isIPFS = urlParsed.includes("ipfs.io/ipfs/") ? true : false;
-              getIPFSFormat(urlParsed).then(({ objectUrl, mediaType }) => {
-                setImageUrl(mediaFormat);
-                setMediaFormat(mediaType);
-              });
-            } else {
-              getMediaFormat(urlParsed);
-              setImageUrl(urlParsed);
-              setReady(true);
-              setLoading(false);
-            } */
           } else {
             setMediaFormat("image");
             setReady(true);
@@ -184,12 +173,12 @@ function SmallNFTCard({
       extension === "png" ||
       extension === "gif"
     ) {
-      setMediaFormat("image");
+      return "image";
     } else if (extension === "mp4") {
-      setMediaFormat("video");
+      return "video";
     } else if (extension === "wav" || extension === "mp3") {
-      setMediaFormat("audio");
-    }
+      return "audio";
+    } else return "image";
   };
   return ready ? (
     <SingleCard

@@ -39,13 +39,6 @@ const PageTitle = styled.text`
   text-align: center;
 `;
 
-const WalletAddress = styled.div`
-  justify-content: center;
-  display: flex;
-  font-size: 20px;
-  text-align: center;
-`;
-
 const BackButton = styled.div`
   align-items: left;
   padding-left: 20px;
@@ -77,7 +70,6 @@ function Header({ searchAddress, onReset, onBack }: HeaderProps) {
       <MainText>
         <br />
         <PageTitle>Non-Fungible Timeline</PageTitle>
-        <WalletAddress>{searchAddress}</WalletAddress>
       </MainText>
       <MenuArea></MenuArea>
     </HeaderContainer>

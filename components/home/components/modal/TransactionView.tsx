@@ -91,8 +91,9 @@ function TransactionView({
       <CardContainer>
         {txData &&
           txData.map((contract, key) =>
-            contract.groupedTokenIds.map((id, key) => (
+            contract.groupedTokenIds.map((id, lowerKey) => (
               <SmallNFTCard
+                key={lowerKey}
                 handleSelectedNFT={handleSelectedNFT}
                 contractAddress={contract.contractAddress}
                 tokenId={id}

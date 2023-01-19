@@ -114,6 +114,7 @@ function TimeLine({
           {!!sortedData &&
             sortedData.slice(0, lastItemNumber).map((day, key) => (
               <VerticalTimelineElement
+                key={key}
                 date={day[1]}
                 contentStyle={timelineElementStyle(day[0])}
                 position={day[0]}

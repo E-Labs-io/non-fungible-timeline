@@ -15,6 +15,7 @@ import { ethers } from "ethers";
 import ensResolver from "hooks/web3/helpers/ensResolver";
 import Header from "./components/Headder";
 import getUsersHistory from "helpers/getters/getUsersHistory";
+import UserInformation from "./components/userInfo/UserInfo";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -214,6 +215,10 @@ function MainPage({}: MainPageProps) {
     return result;
   };
 
+  const handleOpenModalFromStats = () => {
+    
+  }
+
   const handleBack = () => {
     setReady(false);
     setLoadingState(0);
@@ -255,6 +260,14 @@ function MainPage({}: MainPageProps) {
               onBack={handleBack}
             />
           </HeadArea>
+          <br />
+          <UserInformation
+            providedAddress={usersAddress}
+            ensResolver={EnsResolver && EnsResolver}
+            sortedInHistory={sortedInHistory}
+            sortedOutHistory={sortedOutHistory}
+          />
+
           <TimeLine
             sortedInHistory={sortedInHistory}
             sortedOutHistory={sortedOutHistory}
