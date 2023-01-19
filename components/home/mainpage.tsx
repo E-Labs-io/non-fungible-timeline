@@ -13,8 +13,7 @@ import DayModal from "./components/modal/DayModal";
 import { isAddress } from "@ethersproject/address";
 import { ethers } from "ethers";
 import ensResolver from "hooks/web3/helpers/ensResolver";
-import Header from "./components/Headder";
-import Headers from "../common/Layout/Header/Header";
+import Header from "../common/Layout/Header/Header";
 import getUsersHistory from "helpers/getters/getUsersHistory";
 import UserInformation from "./components/userInfo/UserInfo";
 import SearchAndConnectArea from "./components/SearchAndConnectArea";
@@ -28,14 +27,6 @@ const PageContainer = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: 0;
-  top: 0;
-`;
-const HeadArea = styled.div`
-  width: 100%;
-  height: 150px;
-  border-bottom: 2px none white;
-
   left: 0;
   top: 0;
 `;
@@ -261,27 +252,26 @@ function MainPage({}: MainPageProps) {
         />
       )}
       {ready && (
-        <BodyArea>
-          <HeadArea>
-            <Header onBack={handleBack} />
-            <Headers />
-          </HeadArea>
-          <br />
-          <UserInformation
-            handleOpenModal={handleOpenModalFromStats}
-            providedAddress={usersAddress}
-            ensResolver={EnsResolver && EnsResolver}
-            sortedInHistory={sortedInHistory}
-            sortedOutHistory={sortedOutHistory}
-          />
+        <>
+          <Header onBack={handleBack} />
+          <BodyArea>
+            <br />
+            <UserInformation
+              handleOpenModal={handleOpenModalFromStats}
+              providedAddress={usersAddress}
+              ensResolver={EnsResolver && EnsResolver}
+              sortedInHistory={sortedInHistory}
+              sortedOutHistory={sortedOutHistory}
+            />
 
-          <TimeLine
-            sortedInHistory={sortedInHistory}
-            sortedOutHistory={sortedOutHistory}
-            ready={ready}
-            handleOpenModal={handleOpenModal}
-          />
-        </BodyArea>
+            <TimeLine
+              sortedInHistory={sortedInHistory}
+              sortedOutHistory={sortedOutHistory}
+              ready={ready}
+              handleOpenModal={handleOpenModal}
+            />
+          </BodyArea>
+        </>
       )}
       <Modal
         title={

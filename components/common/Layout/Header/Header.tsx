@@ -6,6 +6,13 @@ import styled, { css } from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAnglesLeft,
+  faBars,
+  faCircleMinus,
+} from "@fortawesome/free-solid-svg-icons";
+
 import DegenXChangeLogo from "../../../../public/images/logo.png";
 import TwitterLogoWhite from "../../../../public/images/twitter-logo-white.png";
 import TwitterLogoBlack from "../../../../public/images/twitter-logo-black.png";
@@ -23,15 +30,16 @@ import { ExtraStyleProps } from "types/genericTypes";
 
 const StyledHeader = styled.header`
   position: relative;
-  height: 52px;
+  height: 55px;
   background-color: ${({ theme }) => theme.offWhite};
   display: flex;
   justify-content: space-between;
+  display: flex;
   align-items: center;
   width: 100%;
   padding: 0 15px;
-
-  background: ${({ theme, themeType }) => theme.coloredTheme.background};
+  box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.282);
+  background: transparent;
 `;
 
 const HeaderLogoContainer = styled.div`
@@ -91,14 +99,40 @@ const LinksContainer = styled.div<ExtraStyleProps>`
   z-index: 4;
 `;
 
+const BackButton = styled.div`
+  align-items: left;
+  padding-left: 20px;
+  color: #f7f7f7;
+  width: 100%;
+  :hover {
+    transform: scale(1.05);
+    color: #d80e9f;
+    cursor: pointer;
+  }
+`;
+const PageTitle = styled.text`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+  background: #70ffde;
+  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #0b0b0b;
+
+  font-size: 40px;
+  text-align: center;
+  font-family: "Kanit", sans-serif;
+`;
+
 const menuItems = [
-  { label: "degenXchange", link: "/" },
-  { label: "Draw History", link: "/drawHistory" },
+  { label: "Score Board", link: "/" },
   { label: "F.A.Q.", link: "/faq" },
-  { label: "Contact", link: "/contact" },
 ];
 
-const Header = ({}) => {
+const Header = ({ onBack }) => {
   const [open, setOpen] = useState(false);
   const { width } = useWindowSize();
   const headerRef = useRef();
@@ -115,19 +149,16 @@ const Header = ({}) => {
   return (
     <StyledHeader ref={headerRef}>
       <HeaderLogoContainer>
-        <Link href="/" passHref>
-          <LogoContainer>
-            <Logo
-              priority
-              src={DegenXChangeLogo}
-              width={30}
-              height={30}
-              alt="degenXchange logo"
-            />
-          </LogoContainer>
-        </Link>
+        <BackButton>
+          <FontAwesomeIcon
+            onClick={onBack ? onBack : null}
+            size="2xl"
+            icon={faAnglesLeft}
+          />
+        </BackButton>
       </HeaderLogoContainer>
       <div></div>
+      <PageTitle>NON-FUNGIBLE TIMELINE</PageTitle>
       {showSmallMenu ? (
         <FocusLock disabled={!open}>
           <div>
@@ -156,30 +187,6 @@ const Header = ({}) => {
           <FlatMenu open={open} setOpen={setOpen} ariaControls={menuId} />
         </FocusLock>
       )}
-
-      <LinksContainer showSmallMenu={showSmallMenu}>
-        <RightIconsContainer>
-          {/*
-          <LogoContainer href="https://discord.com/app" target="_blank">
-            {showDarkLogo ? (
-              <Logo src={DiscordLogoBlack} width={30} height={30} />
-            ) : (
-              <Logo src={DiscordLogoWhite} width={30} height={30} />
-            )}
-          </LogoContainer>
-          */}
-          <TwitterLogoContainer
-            href="https://twitter.com/degenexchange"
-            target="_blank"
-          >
-            {!open || !showSmallMenu ? (
-              <Logo src={TwitterLogoWhite} width={30} height={25} />
-            ) : (
-              <Logo src={TwitterLogoBlack} width={30} height={25} />
-            )}
-          </TwitterLogoContainer>
-        </RightIconsContainer>
-      </LinksContainer>
     </StyledHeader>
   );
 };

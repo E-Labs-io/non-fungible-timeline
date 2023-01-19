@@ -81,8 +81,6 @@ function FlatMenu({ open, setOpen, ariaControls }: FlatMenuProps) {
           fontSize={theme.fontSizes.small}
           backgroundColor={theme.offWhite}
           color={theme.primaryDark}
-          actionText={["Show history"]}
-          actionLink={[`/drawHistory/${walletAddress}`]}
           showAddressIcon
           showWarningMessage={handleShowWarningMessage}
         />

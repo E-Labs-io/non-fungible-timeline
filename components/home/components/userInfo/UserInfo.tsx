@@ -26,7 +26,7 @@ const Container = styled.div`
   justify-content: center;
   padding: 5px;
   row-gap: 20px;
-  box-shadow: 0px 0px 42px 5px rgba(207, 207, 207, 0.682);
+  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 const DisplayAddress = styled.a`
   justify-content: center;

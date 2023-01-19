@@ -11,26 +11,27 @@ import useWindowSize from "hooks/window/useWindowSize";
 
 const StyledMenu = styled.nav<ExtraStyleProps>`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: ${({ theme }) => theme.offWhite};
+  flex-direction: row;
+  justify-content: space-around;
+  background: white;
   transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
-  height: ${({ windowHeight }) =>
-    windowHeight ? `${windowHeight}px` : "100vh"};
-  text-align: right;
-  padding: 32px 32px 32px 42px;
+  height: 50px;
+  width: 100vw;
+  text-align: center;
+  padding: 10px;
   position: absolute;
-  top: 0;
+  top: 55px;
   right: 0;
   transition: transform 0.3s ease-in-out;
   z-index: 3;
+  column-gap: 200px;
   @media (max-width: ${({ theme }) => theme.mobile}) {
     width: 100%;
   }
   a {
     font-size: 2rem;
     text-transform: uppercase;
-    padding: 2rem 0;
+
     font-weight: bold;
     letter-spacing: 0.5rem;
     color: ${({ theme }) => theme.primaryDark};
@@ -42,27 +43,21 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
     }
     &:hover {
       opacity: 0.7;
-      color: ${({ theme }) => theme.primaryHover};
+      color: #f50cbb;
     }
   }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  margin: 0 0 20px;
-  justify-content: center;
 `;
 
 const MadeByContainer = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.medium};
   position: absolute;
-  bottom: 20px;
+
   right: 20px;
   color: ${({ theme }) => theme.primaryDark};
 
   a {
     margin-left: 3px;
-    font-size: ${({ theme }) => theme.fontSizes.medium};
+    font-size: small;
     text-transform: uppercase;
     padding: 0 0;
     font-weight: bold;
@@ -88,35 +83,19 @@ interface MenuProps {
 }
 
 function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
-  const { shortWalletAddress, connectToUsersProvider } =
-    useContext(UserWeb3Context);
-  const { height: windowHeight } = useWindowSize();
   const isHidden = open ? true : false;
   const tabIndex = isHidden ? 0 : -1;
 
   const renderMenuItems = () =>
     menuItems?.map(({ label, link }) => (
-      <Link href={link} passHref key={label}>
-        <a tabIndex={tabIndex}>{label}</a>
+      <Link href={link} passHref key={label} tabIndex={tabIndex}>
+        {label}
       </Link>
     ));
 
   return (
-    <StyledMenu
-      windowHeight={windowHeight}
-      open={open}
-      aria-hidden={!isHidden}
-      {...props}
-    >
-      {showSmallMenu && (
-        <ButtonContainer>
-          <Web3ConnectButton fontSize="14px" padding="8px 10px" />
-        </ButtonContainer>
-      )}
+    <StyledMenu open={open} aria-hidden={!isHidden} {...props}>
       {renderMenuItems()}
-      <MadeByContainer>
-        Made by <a href="https://nylonblocks.io">Nylon</a>
-      </MadeByContainer>
     </StyledMenu>
   );
 }
