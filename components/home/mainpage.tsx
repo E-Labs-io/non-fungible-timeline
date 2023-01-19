@@ -1,9 +1,8 @@
 /** @format */
-import { Button, InputBox, Modal } from "../common";
-import { ConnectButton, useWeb3Provider } from "../../hooks/web3";
+import { Modal } from "../common";
+import { useWeb3Provider } from "../../hooks/web3";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import LoadingNotice from "./components/SearchAndConnectArea/loadingNotice";
 import sortUsersHistory from "../../helpers/dataSorting/sortUsersHistory";
 import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
 import compileHistoryIntoDays, {
@@ -18,6 +17,7 @@ import getUsersHistory from "helpers/getters/getUsersHistory";
 import UserInformation from "./components/userInfo/UserInfo";
 import SearchAndConnectArea from "./components/SearchAndConnectArea";
 import useWindowSize from "hooks/window/useWindowSize";
+import { exit } from "process";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -68,6 +68,8 @@ function MainPage({}: MainPageProps) {
   const [selectedDayData, setSelectedDayData] = useState<dailyHistory>();
   const [otherAddress, setOtherAddress] = useState<boolean>(false);
 
+  const [ensError, setEnsError] = useState<boolean>(false);
+
   useEffect(() => {
     if (!internalProvider) {
       connectToGivenProvider("alchemy", "mainnet").then((result) => {
@@ -86,19 +88,26 @@ function MainPage({}: MainPageProps) {
   });
 
   const searchUsersHistory = async () => {
+    setEnsError(false);
     if (userProvider && usersAddress !== walletAddress) setOtherAddress(true);
     setLoadingState(1);
     const isEns = EnsResolver.isENS(usersAddress);
     var searchAddress;
 
     if (isEns) {
-      await EnsResolver.addressFromEns(usersAddress)
-        .then((address) => (searchAddress = address))
-        .catch((error) => {
-          console.log("ENS Doesn't Exist : ", error);
-          setLoadingState(0);
-        });
+      await EnsResolver.addressFromEns(usersAddress).then(
+        (address) => (searchAddress = address)
+      );
     } else searchAddress = usersAddress;
+
+    if (searchAddress === null) {
+      console.log("ENS isn't real: ");
+      setEnsError(true);
+      setLoadingState(0);
+      setUsersAddress(walletAddress ? walletAddress : "");
+      return;
+    }
+
     setLoadingState(2);
     const inBoundTransfers = await getUsersHistory({
       to: searchAddress,
@@ -117,7 +126,10 @@ function MainPage({}: MainPageProps) {
     setReady(true);
   };
 
-  const handleInputChange = (input) => setUsersAddress(input.target.value);
+  const handleInputChange = (input) => {
+    setUsersAddress(input.target.value);
+    setEnsError(false);
+  };
 
   const handleOpenModal = (allSelectedData) => {
     setSelectedDayData(allSelectedData);
@@ -197,6 +209,7 @@ function MainPage({}: MainPageProps) {
           handleIsDisabled={handleIsDisabled}
           loadingState={loadingState}
           usersAddress={usersAddress}
+          ensError={ensError}
         />
       )}
       {ready && <Header onBack={handleBack} />}

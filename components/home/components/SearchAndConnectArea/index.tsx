@@ -61,12 +61,18 @@ const PageTitle = styled.div`
   text-align: center;
 `;
 
+const EnsWarning = styled.div`
+  color: #a10202;
+  font-size: large;
+`;
+
 interface ConnectionAreaProps {
-  handleInputChange;
-  searchUsersHistory;
-  handleIsDisabled;
-  loadingState;
-  usersAddress;
+  handleInputChange: (input: any) => void;
+  searchUsersHistory: () => void;
+  handleIsDisabled: Function;
+  loadingState: 0 | 1 | 2 | 3 | 4 | 5;
+  usersAddress: string;
+  ensError: boolean;
 }
 function SearchAndConnectArea({
   handleInputChange,
@@ -74,6 +80,7 @@ function SearchAndConnectArea({
   handleIsDisabled,
   loadingState,
   usersAddress,
+  ensError,
 }: ConnectionAreaProps) {
   const { walletAddress, userProvider, connectToGivenProvider } =
     useWeb3Provider();
@@ -91,6 +98,9 @@ function SearchAndConnectArea({
               onChange={handleInputChange}
               placeholder="Wallet Address or ENS"
             />
+            {ensError && (
+              <EnsWarning>*ENS not recognised, please try another</EnsWarning>
+            )}
             <Button
               onClick={searchUsersHistory}
               disabled={handleIsDisabled(usersAddress)}
