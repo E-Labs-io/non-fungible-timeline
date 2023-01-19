@@ -14,11 +14,7 @@ const Button = styled.button<ExtraStyleProps>`
   height: ${({ height }) => height || "fit-content"};
   cursor: pointer;
   position: relative;
-  border-radius: 3px;
-
-  border: ${({ color, theme }) =>
-    color ? `4px solid ${color}` : `4px solid ${theme.primaryDark}`};
-  border-radius: 8px;
+  border-radius: 10px;
   -webkit-appearance: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -26,18 +22,17 @@ const Button = styled.button<ExtraStyleProps>`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-weight: bold;
+
   font-size: ${({ fontSize }) => fontSize || "26px"};
   color: ${({ color, theme }) => color || theme.primaryDark};
-  background: ${({ backgroundColor, theme }) =>
-    backgroundColor || theme.primaryLight};
-  box-shadow: ${({ color, theme }) =>
-    color ? `0px 2px ${color}` : `0px 2px ${theme.primaryDark}`};
+  background: #ffffff88;
+  box-shadow: 0px 0px 20px 5px rgba(207, 207, 207, 0.682);
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  border-style: none;
 
   &:active {
     top: 1px;

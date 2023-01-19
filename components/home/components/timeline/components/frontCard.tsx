@@ -16,15 +16,23 @@ import { dailyHistory } from "../TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 
 const Wrapper = styled.div`
-  width: 210px;
+  width: 205px;
   background-color: #86848447;
   border-radius: 20px;
   border-width: 1px;
-  border-style: solid;
+  border-style: none;
   border-color: white;
-  padding: 5px;
-  box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.682);
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  box-shadow: 0px 0px 20px 5px rgba(207, 207, 207, 0.682);
   overflow: hidden;
+
+  padding: 2px;
+  :hover {
+    scale: 1.05;
+    cursor: pointer;
+  }
 `;
 
 const BoldText = styled.span`
@@ -200,7 +208,11 @@ const FrontCard = ({
     <Wrapper>
       <SingleCard>
         <TopImageContainer onClick={() => handleOpenModal(allData)}>
-          <NFTImage alt="An NFT" src={checkIfIPFSUrl(imageUrl)}></NFTImage>
+          <NFTImage
+            alt="An NFT"
+            cursor="pointer"
+            src={checkIfIPFSUrl(imageUrl)}
+          ></NFTImage>
         </TopImageContainer>
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>

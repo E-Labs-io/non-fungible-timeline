@@ -11,7 +11,7 @@ import { useWeb3Provider } from "hooks/web3";
 
 const HeaderContainer = styled.div`
   box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.282);
-  height: 100%;
+  height: 50px;
   display: flex;
   flex-direction: grid;
   grid-column: 3;
@@ -30,9 +30,14 @@ const PageTitle = styled.text`
   align-items: center;
   display: flex;
 
-  color: white;
+  background: #70ffde;
+  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #0b0b0b;
 
-  font-size: 30px;
+  font-size: 35px;
   text-align: center;
   font-family: "Kanit", sans-serif;
 `;
@@ -66,7 +71,6 @@ function Header({ searchAddress, onReset, onBack }: HeaderProps) {
         <FontAwesomeIcon onClick={handleBack} size="2xl" icon={faAnglesLeft} />
       </BackButton>
       <MainText>
-        <br />
         <PageTitle>NON-FUNGIBLE TIMELINE</PageTitle>
       </MainText>
       <MenuArea></MenuArea>

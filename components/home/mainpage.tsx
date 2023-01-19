@@ -75,7 +75,7 @@ const ConnectionArea = styled.div`
   justify-content: center;
   padding: 5px;
   row-gap: 20px;
-  box-shadow: 0px 0px 42px 5px rgba(207, 207, 207, 0.682);
+  box-shadow: inset 0px 0px 40px 1px rgba(207, 207, 207, 0.682);
 `;
 
 const Input = styled.input`
@@ -98,7 +98,9 @@ const PageTitle = styled.div`
   background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #000000;
+  font-family: "Kanit", sans-serif;
   font-size: 70px;
   text-align: center;
 `;

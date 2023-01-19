@@ -7,7 +7,6 @@ interface LoadingNoticeProps {
 }
 
 const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
-  console.log("Loading State Changed: ", loadingState);
   return (
     <div>
       {loadingState > 1 && <Loader />}
@@ -16,7 +15,7 @@ const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
       {loadingState === 3 && <h3>Finding all your mistakes</h3>}
       {loadingState === 4 && <h3>Counting all your wins (on one hand)</h3>}
       {loadingState === 5 && (
-        <h3>Found, Sorted and laughed over your timeline...</h3>
+        <h3>Found, sorted and laughed over your timeline...</h3>
       )}
     </div>
   );

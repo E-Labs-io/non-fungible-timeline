@@ -38,7 +38,6 @@ const combineHistory = (
   finalisedHistory.sort(
     (a, b) => new Date(a[1]).getTime() - new Date(b[1]).getTime()
   );
-  console.log("FINAL ORDERED HISTORY: ", new Date(finalisedHistory[0][1]));
   return finalisedHistory;
 };
 

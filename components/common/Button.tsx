@@ -13,9 +13,7 @@ const Wrapper = styled.button<ExtraStyleProps>`
   height: ${({ height }) => height || "fit-content"};
   cursor: pointer;
   position: relative;
-  border-radius: ${({ borderRadius }) => borderRadius || "8px"};
-  border: ${({ color, theme }) =>
-    color ? `2px solid ${color}` : `2px solid ${theme.primaryDark}`};
+  border-radius: 10px;
 
   -webkit-appearance: none;
   -webkit-touch-callout: none;
@@ -24,13 +22,11 @@ const Wrapper = styled.button<ExtraStyleProps>`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-weight: bold;
+
   font-size: ${({ fontSize }) => fontSize || "26px"};
   color: ${({ color, theme }) => color || theme.primaryDark};
-  background: ${({ backgroundColor, theme }) =>
-    backgroundColor || theme.primaryLight};
-  box-shadow: ${({ color, theme }) =>
-    color ? `0px 5px ${color}` : `0px 5px ${theme.primaryDark}`};
+  background: #ffffff88;
+  box-shadow: 0px 0px 20px 5px rgba(207, 207, 207, 0.682);
   padding: ${({ padding }) => (padding ? padding : "8px")};
   margin: ${({ margin }) => (margin ? margin : "0px")};
   z-index: 1;
@@ -62,13 +58,7 @@ const Wrapper = styled.button<ExtraStyleProps>`
     box-shadow: ${({ color, theme }) =>
       color ? `0px 5px ${color}` : `0px 5px ${theme.primaryDark}`};
   }
-
-  border-color: ${({ borderColor, color, theme }) =>
-    borderColor
-      ? borderColor
-      : color
-      ? `2px solid ${color}`
-      : `2px solid ${theme.primaryDark}`};
+  border-style: none;
 `;
 
 const ChildrenContainer = styled.span`
