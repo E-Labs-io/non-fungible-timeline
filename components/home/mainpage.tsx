@@ -17,7 +17,7 @@ import getUsersHistory from "helpers/getters/getUsersHistory";
 import UserInformation from "./components/userInfo/UserInfo";
 import SearchAndConnectArea from "./components/SearchAndConnectArea";
 import useWindowSize from "hooks/window/useWindowSize";
-import { exit } from "process";
+import Introduction from "./components/SearchAndConnectArea/Introduction";
 
 const PageContainer = styled.div`
   background: ${({ theme }) =>
@@ -43,6 +43,16 @@ const BodyArea = styled.div`
   padding: 5px;
   display: flex;
   flex-direction: column;
+`;
+
+const PreLoad = styled.div`
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10%;
 `;
 
 /**
@@ -79,6 +89,7 @@ function MainPage({}: MainPageProps) {
     }
     if (!connected && userProvider) {
       setUsersAddress(walletAddress);
+      setEnsError(false);
       setConnected(true);
     }
     if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
@@ -202,36 +213,43 @@ function MainPage({}: MainPageProps) {
   };
   return (
     <PageContainer>
-      {!ready && (
-        <SearchAndConnectArea
-          handleInputChange={handleInputChange}
-          searchUsersHistory={searchUsersHistory}
-          handleIsDisabled={handleIsDisabled}
-          loadingState={loadingState}
-          usersAddress={usersAddress}
-          ensError={ensError}
-        />
-      )}
       {ready && <Header onBack={handleBack} />}
-      {ready && (
-        <BodyArea height={height}>
-          <br />
-          <UserInformation
-            handleOpenModal={handleOpenModalFromStats}
-            providedAddress={usersAddress}
-            ensResolver={EnsResolver && EnsResolver}
-            sortedInHistory={sortedInHistory}
-            sortedOutHistory={sortedOutHistory}
-          />
+      <BodyArea>
+        {!ready && (
+          <PreLoad>
+            <SearchAndConnectArea
+              handleInputChange={handleInputChange}
+              searchUsersHistory={searchUsersHistory}
+              handleIsDisabled={handleIsDisabled}
+              loadingState={loadingState}
+              usersAddress={usersAddress}
+              ensError={ensError}
+            />
+            <br />
+            {/**<Introduction /> */}
+          </PreLoad>
+        )}
+        {ready && (
+          <>
+            <br />
+            <UserInformation
+              handleOpenModal={handleOpenModalFromStats}
+              providedAddress={usersAddress}
+              ensResolver={EnsResolver && EnsResolver}
+              sortedInHistory={sortedInHistory}
+              sortedOutHistory={sortedOutHistory}
+            />
 
-          <TimeLine
-            sortedInHistory={sortedInHistory}
-            sortedOutHistory={sortedOutHistory}
-            ready={ready}
-            handleOpenModal={handleOpenModal}
-          />
-        </BodyArea>
-      )}
+            <TimeLine
+              sortedInHistory={sortedInHistory}
+              sortedOutHistory={sortedOutHistory}
+              ready={ready}
+              handleOpenModal={handleOpenModal}
+            />
+          </>
+        )}
+      </BodyArea>
+
       <Modal
         title={
           selectedDayData &&

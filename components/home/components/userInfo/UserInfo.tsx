@@ -171,8 +171,8 @@ function UserInformation({
           />
         </WalletInfo>
         <InteractionArea>
-          <FilterArea>Search Filters</FilterArea>
-          <VotingArea>Voting Options</VotingArea>
+          <FilterArea></FilterArea>
+          <VotingArea></VotingArea>
         </InteractionArea>
       </Container>
     );
