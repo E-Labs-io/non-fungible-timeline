@@ -15,7 +15,7 @@ import styled from "styled-components";
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  position: absolute;
+
   display: block;
   background-color: white;
   padding: 10px;
@@ -28,7 +28,7 @@ const CloseView = styled.div`
 
 const ViewArea = styled.div`
   height: 100%;
-  width: 100% -300px;
+  width: 100% ;
   display: flex;
   flex-direction: row;
   column-gap: 10px;

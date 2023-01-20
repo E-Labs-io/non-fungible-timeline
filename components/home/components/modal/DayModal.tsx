@@ -9,16 +9,13 @@ import TransactionView from "./TransactionView";
 
 const Wrapper = styled.div`
   width: 70vw;
-  min-height: 300px;
+  min-height: ${({ overlay }) => (overlay ? "400px" : "300px")};
   padding: 10px;
   color: black;
 `;
 
 const TxArea = styled.div``;
 
-const Overlay = styled.div`
-  background-color: white;
-`;
 
 interface DayModalProps {
   allDayData: dailyHistory;
@@ -48,17 +45,15 @@ const DayModal = ({ allDayData }: DayModalProps) => {
   const handleCloseModal = () => setShowOverlay(false);
 
   return (
-    <Wrapper>
+    <Wrapper overlay={showOverlay}>
       {showOverlay && (
-        <Overlay>
-          <SingleNFTView
-            NFTData={selectedNFT.NFTData}
-            metadata={selectedNFT.metadata}
-            transactionData={selectedNFT.transactionData}
-            closeView={handleCloseModal}
-            direction={allDayData[0]}
-          />
-        </Overlay>
+        <SingleNFTView
+          NFTData={selectedNFT.NFTData}
+          metadata={selectedNFT.metadata}
+          transactionData={selectedNFT.transactionData}
+          closeView={handleCloseModal}
+          direction={allDayData[0]}
+        />
       )}
       <TxArea>
         {allDayData &&
