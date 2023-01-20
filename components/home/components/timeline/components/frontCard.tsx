@@ -14,6 +14,7 @@ import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { dailyHistory } from "../TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 
 const Wrapper = styled.div`
   width: 205px;
@@ -145,6 +146,7 @@ const FrontCard = ({
   handleOpenModal,
   allData,
 }: FrontCardProps) => {
+  const { getTokenMetadata } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -171,7 +173,8 @@ const FrontCard = ({
         setTxData(toShow);
         setShowContract(toShow.contractAddress);
         setShowToken(toShow.groupedTokenIds[0]);
-        AlchemyGetSingleNFT(
+        getTokenMetadata(
+          "eth",
           toShow.contractAddress,
           toShow.groupedTokenIds[0].hex
         )

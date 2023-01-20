@@ -12,6 +12,7 @@ import {
 } from "helpers/dataSorting/sortUsersHistory";
 import getIPFSFormat from "helpers/getIPFSFormat";
 import shortenTokenId from "helpers/shorternTokenId";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 
 //////  CARD BUILD
 const SingleCard = styled.div`
@@ -116,6 +117,7 @@ function SmallNFTCard({
   transactionData,
   handleSelectedNFT,
 }: SmallNFTCardProps) {
+  const { getTokenMetadata } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -131,7 +133,7 @@ function SmallNFTCard({
       if (!!contractAddress) {
         setLoading(true);
 
-        AlchemyGetSingleNFT(contractAddress, tokenId.hex).then((nft) => {
+        getTokenMetadata("eth", contractAddress, tokenId.hex).then((nft) => {
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
