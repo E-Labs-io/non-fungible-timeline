@@ -8,6 +8,7 @@ const getFirstAndLastTransactions = (
 ): { first: string; last: string } => {
   let first, last;
   let dates = [];
+
   Object.keys(sortedInHistory.hashes).forEach((date) => dates.push(date));
   Object.keys(sortedOutHistory.hashes).forEach((date) => dates.push(date));
 

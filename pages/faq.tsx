@@ -48,13 +48,14 @@ function FAQ() {
   const onBack = () => router.push("/");
 
   return (
-    <Page>
-      <Header onBack={onBack} />
-      <Wrapper>
-        <Title>F.A.Q.</Title>
-        <TextExpandList data={faqQuestions} />
-      </Wrapper>
-    </Page>
+    <Layout>
+      <Page>
+        <Wrapper>
+          <Title>F.A.Q.</Title>
+          <TextExpandList data={faqQuestions} />
+        </Wrapper>
+      </Page>
+    </Layout>
   );
 }
 

@@ -2,6 +2,8 @@
 
 import { Loader } from "components/common";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import { useWeb3Provider } from "hooks/web3";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
@@ -72,20 +74,14 @@ const VotingArea = styled.div`
 `;
 
 interface UserInformationProps {
-  providedAddress: string;
-  ensResolver;
-  sortedInHistory: compileHistoryIntoDaysReturn;
-  sortedOutHistory: compileHistoryIntoDaysReturn;
   handleOpenModal: (selected: "first" | "last") => void;
 }
 
-function UserInformation({
-  providedAddress,
-  ensResolver,
-  sortedInHistory,
-  sortedOutHistory,
-  handleOpenModal,
-}: UserInformationProps) {
+function UserInformation({ handleOpenModal }: UserInformationProps) {
+  const { useEnsResolver } = useWeb3Provider();
+  const { activeTimeline, activeAddress } = useNFTimelineProvider();
+
+  //  Checks
   const [ready, setReady] = useState<boolean>(false);
   const [addressCheck, setAddressCheck] = useState<{
     started: boolean;
@@ -96,6 +92,7 @@ function UserInformation({
     finished: boolean;
   }>({ started: false, finished: false });
   //    ENS & Address States
+  const [ensResolver, setEnsResolver] = useState<any>(undefined);
   const [hasENS, setHasENS] = useState<boolean | undefined>(undefined);
   const [ensAddress, setEnsAddress] = useState<string>();
   const [walletAddress, setWalletAddress] = useState<string>();
@@ -109,21 +106,35 @@ function UserInformation({
     totalOut: number;
   }>(undefined);
   const [totalTX, setTotalTX] = useState<number>(0);
+  //  History
+  const [sortedInHistory, setSortedInHistory] =
+    useState<compileHistoryIntoDaysReturn>();
+  const [sortedOutHistory, setSortedOutHistory] =
+    useState<compileHistoryIntoDaysReturn>();
 
   useEffect(() => {
-    if (!ready && !addressCheck.started) {
+    //  Get the ENS resolver
+    if (!ensResolver)
+      useEnsResolver("mainnet").then((resolver) => setEnsResolver(resolver));
+    //  Set the active timeline data
+    if (activeTimeline && !sortedInHistory && !sortedOutHistory) {
+      setSortedInHistory(activeTimeline.inByDate);
+      setSortedOutHistory(activeTimeline.outByDate);
+    }
+    //  Check ENS
+    if (!ready && !addressCheck.started && activeAddress && ensResolver) {
       setAddressCheck({ started: true, finished: false });
-      const isEns = ensResolver.isENS(providedAddress);
+      const isEns = ensResolver.isENS(activeAddress);
       if (isEns) {
         setHasENS(true);
-        setEnsAddress(providedAddress);
-        ensResolver.addressFromEns(providedAddress).then((address) => {
+        setEnsAddress(activeAddress);
+        ensResolver.addressFromEns(activeAddress).then((address) => {
           setWalletAddress(address);
           setAddressCheck({ started: true, finished: true });
         });
       } else {
-        setWalletAddress(providedAddress);
-        ensResolver.ensFromAddress(providedAddress).then((ens) => {
+        setWalletAddress(activeAddress);
+        ensResolver.ensFromAddress(activeAddress).then((ens) => {
           if (ens) {
             setHasENS(true);
             setEnsAddress(ens);
@@ -132,7 +143,8 @@ function UserInformation({
         });
       }
     }
-    if (!ready && !statsCheck.started) {
+    //  Start building starts
+    if (!ready && !statsCheck.started && sortedInHistory && sortedOutHistory) {
       setStatsCheck({ started: true, finished: false });
       //  Build the stats data
       const dates = getFirstAndLastTransactions(
@@ -147,6 +159,7 @@ function UserInformation({
 
       setStatsCheck({ started: true, finished: true });
     }
+    //  I fall finished set ready
     if (statsCheck.finished && addressCheck.finished && !ready) setReady(true);
   });
 

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Button } from "../../../common";
-import { ConnectButton, useWeb3Provider } from "../../../../hooks/web3";
+import { Button } from "../../../../components/common";
+import { ConnectButton, useWeb3Provider } from "../../../web3";
 import LoadingNotice from "./loadingNotice";
 
 const PreLoadLayout = styled.div`
@@ -11,8 +11,7 @@ const PreLoadLayout = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+
   display: flex;
   column-gap: 30px;
 `;
@@ -46,21 +45,6 @@ const Input = styled.input`
   background-color: #ffffff75;
 `;
 
-const PageTitle = styled.div`
-  justify-content: center;
-  align-items: center;
-
-  background: #70ffde;
-  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #000000;
-  font-family: "Kanit", sans-serif;
-  font-size: 70px;
-  text-align: center;
-`;
-
 const EnsWarning = styled.div`
   color: #a10202;
   font-size: large;
@@ -70,7 +54,7 @@ interface ConnectionAreaProps {
   handleInputChange: (input: any) => void;
   searchUsersHistory: () => void;
   handleIsDisabled: Function;
-  loadingState: 0 | 1 | 2 | 3 | 4 | 5;
+  loadingState: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   usersAddress: string;
   ensError: boolean;
 }
@@ -82,12 +66,8 @@ function SearchAndConnectArea({
   usersAddress,
   ensError,
 }: ConnectionAreaProps) {
-  const { walletAddress, userProvider, connectToGivenProvider } =
-    useWeb3Provider();
   return (
     <PreLoadLayout>
-      <PageTitle>Non-Fungible Timeline</PageTitle>
-      <br />
       <ConnectionArea>
         {loadingState === 0 && (
           <>

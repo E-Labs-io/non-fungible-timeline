@@ -15,6 +15,7 @@ import alchemyAPI from "./api/alchemySetup";
 import config from "config/config";
 import { shortenWalletAddress } from "./helpers/textHelpers";
 import { Network } from "alchemy-sdk";
+import ensResolver from "./helpers/ensResolver";
 
 export interface UserWeb3ProviderContextType {
   walletAddress: string;
@@ -28,6 +29,7 @@ export interface UserWeb3ProviderContextType {
   web3API: any;
   disconnectProvider: Function;
   connectToGivenProvider: Function;
+  useEnsResolver: Function;
 }
 
 export type GivenProviderAllowance = "alchemy";
@@ -38,6 +40,7 @@ export const UserWeb3Context = createContext({
   userProvider: null,
   auxStorage: {},
   userSigner: null,
+  useEnsResolver: (network: string) => Promise,
   updateAuxStorage: (param: string, value: any) => {},
   connectToUsersProvider: (userAction: boolean) => {},
   web3API: null,
@@ -91,6 +94,11 @@ const UserWeb3Provider = ({ children }) => {
 
     return connection;
   };
+
+  const useEnsResolver = async (network: string) =>
+    connectToGivenProvider("alchemy", network).then((provider) =>
+      ensResolver(provider).then((resolver) => resolver)
+    );
 
   /**
    * @notice                        - Handles any changed on the provider from listeners
@@ -224,6 +232,7 @@ const UserWeb3Provider = ({ children }) => {
         web3API,
         disconnectProvider,
         connectToGivenProvider,
+        useEnsResolver,
       }}
     >
       {children}

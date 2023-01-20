@@ -4,12 +4,38 @@ import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { Ballot } from "./VotingTypes";
 
 export interface NFTimelineProviderContextType {
-  postVote: postVoteType;
+  //postVote: postVoteType;
+  //getBallots: getBallotsType;
+  //getBallotData: getBallotDataType;
   getTokenMetadata: getTokenMetadataType;
-  getBallots: getBallotsType;
-  getBallotData: getBallotDataType;
+  getTimelineData: getTimelineData;
+  setActiveTimelineData: setActiveTimelineDataType;
+  setActiveAddress: (address: string) => void;
+  addNewTimelineData: addNewTimelineData;
+  activeTimeline: addressSplitHistory;
   verifiedContractList: string[];
+  activeAddress: string;
 }
+
+export type addNewTimelineData = (
+  address: string,
+  timeline: addressSplitHistory
+) => void;
+
+export type addressCollection = {
+  [address: string]: addressSplitHistory;
+};
+export type addressSplitHistory = {
+  inByDate: compileHistoryIntoDaysReturn;
+  outByDate: compileHistoryIntoDaysReturn;
+  searchAddress: string;
+};
+
+export type setActiveTimelineDataType = (
+  timelineData: addressSplitHistory
+) => void;
+
+export type getTimelineData = (address: string) => addressSplitHistory | false;
 
 export type postVoteType = (
   category: string,

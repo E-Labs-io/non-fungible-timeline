@@ -11,6 +11,7 @@ const getTokenMetadata = async (
     .then((history) => {
       return history;
     });
+  console.log(returnedData);
   return returnedData;
 };
 

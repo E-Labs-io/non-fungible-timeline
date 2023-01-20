@@ -31,7 +31,6 @@ import { ExtraStyleProps } from "types/genericTypes";
 const StyledHeader = styled.header`
   position: relative;
   height: 55px;
-  background-color: ${({ theme }) => theme.offWhite};
   display: flex;
   justify-content: space-between;
   display: flex;

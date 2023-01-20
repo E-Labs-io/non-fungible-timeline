@@ -2,16 +2,18 @@
 
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useEffect, useState, createContext } from "react";
-import { getBallotData, getBallots } from "../helpers/ballots";
 import getTokenMetadata from "../hooks/getTokenMetadata";
-import { postVote } from "../helpers/voting";
-import { Ballot, NFTimelineProviderContextType } from "../types";
-import { StoredMetadataType } from "../types/ProviderTypes";
+import { NFTimelineProviderContextType } from "../types";
+import {
+  addressCollection,
+  addressSplitHistory,
+  StoredMetadataType,
+} from "../types/ProviderTypes";
 
 export const NFTimelineProviderContext = createContext({
-  postVote: postVote,
-  getBallots: getBallots,
-  getBallotData: getBallotData,
+  //postVote: postVote,
+  //getBallots: getBallots,
+  //getBallotData: getBallotData,
   verifiedContractList: [],
 } as NFTimelineProviderContextType);
 
@@ -19,6 +21,15 @@ const NFTimelineProvider = ({ children }) => {
   const [verifiedContractList, setVerifiedContractList] = useState<string[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
     ethereum: {},
+  });
+  const [timelineData, setTimelineData] = useState<addressCollection>({});
+  const [activeTimeline, setActiveTimeline] = useState<addressSplitHistory>();
+  const [activeAddress, setActiveAddress] = useState<string>();
+
+  useEffect(() => {
+    if (!!!verifiedContractList) {
+      //  Get verified contract data from API
+    }
   });
 
   const getMetadata = async (
@@ -33,10 +44,8 @@ const NFTimelineProvider = ({ children }) => {
       !!storedMetadata.ethereum[contractAddress] &&
       !!storedMetadata.ethereum[contractAddress][tokenId]
     ) {
-      console.log("Token is in local");
       return storedMetadata.ethereum[contractAddress][tokenId];
     } else {
-      console.log("Get token from API");
       const tokenData = await getTokenMetadata(
         network,
         contractAddress,
@@ -52,18 +61,37 @@ const NFTimelineProvider = ({ children }) => {
         storedData.ethereum[contractAddress] = { [tokenId]: tokenData };
       }
       setStoredMetadata(storedData);
+      console.log(tokenData);
       return tokenData;
     }
+  };
+
+  const setActiveTimelineData = (timelineData: addressSplitHistory) =>
+    setActiveTimeline(timelineData);
+
+  const getTimelineData = (address: string): addressSplitHistory | false =>
+    !!timelineData[address] ? timelineData[address] : false;
+
+  const addNewTimelineData = (
+    address: string,
+    timeline: addressSplitHistory
+  ) => {
+    const oldState = timelineData;
+    oldState[address] = timeline;
+    setTimelineData(oldState);
   };
 
   return (
     <NFTimelineProviderContext.Provider
       value={{
-        postVote,
         getTokenMetadata: getMetadata,
-        getBallots,
-        getBallotData,
+        getTimelineData,
+        setActiveTimelineData,
+        setActiveAddress,
+        addNewTimelineData,
+        activeTimeline,
         verifiedContractList,
+        activeAddress,
       }}
     >
       {children}

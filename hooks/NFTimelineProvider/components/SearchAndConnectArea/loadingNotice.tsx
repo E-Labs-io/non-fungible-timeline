@@ -1,9 +1,9 @@
 /** @format */
 import React from "react";
-import { Loader } from "../../../common";
+import { Loader } from "../../../../components/common";
 
 interface LoadingNoticeProps {
-  loadingState: 0 | 1 | 2 | 3 | 4 | 5;
+  loadingState: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
@@ -17,6 +17,7 @@ const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
       {loadingState === 5 && (
         <h3>Found, sorted and laughed over your timeline...</h3>
       )}
+      {loadingState === 6 && null}
     </div>
   );
 };
