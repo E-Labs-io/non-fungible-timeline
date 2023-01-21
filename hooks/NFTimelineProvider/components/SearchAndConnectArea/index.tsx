@@ -34,8 +34,8 @@ const ConnectionArea = styled.div`
 `;
 
 const Input = styled.input`
-  width: ${({ width }) => (width ? width : "500px")};
-  height: ${({ height }) => (height ? height : "50px")};
+  width: ${({ width }) => (width ? width : "80%")};
+  height: ${({ height }) => (height ? height : "40px")};
   margin-top: 10px;
   padding: 12px 15px;
   display: inline-block;
@@ -43,6 +43,7 @@ const Input = styled.input`
   border-radius: 4px;
   box-sizing: border-box;
   background-color: #ffffff75;
+  font-size: 1rem;
 `;
 
 const EnsWarning = styled.div`
