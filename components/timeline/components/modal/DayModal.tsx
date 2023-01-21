@@ -1,5 +1,6 @@
 /** @format */
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
@@ -16,17 +17,40 @@ const Wrapper = styled.div`
 
 const TxArea = styled.div``;
 
-
 interface DayModalProps {
   allDayData: dailyHistory;
 }
 const DayModal = ({ allDayData }: DayModalProps) => {
+  const { getTokenMetadata } = useNFTimelineProvider();
+  const [loading, setLoading] = useState(false);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [selectedNFT, setSelectedNFT] = useState<{
     NFTData: SingleNFTDataType;
     metadata: NFTMetaDataType;
     transactionData: sortedHistoryData;
   }>();
+
+  useEffect(() => {
+    if (allDayData && allDayData[2].length === 1 && !loading) {
+      if (allDayData[3][allDayData[2][0]].length === 1) {
+        setLoading(true);
+        console.log("single item TX");
+        getTokenMetadata(
+          "ethereum",
+          allDayData[3][allDayData[2][0]][0].contractAddress,
+          allDayData[3][allDayData[2][0]][0].tokenId.hex
+        ).then((data: SingleNFTDataType) => {
+          const toView = {
+            NFTData: data,
+            metadata: data.metadata,
+            transactionData: allDayData[3][allDayData[2][0]][0],
+          };
+          setSelectedNFT(toView);
+          setShowOverlay(true);
+        });
+      }
+    }
+  });
 
   const handleSelectedNFT = (
     NFTData: SingleNFTDataType,
