@@ -1,6 +1,7 @@
 /** @format */
 
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import { type } from "os";
 import { Ballot } from "./VotingTypes";
 
 export interface NFTimelineProviderContextType {
@@ -12,10 +13,24 @@ export interface NFTimelineProviderContextType {
   setActiveTimelineData: setActiveTimelineDataType;
   setActiveAddress: (address: string) => void;
   addNewTimelineData: addNewTimelineData;
+  addTimelineFilter: addTimelineFilter;
+  removeTimelineFilter: removeTimelineFilter;
+  removeAllTimelineFilters: removeAllTimelineFilters;
+  timelineFilters: timelineFilterStore[];
   activeTimeline: addressSplitHistory;
   verifiedContractList: string[];
   activeAddress: string;
 }
+
+export type timelineFilterTypes = "date" | "verified";
+export interface timelineFilterStore {
+  filterType: timelineFilterTypes;
+  optionA?: string;
+  optionB?: string;
+}
+export type addTimelineFilter = (filterOptions: timelineFilterStore) => void;
+export type removeTimelineFilter = (filterType: timelineFilterTypes) => void;
+export type removeAllTimelineFilters = () => void;
 
 export type addNewTimelineData = (
   address: string,

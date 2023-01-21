@@ -9,6 +9,8 @@ import {
   addressCollection,
   addressSplitHistory,
   StoredMetadataType,
+  timelineFilterStore,
+  timelineFilterTypes,
 } from "../types/ProviderTypes";
 
 export const NFTimelineProviderContext = createContext({
@@ -28,6 +30,8 @@ const NFTimelineProvider = ({ children }) => {
   const [timelineData, setTimelineData] = useState<addressCollection>({});
   const [activeTimeline, setActiveTimeline] = useState<addressSplitHistory>();
   const [activeAddress, setActiveAddress] = useState<string>();
+  const [timelineFilters, setTimelineFilters] =
+    useState<timelineFilterStore[]>();
 
   useEffect(() => {
     if (!!!verifiedContractList) {
@@ -74,6 +78,31 @@ const NFTimelineProvider = ({ children }) => {
   const addNewTimelineData = (address: string, timeline: addressSplitHistory) =>
     setTimelineData({ ...timelineData, [address]: timeline });
 
+  const addTimelineFilter = (filterOptions: timelineFilterStore) => {
+    let i = null;
+    if (!!timelineFilters) {
+      timelineFilters.forEach((filter, index) => {
+        if (filter.filterType === filterOptions.filterType) {
+          i = index;
+        }
+      });
+    }
+
+    if (!!i) {
+      let newFilters = timelineFilters;
+      newFilters[i] = filterOptions;
+      setTimelineFilters(newFilters);
+    } else {
+      setTimelineFilters([...timelineFilters, filterOptions]);
+    }
+  };
+
+  const removeAllTimelineFilters = () => {
+    setTimelineFilters([]);
+  };
+
+  const removeTimelineFilter = (filterType: timelineFilterTypes) => {};
+
   return (
     <NFTimelineProviderContext.Provider
       value={{
@@ -82,6 +111,10 @@ const NFTimelineProvider = ({ children }) => {
         setActiveTimelineData,
         setActiveAddress,
         addNewTimelineData,
+        addTimelineFilter,
+        removeAllTimelineFilters,
+        removeTimelineFilter,
+        timelineFilters,
         activeTimeline,
         verifiedContractList,
         activeAddress,
