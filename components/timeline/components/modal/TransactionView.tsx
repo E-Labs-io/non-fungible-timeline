@@ -45,7 +45,7 @@ const CardContainer = styled.div`
   min-height: 189px;
   display: flex;
   flex-direction: row;
-  column-gap: 5px;
+  column-gap: 10px;
   overflow: scroll;
   cursor: pointer;
 

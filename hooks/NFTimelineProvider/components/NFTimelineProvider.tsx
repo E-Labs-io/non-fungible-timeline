@@ -12,6 +12,7 @@ import {
   timelineFilterStore,
   timelineFilterTypes,
 } from "../types/ProviderTypes";
+import { VerifiedContractData } from "../types/verifiedContractsTypes";
 
 export const NFTimelineProviderContext = createContext({
   //postVote: postVote,
@@ -23,7 +24,8 @@ export const NFTimelineProviderContext = createContext({
 //let storedMetadata: StoredMetadataType = { ethereum: {} };
 
 const NFTimelineProvider = ({ children }) => {
-  const [verifiedContractList, setVerifiedContractList] = useState<string[]>();
+  const [verifiedContractList, setVerifiedContractList] =
+    useState<VerifiedContractData[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
     ethereum: {},
   });
@@ -103,6 +105,20 @@ const NFTimelineProvider = ({ children }) => {
 
   const removeTimelineFilter = (filterType: timelineFilterTypes) => {};
 
+  const checkIfValidContract = (contractAddress: string): boolean => {
+    let isVerified: boolean = false;
+    console.log("checking for verification: ", contractAddress);
+    if (verifiedContractList.length > 0) {
+      verifiedContractList.forEach((contractItem) => {
+        contractItem.contracts.forEach((address) => {
+          if (address.toLowerCase() === contractAddress) isVerified = true;
+        });
+      });
+    }
+    console.log("Check is verified: ", isVerified);
+    return isVerified;
+  };
+
   return (
     <NFTimelineProviderContext.Provider
       value={{
@@ -114,6 +130,7 @@ const NFTimelineProvider = ({ children }) => {
         addTimelineFilter,
         removeAllTimelineFilters,
         removeTimelineFilter,
+        checkIfValidContract,
         timelineFilters,
         activeTimeline,
         verifiedContractList,
