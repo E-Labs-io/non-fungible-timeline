@@ -1,11 +1,9 @@
 /** @format */
 
-import compileHistoryIntoDays, {
-  compileHistoryIntoDaysReturn,
-} from "helpers/dataSorting/compileHistoryIntoDays";
+import compileHistoryIntoDays from "helpers/dataSorting/compileHistoryIntoDays";
 import sortUsersHistory from "helpers/dataSorting/sortUsersHistory";
 import getUsersHistory from "helpers/getters/getUsersHistory";
-import { addressSplitHistory } from "../types/ProviderTypes";
+import { getTImelineDataReturn } from "../types/ProviderTypes";
 
 interface searchUsersHistoryProps {
   addressOrEns: string;
@@ -18,7 +16,7 @@ const searchUsersHistory = async ({
   loadingStateCallback,
   hasErrorCallback,
   ensResolver,
-}: searchUsersHistoryProps): Promise<addressSplitHistory | false> => {
+}: searchUsersHistoryProps): Promise<getTImelineDataReturn | false> => {
   hasErrorCallback(false);
 
   loadingStateCallback(1);

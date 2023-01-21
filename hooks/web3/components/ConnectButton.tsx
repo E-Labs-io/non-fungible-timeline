@@ -76,21 +76,22 @@ const ActionListContainer = styled.div`
   opacity: 0;
   background-color: ${({ backgroundColor, theme }) =>
     backgroundColor || theme.primaryLight};
-  background-color: #b0b0b037;
+  background-color: #b0b0b07c;
   padding: 15px 10px;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
   border-color: black;
   border-width: 1px;
-  border-style: solid;
+  border-style: none;
   row-gap: 10px;
+  box-shadow: inset 0px 0px 20px 2px rgba(207, 207, 207, 0.682);
 `;
 
 const ActionText = styled.a`
   cursor: pointer;
-  color: black;
+  color: #ffffff;
   :hover {
-    color: white;
+    color: #000000;
   }
 `;
 

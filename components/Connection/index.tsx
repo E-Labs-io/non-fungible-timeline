@@ -7,7 +7,10 @@ import { isAddress } from "ethers/lib/utils";
 import searchUsersHistory from "hooks/NFTimelineProvider/helpers/searchAddressHistory";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
-import { addressSplitHistory } from "hooks/NFTimelineProvider/types/ProviderTypes";
+import {
+  addressSplitHistory,
+  getTImelineDataReturn,
+} from "hooks/NFTimelineProvider/types/ProviderTypes";
 
 const ConnectionContainer = styled.div`
   height: 50%;
@@ -72,7 +75,7 @@ function Connection({}) {
       }
     } else {
       setActiveTimelineData(isLocal);
-      setActiveAddress(isLocal.searchAddress);
+      setActiveAddress(usersAddress);
       router.push("/timeline");
     }
   };

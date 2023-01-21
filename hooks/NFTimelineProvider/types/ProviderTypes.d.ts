@@ -28,6 +28,11 @@ export type addressCollection = {
 export type addressSplitHistory = {
   inByDate: compileHistoryIntoDaysReturn;
   outByDate: compileHistoryIntoDaysReturn;
+};
+
+export type getTImelineDataReturn = {
+  inByDate: compileHistoryIntoDaysReturn;
+  outByDate: compileHistoryIntoDaysReturn;
   searchAddress: string;
 };
 

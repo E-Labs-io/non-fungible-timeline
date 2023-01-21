@@ -3,6 +3,7 @@
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useEffect, useState, createContext } from "react";
 import getTokenMetadata from "../hooks/getTokenMetadata";
+import getVerifiedContractList from "../hooks/getVerifiedContracts";
 import { NFTimelineProviderContextType } from "../types";
 import {
   addressCollection,
@@ -17,6 +18,8 @@ export const NFTimelineProviderContext = createContext({
   verifiedContractList: [],
 } as NFTimelineProviderContextType);
 
+//let storedMetadata: StoredMetadataType = { ethereum: {} };
+
 const NFTimelineProvider = ({ children }) => {
   const [verifiedContractList, setVerifiedContractList] = useState<string[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
@@ -29,6 +32,10 @@ const NFTimelineProvider = ({ children }) => {
   useEffect(() => {
     if (!!!verifiedContractList) {
       //  Get verified contract data from API
+      getVerifiedContractList().then((list) => {
+        setVerifiedContractList(list);
+        console.log(list);
+      });
     }
   });
 
@@ -37,33 +44,33 @@ const NFTimelineProvider = ({ children }) => {
     contractAddress: string,
     tokenId: string
   ): Promise<SingleNFTDataType> => {
-    const storedData: StoredMetadataType = storedMetadata;
-
+    let metadata: SingleNFTDataType;
+    console.log("contract Address : ", contractAddress);
+    console.log(!!storedMetadata.ethereum[contractAddress]);
+    console.log(storedMetadata);
     if (
       !!storedMetadata.ethereum &&
       !!storedMetadata.ethereum[contractAddress] &&
       !!storedMetadata.ethereum[contractAddress][tokenId]
     ) {
-      return storedMetadata.ethereum[contractAddress][tokenId];
+      //  If the metadata is stored locally
+      metadata = storedMetadata.ethereum[contractAddress][tokenId];
+      console.log("Got data locally: ", metadata);
     } else {
-      const tokenData = await getTokenMetadata(
-        network,
-        contractAddress,
-        tokenId
-      );
+      //  If not local get from API
+      metadata = await getTokenMetadata(network, contractAddress, tokenId);
+      console.log("Got data from API: ", metadata);
 
-      if (
-        !!storedMetadata.ethereum &&
-        !!storedMetadata.ethereum[contractAddress]
-      ) {
-        storedData.ethereum[contractAddress][tokenId] = tokenData;
-      } else {
-        storedData.ethereum[contractAddress] = { [tokenId]: tokenData };
-      }
-      setStoredMetadata(storedData);
-      console.log(tokenData);
-      return tokenData;
+      const update = {
+        ...storedMetadata,
+        ethereum: { [contractAddress]: { [tokenId]: metadata } },
+      };
+      setStoredMetadata({
+        ...storedMetadata,
+        ethereum: { [contractAddress]: { [tokenId]: metadata } },
+      });
     }
+    return metadata;
   };
 
   const setActiveTimelineData = (timelineData: addressSplitHistory) =>
@@ -72,14 +79,8 @@ const NFTimelineProvider = ({ children }) => {
   const getTimelineData = (address: string): addressSplitHistory | false =>
     !!timelineData[address] ? timelineData[address] : false;
 
-  const addNewTimelineData = (
-    address: string,
-    timeline: addressSplitHistory
-  ) => {
-    const oldState = timelineData;
-    oldState[address] = timeline;
-    setTimelineData(oldState);
-  };
+  const addNewTimelineData = (address: string, timeline: addressSplitHistory) =>
+    setTimelineData({ ...timelineData, [address]: timeline });
 
   return (
     <NFTimelineProviderContext.Provider
