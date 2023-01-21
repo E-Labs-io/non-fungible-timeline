@@ -13,6 +13,8 @@ import SmallNFTCard from "../SmallNFTCard";
 const Container = styled.div`
   width: 100%;
   padding: 5px;
+  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+  border-radius: 10px;
 `;
 
 const InfoArea = styled.div`
@@ -43,8 +45,9 @@ const CardContainer = styled.div`
   min-height: 189px;
   display: flex;
   flex-direction: row;
-  column-gap: 5px;
+  column-gap: 10px;
   overflow: scroll;
+  cursor: pointer;
 
   padding: 5px;
 

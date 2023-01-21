@@ -9,7 +9,10 @@ import {
   addressCollection,
   addressSplitHistory,
   StoredMetadataType,
+  timelineFilterStore,
+  timelineFilterTypes,
 } from "../types/ProviderTypes";
+import { VerifiedContractData } from "../types/verifiedContractsTypes";
 
 export const NFTimelineProviderContext = createContext({
   //postVote: postVote,
@@ -21,13 +24,16 @@ export const NFTimelineProviderContext = createContext({
 //let storedMetadata: StoredMetadataType = { ethereum: {} };
 
 const NFTimelineProvider = ({ children }) => {
-  const [verifiedContractList, setVerifiedContractList] = useState<string[]>();
+  const [verifiedContractList, setVerifiedContractList] =
+    useState<VerifiedContractData[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
     ethereum: {},
   });
   const [timelineData, setTimelineData] = useState<addressCollection>({});
   const [activeTimeline, setActiveTimeline] = useState<addressSplitHistory>();
   const [activeAddress, setActiveAddress] = useState<string>();
+  const [timelineFilters, setTimelineFilters] =
+    useState<timelineFilterStore[]>();
 
   useEffect(() => {
     if (!!!verifiedContractList) {
@@ -74,6 +80,45 @@ const NFTimelineProvider = ({ children }) => {
   const addNewTimelineData = (address: string, timeline: addressSplitHistory) =>
     setTimelineData({ ...timelineData, [address]: timeline });
 
+  const addTimelineFilter = (filterOptions: timelineFilterStore) => {
+    let i = null;
+    if (!!timelineFilters) {
+      timelineFilters.forEach((filter, index) => {
+        if (filter.filterType === filterOptions.filterType) {
+          i = index;
+        }
+      });
+    }
+
+    if (!!i) {
+      let newFilters = timelineFilters;
+      newFilters[i] = filterOptions;
+      setTimelineFilters(newFilters);
+    } else {
+      setTimelineFilters([...timelineFilters, filterOptions]);
+    }
+  };
+
+  const removeAllTimelineFilters = () => {
+    setTimelineFilters([]);
+  };
+
+  const removeTimelineFilter = (filterType: timelineFilterTypes) => {};
+
+  const checkIfValidContract = (contractAddress: string): boolean => {
+    let isVerified: boolean = false;
+    console.log("checking for verification: ", contractAddress);
+    if (verifiedContractList.length > 0) {
+      verifiedContractList.forEach((contractItem) => {
+        contractItem.contracts.forEach((address) => {
+          if (address.toLowerCase() === contractAddress) isVerified = true;
+        });
+      });
+    }
+    console.log("Check is verified: ", isVerified);
+    return isVerified;
+  };
+
   return (
     <NFTimelineProviderContext.Provider
       value={{
@@ -82,6 +127,11 @@ const NFTimelineProvider = ({ children }) => {
         setActiveTimelineData,
         setActiveAddress,
         addNewTimelineData,
+        addTimelineFilter,
+        removeAllTimelineFilters,
+        removeTimelineFilter,
+        checkIfValidContract,
+        timelineFilters,
         activeTimeline,
         verifiedContractList,
         activeAddress,

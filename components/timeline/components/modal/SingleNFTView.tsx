@@ -11,6 +11,7 @@ import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 
 const Container = styled.div`
   width: 100%;
@@ -28,7 +29,7 @@ const CloseView = styled.div`
 
 const ViewArea = styled.div`
   height: 100%;
-  width: 100% ;
+  width: 100%;
   display: flex;
   flex-direction: row;
   column-gap: 10px;
@@ -147,6 +148,7 @@ const SingleNFTView = ({
   direction,
 }: SingleNFTViewProps) => {
   //console.log(NFTData, metadata, transactionData);
+  const { checkIfValidContract } = useNFTimelineProvider();
 
   const figureMethod = () => {
     let method;
@@ -221,6 +223,9 @@ const SingleNFTView = ({
             <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
             <InfoBadge>{NFTData.contract_type}</InfoBadge>
             <InfoBadge>Ethereum</InfoBadge>
+            {checkIfValidContract(transactionData.contractAddress) && (
+              <InfoBadge>Verified</InfoBadge>
+            )}
           </BadgeArea>
           <InformationDescription>
             {metadata.description}

@@ -15,7 +15,11 @@ const Wrapper = styled.div`
   color: black;
 `;
 
-const TxArea = styled.div``;
+
+const TxArea = styled.div`
+  padding: 5px;
+`;
+
 
 interface DayModalProps {
   allDayData: dailyHistory;
@@ -82,13 +86,16 @@ const DayModal = ({ allDayData }: DayModalProps) => {
       <TxArea>
         {allDayData &&
           allDayData[2].map((txHash, key) => (
-            <TransactionView
-              handleSelectedNFT={handleSelectedNFT}
-              txHash={txHash}
-              txData={allDayData[3][txHash]}
-              key={key}
-              index={key}
-            />
+            <>
+              <TransactionView
+                handleSelectedNFT={handleSelectedNFT}
+                txHash={txHash}
+                txData={allDayData[3][txHash]}
+                key={key}
+                index={key}
+              />
+              <br />
+            </>
           ))}
       </TxArea>
     </Wrapper>

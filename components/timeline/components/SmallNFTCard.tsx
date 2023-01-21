@@ -32,6 +32,8 @@ const SingleCard = styled.div`
   border-color: black;
   border-style: none;
   border-width: 1px;
+
+  box-shadow: 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 
 const InfoBox = styled.div`
@@ -85,7 +87,7 @@ const NFTImage = styled.img`
   width: 200px;
   height: 190px;
   overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
+  cursor: ${({ cursor }) => cursor || "pointer"};
   align-items: center;
   justify-content: center;
 `;
