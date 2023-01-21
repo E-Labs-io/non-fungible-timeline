@@ -32,10 +32,7 @@ const NFTimelineProvider = ({ children }) => {
   useEffect(() => {
     if (!!!verifiedContractList) {
       //  Get verified contract data from API
-      getVerifiedContractList().then((list) => {
-        setVerifiedContractList(list);
-        console.log(list);
-      });
+      getVerifiedContractList().then((list) => setVerifiedContractList(list));
     }
   });
 
