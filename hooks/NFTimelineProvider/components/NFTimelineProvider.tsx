@@ -45,9 +45,7 @@ const NFTimelineProvider = ({ children }) => {
     tokenId: string
   ): Promise<SingleNFTDataType> => {
     let metadata: SingleNFTDataType;
-    console.log("contract Address : ", contractAddress);
-    console.log(!!storedMetadata.ethereum[contractAddress]);
-    console.log(storedMetadata);
+
     if (
       !!storedMetadata.ethereum &&
       !!storedMetadata.ethereum[contractAddress] &&
@@ -55,12 +53,9 @@ const NFTimelineProvider = ({ children }) => {
     ) {
       //  If the metadata is stored locally
       metadata = storedMetadata.ethereum[contractAddress][tokenId];
-      console.log("Got data locally: ", metadata);
     } else {
       //  If not local get from API
       metadata = await getTokenMetadata(network, contractAddress, tokenId);
-      console.log("Got data from API: ", metadata);
-
       const update = {
         ...storedMetadata,
         ethereum: { [contractAddress]: { [tokenId]: metadata } },

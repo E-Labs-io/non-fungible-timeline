@@ -1,12 +1,11 @@
 /** @format */
 
-import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
-
 const url = process.env.NEXT_PUBLIC_NFT_SERVER
   ? process.env.NEXT_PUBLIC_NFT_SERVER
   : "http://localhost:3003";
 
 const getVerifiedContractList = async (): Promise<any> => {
+  console.log(url);
   const baseURL = `${url}/getVerifiedContractList`;
   const returnedData = await fetch(baseURL)
     .then((result) => result.json())
