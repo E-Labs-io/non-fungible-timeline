@@ -52,6 +52,8 @@ const searchUsersHistory = async ({
   const outByDate = compileHistoryIntoDays(sortedDataOut);
   loadingStateCallback(6);
 
+  console.log({ inByDate, outByDate, searchAddress });
+
   return { inByDate, outByDate, searchAddress };
 };
 
