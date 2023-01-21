@@ -23,7 +23,6 @@ function Connection({}) {
   const { walletAddress, userProvider, useEnsResolver } = useWeb3Provider();
   const [EnsResolver, setEnsResolver] = useState<any>();
   const [usersAddress, setUsersAddress] = useState<string>();
-  const [otherAddress, setOtherAddress] = useState<boolean>(false);
   const [ensError, setEnsError] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
   const [loadingState, setLoadingState] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(
