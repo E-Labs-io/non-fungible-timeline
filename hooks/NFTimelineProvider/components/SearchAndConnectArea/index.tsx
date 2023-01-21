@@ -66,6 +66,10 @@ function SearchAndConnectArea({
   usersAddress,
   ensError,
 }: ConnectionAreaProps) {
+  const handleSubmit = () => {
+    loadingState = 1;
+    searchUsersHistory();
+  };
   return (
     <PreLoadLayout>
       <ConnectionArea>
@@ -82,7 +86,7 @@ function SearchAndConnectArea({
               <EnsWarning>*ENS not recognised, please try another</EnsWarning>
             )}
             <Button
-              onClick={searchUsersHistory}
+              onClick={handleSubmit}
               disabled={handleIsDisabled(usersAddress)}
             >
               Search

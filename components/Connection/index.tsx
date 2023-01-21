@@ -45,7 +45,7 @@ function Connection({}) {
       setConnected(true);
     }
     //  If no connection or given, reset
-    if (!!walletAddress && usersAddress !== walletAddress && !otherAddress) {
+    if (!connected && !usersAddress) {
       setLoadingState(0);
     }
   });
@@ -74,6 +74,7 @@ function Connection({}) {
         setLoadingState(0);
       }
     } else {
+      setLoadingState(5);
       setActiveTimelineData(isLocal);
       setActiveAddress(usersAddress);
       router.push("/timeline");

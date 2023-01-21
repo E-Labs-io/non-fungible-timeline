@@ -21,7 +21,7 @@ const StatBox = styled.div`
   height: 60px;
   padding: 10px;
 
-  box-shadow: 0px 0px 20px 5px rgba(207, 207, 207, 0.682);
+  box-shadow: 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
   border-radius: 10px;
 
   display: flex;

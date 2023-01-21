@@ -19,7 +19,6 @@ const searchUsersHistory = async ({
 }: searchUsersHistoryProps): Promise<getTImelineDataReturn | false> => {
   hasErrorCallback(false);
 
-  loadingStateCallback(1);
   const isEns = ensResolver.isENS(addressOrEns);
   var searchAddress;
 

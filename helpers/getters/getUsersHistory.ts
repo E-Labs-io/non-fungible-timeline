@@ -55,7 +55,6 @@ const getUsersHistory = async ({
       if (!!returnedData.pageKey) {
         pageKey = returnedData.pageKey;
       } else pageKey = undefined;
-      console.log(returnedData);
       //  Add the new data to the array
       returnedData.transfers.forEach((tx) => transfers.push(tx));
     });
