@@ -4,11 +4,12 @@ import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
 import Connection from "components/Connection";
+import Introduction from "components/timeline/Introduction";
 
 const HomeContainer = styled.div`
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background: ${({ theme }) =>
     theme ? theme.coloredTheme.background : "white"};
   display: flex;
@@ -16,18 +17,22 @@ const HomeContainer = styled.div`
   align-items: center;
   justify-content: space-evenly;
   margin: auto;
+  row-gap: 15px;
 `;
 
 const TitleContainer = styled.div`
   width: 100%;
   height: 100px;
-  align-items: center;
+  margin-top: 100px;
   justify-content: center;
   display: flex;
 `;
+
+const ConnectionContainer = styled.div`
+  height: auto;
+`;
 const PageTitle = styled.div`
   justify-content: center;
-  align-items: center;
   background: #70ffde;
   background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
   -webkit-background-clip: text;
@@ -45,7 +50,11 @@ const Home = () => {
       <TitleContainer>
         <PageTitle>Non-Fungible Timeline</PageTitle>
       </TitleContainer>
-      <Connection />
+      <ConnectionContainer>
+        <Connection />
+      </ConnectionContainer>
+
+      <Introduction />
     </HomeContainer>
   );
 };

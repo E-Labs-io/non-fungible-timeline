@@ -10,7 +10,6 @@ const combineHistory = (
   inBound: compileHistoryIntoDaysReturn,
   outBound: compileHistoryIntoDaysReturn
 ) => {
-  console.log(outBound);
   const finalisedHistory: combinedHistory = [];
   const inCount = !!inBound.history ? Object.keys(inBound.history).length : 0;
   const outCount = !!outBound.history

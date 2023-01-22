@@ -5,13 +5,7 @@ import ToggleSwitch from "components/common/ToggleSwitch";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import React, { useState, useEffect, useReducer } from "react";
 import styled from "styled-components";
-import {
-  DateRangeInput,
-  DateSingleInput,
-  Datepicker,
-  OnDatesChangeProps,
-  START_DATE,
-} from "@datepicker-react/styled";
+import { DateRangeInput } from "@datepicker-react/styled";
 import { filtersInitalState } from "hooks/NFTimelineProvider/types/FilterTypes";
 
 const Container = styled.div`
@@ -75,8 +69,7 @@ function FilterOptions({}: FilterOptionsProps) {
     if (!!!activeFilters) {
       //  Filters Not set - setting
       if (timelineFilters && timelineFilters.length > 0) {
-        console.log("useEffect, there acr filters");
-        //  Setting foilters from store
+        //  Setting filters from store
         const actualActive: filtersInitalState = initState;
         timelineFilters.forEach((filter) => {
           actualActive[filter.filterType] = true;
@@ -126,11 +119,8 @@ function FilterOptions({}: FilterOptionsProps) {
   };
 
   const dateToLocal = (date) => new Date(date).toLocaleDateString();
-
-  const handleOnDateChange = (data) => {
+  const handleOnDateChange = (data) =>
     dispatch({ type: "dateChange", payload: data });
-    console.log(data);
-  };
   const handleOnFocuseChange = (focusedInput) =>
     dispatch({ type: "focusChange", payload: focusedInput });
 

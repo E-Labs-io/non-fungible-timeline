@@ -15,6 +15,7 @@ import {
 const ConnectionContainer = styled.div`
   height: 50%;
   width: 100%;
+  margin: auto;
 `;
 
 function Connection({}) {
@@ -42,7 +43,7 @@ function Connection({}) {
     if (!connected && userProvider) {
       setUsersAddress(walletAddress);
       setEnsError(false);
-       setBadAddressError(false);
+      setBadAddressError(false);
       setConnected(true);
     }
     //  If no connection or given, reset
