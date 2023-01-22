@@ -9,13 +9,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UserStats from "./components/UserStats";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import {
   countTokens,
   countTransactions,
   getFirstAndLastTransactions,
 } from "./helpers/sortUserStats";
 import FilterOptions from "./components/FilterOptions";
+import UsersVotingArea from "./components/UsersVotingArea";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -73,7 +74,6 @@ const FilterArea = styled.div`
 const FilterLabel = styled.div`
   width: 100%;
   height: 100%;
-  border-right: 2px, solid, white;
 
   display: flex;
   padding-right: 30px;
@@ -92,9 +92,24 @@ const VotingArea = styled.div`
   border-left: 2px, solid, white;
 
   display: flex;
+  flex-direction: column;
 
   justify-content: space-evenly;
   align-items: center;
+`;
+const VoteLabel = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  :hover {
+    color: #ff47e6;
+    cursor: pointer;
+  }
 `;
 
 interface UserInformationProps {
@@ -137,6 +152,7 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
     useState<compileHistoryIntoDaysReturn>();
 
   const [isFiltersOpen, setFiltersOpen] = useState(false);
+  const [isVotingOpen, setVotingOpen] = useState(false);
 
   useEffect(() => {
     //  Get the ENS resolver
@@ -201,6 +217,13 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
         >
           {hasENS ? ensAddress : walletAddress}
         </DisplayAddress>
+        <VotingArea>
+          <VoteLabel onClick={() => setVotingOpen(isVotingOpen ? false : true)}>
+            <FontAwesomeIcon icon={isVotingOpen ? faAngleDown : faAngleRight} />
+            {"  "}VOTE
+          </VoteLabel>
+          {isVotingOpen && <UsersVotingArea />}
+        </VotingArea>
         <WalletInfo>
           <UserStats
             handleOpenModal={handleOpenModal}
@@ -210,13 +233,14 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
           />
         </WalletInfo>
         <InteractionArea>
-          <VotingArea></VotingArea>
           <FilterArea>
             <FilterLabel
               onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
             >
-              Filters
-              <FontAwesomeIcon icon={isFiltersOpen ? faAngleDown: faAngleUp } />
+              <FontAwesomeIcon
+                icon={isFiltersOpen ? faAngleDown : faAngleRight}
+              />
+              FILTERS
             </FilterLabel>
           </FilterArea>
         </InteractionArea>
