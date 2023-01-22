@@ -209,8 +209,8 @@ const FrontCard = ({
 
   return ready ? (
     <Wrapper>
-      <SingleCard>
-        <TopImageContainer onClick={() => handleOpenModal(allData)}>
+      <SingleCard onClick={() => handleOpenModal(allData)}>
+        <TopImageContainer>
           <NFTImage
             alt="An NFT"
             cursor="pointer"

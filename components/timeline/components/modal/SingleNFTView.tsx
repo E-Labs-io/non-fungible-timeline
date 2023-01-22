@@ -12,6 +12,7 @@ import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
 
 const Container = styled.div`
   width: 100%;
@@ -150,9 +151,14 @@ const SingleNFTView = ({
   direction,
 }: SingleNFTViewProps) => {
   //console.log(NFTData, metadata, transactionData);
-  const { checkIfValidContract, verifiedContractList } =
-    useNFTimelineProvider();
+  const {
+    checkIfValidContract,
+    verifiedContractList,
+    getVerifiedContractData,
+  } = useNFTimelineProvider();
   const [verified, setVerified] = useState(undefined);
+  const [verifiedData, setVerifiedData] = useState<VerifiedContractData>();
+  const [loading, setLoading] = useState(false);
 
   const figureMethod = () => {
     let method;
@@ -215,8 +221,17 @@ const SingleNFTView = ({
   };
 
   useEffect(() => {
-    if (!!!verified && verifiedContractList)
-      setVerified(checkIfValidContract(transactionData.contractAddress));
+    if (!!!verified && verifiedContractList && !loading) {
+      setLoading(true);
+      let isValied = checkIfValidContract(transactionData.contractAddress);
+      if (isValied !== false) {
+        setVerified(true);
+        setVerifiedData(isValied);
+      } else {
+        setVerified(false);
+        setVerifiedData(undefined);
+      }
+    }
   });
 
   return (
@@ -228,9 +243,9 @@ const SingleNFTView = ({
         </ImageContainer>
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>
-          <InformationTextMedium>
-            Name of Project if Verified
-          </InformationTextMedium>
+          {verified && (
+            <InformationTextMedium>{verifiedData?.name}</InformationTextMedium>
+          )}
           <BadgeArea>
             <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
             <InfoBadge>{NFTData.contract_type}</InfoBadge>

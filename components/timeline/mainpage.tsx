@@ -3,19 +3,10 @@ import { Loader, Modal } from "../common";
 import { useWeb3Provider } from "../../hooks/web3";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import sortUsersHistory from "../../helpers/dataSorting/sortUsersHistory";
 import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
-import compileHistoryIntoDays, {
-  compileHistoryIntoDaysReturn,
-} from "helpers/dataSorting/compileHistoryIntoDays";
+import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
 import DayModal from "./components/modal/DayModal";
-import { isAddress } from "@ethersproject/address";
-import { ethers } from "ethers";
-import ensResolver from "hooks/web3/helpers/ensResolver";
-import Header from "../common/Layout/Header/Header";
-import getUsersHistory from "helpers/getters/getUsersHistory";
 import UserInformation from "./components/userInfo/UserInfo";
-import SearchAndConnectArea from "../../hooks/NFTimelineProvider/components/SearchAndConnectArea";
 import useWindowSize from "hooks/window/useWindowSize";
 import Introduction from "./Introduction";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
@@ -67,7 +58,8 @@ function MainPage({}: MainPageProps) {
   const { activeTimeline } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedDayData, setSelectedDayData] = useState<dailyHistory>();
+  const [selectedDayData, setSelectedDayData] =
+    useState<dailyHistory>(undefined);
   const [sortedInHistory, setSortedInHistory] =
     useState<compileHistoryIntoDaysReturn>();
   const [sortedOutHistory, setSortedOutHistory] =
@@ -91,10 +83,14 @@ function MainPage({}: MainPageProps) {
   });
 
   const handleOpenModal = (allSelectedData) => {
+    console.log("CLICK OPEN MODAL");
     setSelectedDayData(allSelectedData);
     setIsModalOpen(true);
   };
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDayData(undefined);
+  };
 
   const handleOpenModalFromStats = (selected: "first" | "last") => {
     let dates = [];

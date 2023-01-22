@@ -15,11 +15,9 @@ const Wrapper = styled.div`
   color: black;
 `;
 
-
 const TxArea = styled.div`
   padding: 5px;
 `;
-
 
 interface DayModalProps {
   allDayData: dailyHistory;
@@ -36,9 +34,8 @@ const DayModal = ({ allDayData }: DayModalProps) => {
 
   useEffect(() => {
     if (allDayData && allDayData[2].length === 1 && !loading) {
-      if (allDayData[3][allDayData[2][0]].length === 1) {
-        setLoading(true);
-        console.log("single item TX");
+      setLoading(true);
+      if (allDayData[3][allDayData[2][0]][0].groupedTokenIds.length === 1) {
         getTokenMetadata(
           "ethereum",
           allDayData[3][allDayData[2][0]][0].contractAddress,
@@ -54,7 +51,7 @@ const DayModal = ({ allDayData }: DayModalProps) => {
         });
       }
     }
-  });
+  }, [loading, allDayData]);
 
   const handleSelectedNFT = (
     NFTData: SingleNFTDataType,
@@ -72,7 +69,7 @@ const DayModal = ({ allDayData }: DayModalProps) => {
 
   const handleCloseModal = () => setShowOverlay(false);
 
-  return (
+  return allDayData && allDayData.length === 4 ? (
     <Wrapper overlay={showOverlay}>
       {showOverlay && (
         <SingleNFTView
@@ -99,7 +96,7 @@ const DayModal = ({ allDayData }: DayModalProps) => {
           ))}
       </TxArea>
     </Wrapper>
-  );
+  ) : null;
 };
 
 export default DayModal;
