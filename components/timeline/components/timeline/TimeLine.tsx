@@ -20,6 +20,8 @@ import {
   sortedHashData,
 } from "helpers/dataSorting/compileHistoryIntoDays";
 import combineHistory from "helpers/dataSorting/combinedSortedHistory";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import { timelineFilterStore } from "hooks/NFTimelineProvider/types/ProviderTypes";
 
 const Container = styled.div`
   height: 100%;
@@ -30,12 +32,20 @@ const Container = styled.div`
 `;
 
 const LoadMoreButton = styled.div`
-  color: #ffffff;
+  color: #2d93f8;
   align-items: center;
   justify-content: center;
+  display: flex;
   :hover {
-    color: #2d93f8;
+    color: #ff55bb;
   }
+`;
+
+const MoreContainer = styled.div`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 `;
 
 export type combinedHistory = dailyHistory[];
@@ -54,10 +64,12 @@ function TimeLine({
   ready,
   handleOpenModal,
 }: TimeLineProps) {
+  const { timelineFilters, checkIfValidContract } = useNFTimelineProvider();
   const [isReady, setIsReady] = useState<boolean>(false);
   const [firstLoad, setFirstLoad] = useState<boolean>(false);
   const [lastItemNumber, setLastItemNumber] = useState<number>(10);
   const [sortedData, setSortedData] = useState<combinedHistory>();
+  const [activeFilter, setActiveFilter] = useState<boolean>(false);
 
   const loadMore = () => {
     let lastNum = lastItemNumber + 10;
@@ -66,12 +78,24 @@ function TimeLine({
 
   useEffect(() => {
     if (ready && !!sortedInHistory && !!sortedOutHistory && !isReady) {
-      const history = combineHistory(sortedInHistory, sortedOutHistory);
+      timelineFilters && timelineFilters.length > 0
+        ? setActiveFilter(true)
+        : setActiveFilter(false);
+      const history = filterFilteredDays(
+        combineHistory(sortedInHistory, sortedOutHistory),
+        activeFilter
+      );
       setSortedData(history);
       setIsReady(true);
       setFirstLoad(true);
     }
   });
+
+  useEffect(() => {
+    const active = checkIfFilterIsActive();
+    let changed = active !== activeFilter;
+    setActiveFilter(active);
+  }, [timelineFilters]);
 
   const addButton = () => (
     <LoadMoreButton>
@@ -105,6 +129,64 @@ function TimeLine({
           display: "flex",
         };
 
+  const checkIfFilterIsActive = () => {
+    if (timelineFilters && timelineFilters.length > 0) return true;
+    else return false;
+  };
+
+  const filterFilteredDays = (history: combinedHistory, active: boolean) => {
+    if (active) {
+      let filteredHistory: combinedHistory = history;
+      console.log(timelineFilters);
+      //  Get the filters
+      //  Check what filters are active
+      const filters: timelineFilterStore[] = timelineFilters;
+      const isData = filters.find((a) => a.filterType === "date");
+      const isVerified = filters.find((a) => a.filterType === "verified");
+
+      if (!!isData) {
+        //  Filter for days
+      }
+      if (!!isVerified) {
+        const filtered: combinedHistory = [];
+        //  Filter for verified contracts
+        for (let day = 0; day < filteredHistory.length; day++) {
+          //  For each day, lets check if the contracts are allowed
+          //  Set the vars to collect allowed data
+          const allowedHash: string[] = [];
+          const allowedSortedData: sortedHashData = {};
+          //  Get the original data
+          const dayData = filteredHistory[day];
+          const hashes = dayData[2];
+          const contracts = dayData[3];
+
+          //  Check each contract
+          hashes.forEach((hash) => {
+            contracts[hash].forEach((contract) => {
+              if (checkIfValidContract(contract.contractAddress)) {
+                allowedSortedData[hash]
+                  ? allowedSortedData[hash].push(contract)
+                  : (allowedSortedData[hash] = [contract]);
+              }
+            });
+            if (!!allowedSortedData[hash] && allowedSortedData[hash].length > 0)
+              allowedHash.push(hash);
+          });
+          filtered.push([
+            dayData[0],
+            dayData[1],
+            allowedHash,
+            allowedSortedData,
+          ]);
+        }
+        //  Save the filtered contracts as the history
+        filteredHistory = filtered;
+      }
+
+      return filteredHistory;
+    } else return history;
+  };
+
   return (
     <Container>
       {isReady && (
@@ -136,7 +218,6 @@ function TimeLine({
               </VerticalTimelineElement>
             ))}
           {!!sortedInHistory && (
-            //  Load next button
             <VerticalTimelineElement
               iconOnClick={loadMore}
               icon={addButton()}

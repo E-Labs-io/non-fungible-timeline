@@ -1,5 +1,5 @@
 /** @format */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
 const CheckBoxWrapper = styled.div`
@@ -74,6 +74,7 @@ interface ToggleSwitchProps {
   height?: string;
   tooltip?: string;
   callBack?: (status) => void;
+  status?: boolean;
 }
 
 function ToggleSwitch({
@@ -87,8 +88,10 @@ function ToggleSwitch({
   zIndex,
   tooltip,
   callBack,
+  status,
 }: ToggleSwitchProps) {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState<boolean>(false);
+  const [firstUse, setFirstUse] = useState<boolean>(false);
 
   return (
     <CheckBoxWrapper
@@ -103,6 +106,7 @@ function ToggleSwitch({
       disabled={disabled}
       zIndex={zIndex}
       active={active}
+      checked={status}
     >
       <CheckBox
         backgroundColor={backgroundColor}
@@ -113,8 +117,9 @@ function ToggleSwitch({
         width={width}
         zIndex={zIndex}
         disabled={disabled}
-        id="userSearch"
+        id="toggleSwitch"
         type="checkbox"
+        checked={status}
         control={active}
         active={active}
         onChange={() => {
@@ -122,7 +127,7 @@ function ToggleSwitch({
           callBack ? callBack(active ? false : true) : null;
         }}
       />
-      <CheckBoxLabel htmlFor="userSearch" />
+      <CheckBoxLabel htmlFor="toggleSwitch" />
       {tooltip && (
         <ReactTooltip id="toggle" place="top" type="dark" effect="float">
           {tooltip}

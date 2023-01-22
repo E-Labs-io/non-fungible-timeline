@@ -32,8 +32,9 @@ const NFTimelineProvider = ({ children }) => {
   const [timelineData, setTimelineData] = useState<addressCollection>({});
   const [activeTimeline, setActiveTimeline] = useState<addressSplitHistory>();
   const [activeAddress, setActiveAddress] = useState<string>();
-  const [timelineFilters, setTimelineFilters] =
-    useState<timelineFilterStore[]>();
+  const [timelineFilters, setTimelineFilters] = useState<timelineFilterStore[]>(
+    []
+  );
 
   useEffect(() => {
     if (!!!verifiedContractList) {
@@ -99,9 +100,7 @@ const NFTimelineProvider = ({ children }) => {
     }
   };
 
-  const removeAllTimelineFilters = () => {
-    setTimelineFilters([]);
-  };
+  const removeAllTimelineFilters = () => setTimelineFilters([]);
 
   const removeTimelineFilter = (filterType: timelineFilterTypes) => {
     if (timelineFilters) {

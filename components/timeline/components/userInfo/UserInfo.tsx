@@ -8,14 +8,19 @@ import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UserStats from "./components/UserStats";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import {
   countTokens,
   countTransactions,
   getFirstAndLastTransactions,
 } from "./helpers/sortUserStats";
+import FilterOptions from "./components/FilterOptions";
 
 const Container = styled.div`
   background-color: #86848447;
+  margin: auto;
+  transition: all 0.3s linear;
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
@@ -23,7 +28,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  min-height: 20vh;
+  min-height: ${({ extension }) => (extension ? "auto" : "20vh")};
   align-items: center;
   justify-content: center;
   padding: 5px;
@@ -58,9 +63,25 @@ const FilterArea = styled.div`
   border-right: 2px, solid, white;
 
   display: flex;
-
-  justify-content: space-evenly;
+  padding-right: 30px;
+  justify-content: right;
   align-items: center;
+  text-align: center;
+`;
+const FilterLabel = styled.div`
+  width: 100%;
+  height: 100%;
+  border-right: 2px, solid, white;
+
+  display: flex;
+  padding-right: 30px;
+  justify-content: right;
+  align-items: center;
+  text-align: center;
+  :hover {
+    color: #ff47e6;
+    cursor: pointer;
+  }
 `;
 const VotingArea = styled.div`
   width: 100%;
@@ -111,6 +132,8 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
     useState<compileHistoryIntoDaysReturn>();
   const [sortedOutHistory, setSortedOutHistory] =
     useState<compileHistoryIntoDaysReturn>();
+
+  const [isFiltersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     //  Get the ENS resolver
@@ -165,7 +188,7 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
 
   if (ready)
     return (
-      <Container>
+      <Container extension={isFiltersOpen}>
         <DisplayAddress
           href={buildNetworkScanLink({
             network: "eth",
@@ -184,9 +207,18 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
           />
         </WalletInfo>
         <InteractionArea>
-          <FilterArea></FilterArea>
           <VotingArea></VotingArea>
+          <FilterArea>
+            <FilterLabel
+              onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
+            >
+              Filters
+              <FontAwesomeIcon icon={isFiltersOpen ? faAngleUp : faAngleDown} />
+            </FilterLabel>
+          </FilterArea>
         </InteractionArea>
+        {isFiltersOpen && <FilterOptions />}
+        <br />
       </Container>
     );
   else
