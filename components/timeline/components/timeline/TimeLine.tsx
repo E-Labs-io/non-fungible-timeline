@@ -45,7 +45,7 @@ interface TimeLineProps {
   sortedInHistory: compileHistoryIntoDaysReturn;
   sortedOutHistory: compileHistoryIntoDaysReturn;
   ready: boolean;
-  handleOpenModal: Function;
+  handleOpenModal: (allSelectedData) => void;
 }
 
 function TimeLine({

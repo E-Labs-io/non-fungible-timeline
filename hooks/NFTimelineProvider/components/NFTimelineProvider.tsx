@@ -105,19 +105,23 @@ const NFTimelineProvider = ({ children }) => {
 
   const removeTimelineFilter = (filterType: timelineFilterTypes) => {};
 
-  const checkIfValidContract = (contractAddress: string): boolean => {
-    let isVerified: boolean = false;
-    console.log("checking for verification: ", contractAddress);
+  const checkIfValidContract = (
+    contractAddress: string
+  ): false | VerifiedContractData => {
+    let isVerified: false | VerifiedContractData = false;
     if (verifiedContractList.length > 0) {
       verifiedContractList.forEach((contractItem) => {
         contractItem.contracts.forEach((address) => {
-          if (address.toLowerCase() === contractAddress) isVerified = true;
+          if (address.toLowerCase() === contractAddress)
+            isVerified = contractItem;
         });
       });
     }
-    console.log("Check is verified: ", isVerified);
     return isVerified;
   };
+
+  const getVerifiedContractData = (contractAddress) =>
+    verifiedContractList[contractAddress];
 
   return (
     <NFTimelineProviderContext.Provider
@@ -131,6 +135,7 @@ const NFTimelineProvider = ({ children }) => {
         removeAllTimelineFilters,
         removeTimelineFilter,
         checkIfValidContract,
+        getVerifiedContractData,
         timelineFilters,
         activeTimeline,
         verifiedContractList,
