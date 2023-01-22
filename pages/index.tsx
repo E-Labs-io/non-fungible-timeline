@@ -3,11 +3,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
-import config from "config/config";
-import { MainPage } from "components/timeline";
-import { useWeb3Provider } from "hooks/web3";
-import { Layout } from "components/common";
-import SearchAndConnectArea from "hooks/NFTimelineProvider/components/SearchAndConnectArea";
 import Connection from "components/Connection";
 
 const HomeContainer = styled.div`

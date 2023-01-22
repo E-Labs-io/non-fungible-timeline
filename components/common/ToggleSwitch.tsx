@@ -75,6 +75,7 @@ interface ToggleSwitchProps {
   tooltip?: string;
   callBack?: (status) => void;
   status?: boolean;
+  id?: string;
 }
 
 function ToggleSwitch({
@@ -89,6 +90,7 @@ function ToggleSwitch({
   tooltip,
   callBack,
   status,
+  id,
 }: ToggleSwitchProps) {
   const [active, setActive] = useState<boolean>(false);
   const [firstUse, setFirstUse] = useState<boolean>(false);
@@ -117,7 +119,7 @@ function ToggleSwitch({
         width={width}
         zIndex={zIndex}
         disabled={disabled}
-        id="toggleSwitch"
+        id={id ? id : "toggleSwitch"}
         type="checkbox"
         checked={status}
         control={active}
@@ -127,7 +129,7 @@ function ToggleSwitch({
           callBack ? callBack(active ? false : true) : null;
         }}
       />
-      <CheckBoxLabel htmlFor="toggleSwitch" />
+      <CheckBoxLabel htmlFor={id} />
       {tooltip && (
         <ReactTooltip id="toggle" place="top" type="dark" effect="float">
           {tooltip}

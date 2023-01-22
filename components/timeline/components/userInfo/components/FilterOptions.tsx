@@ -3,7 +3,7 @@
 import { Button } from "components/common";
 import ToggleSwitch from "components/common/ToggleSwitch";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import styled from "styled-components";
 import {
   DateRangeInput,
@@ -48,6 +48,14 @@ const ButtonContainer = styled.div`
   padding: 5px;
 `;
 
+const SwitchContainer = styled.div`
+  align-items: center;
+  justify-content: right;
+  display: flex;
+
+  width: auto;
+`;
+
 interface FilterOptionsProps {}
 function FilterOptions({}: FilterOptionsProps) {
   const {
@@ -56,50 +64,100 @@ function FilterOptions({}: FilterOptionsProps) {
     removeAllTimelineFilters,
     timelineFilters,
   } = useNFTimelineProvider();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [activeFilters, setActiveFilters] = useState<{
+    date: boolean;
+    verified: boolean;
+  }>();
+
+  useEffect(() => {
+    if (!!!activeFilters) {
+      //  Filters Not set - setting
+      if (timelineFilters && timelineFilters.length > 0) {
+        console.log("useEffect, there acr filters");
+        //  Setting foilters from store
+        const actualActive: {
+          date: boolean;
+          verified: boolean;
+        } = { date: false, verified: false };
+        timelineFilters.forEach((filter) => {
+          actualActive[filter.filterType] = true;
+        });
+        setActiveFilters(actualActive);
+      }
+    }
+  }, [activeFilters, timelineFilters]);
+
+  const handleResetAllFilters = () => {
+    dispatch({ type: "dateChange", payload: initialState });
+    removeAllTimelineFilters();
+    setActiveFilters({ date: false, verified: false });
+  };
 
   const handleToggleVerifiedFilter = (flag: boolean) => {
     if (flag) {
-      console.log("Verified Filter: ", flag);
       addTimelineFilter({ filterType: "verified" });
+      setActiveFilters({ ...activeFilters, verified: true });
     } else {
-      console.log("Verified Filter: ", flag);
       removeTimelineFilter("verified");
+      setActiveFilters({ ...activeFilters, verified: false });
     }
   };
 
-  const handleResetAllFilters = () => removeAllTimelineFilters();
-
-  const [dateState, setDateState] = useState({
-    startDate: null,
-    endDate: null,
-    focusedInput: START_DATE,
-  });
-
-  function handleDatesChange(data: OnDatesChangeProps) {
-    if (!data.focusedInput) {
-      setDateState({ ...data, focusedInput: START_DATE });
+  const handleToggleDateFilter = (flag: boolean) => {
+    console.log("Toggle Date: ", flag);
+    if (flag) {
+      const optionA = state.startDate;
+      const optionB = !!state.endDate ? state.endDate : new Date();
+      addTimelineFilter({ filterType: "date", optionA, optionB });
+      setActiveFilters({ ...activeFilters, date: true });
     } else {
-      setDateState(data);
+      removeTimelineFilter("date");
+      setActiveFilters({ ...activeFilters, date: false });
     }
-  }
+  };
+
+  const dateToLocal = (date) => new Date(date).toLocaleDateString();
+
+  const handleOnDateChange = (data) => {
+    dispatch({ type: "dateChange", payload: data });
+    console.log(data);
+  };
+  const handleOnFocuseChange = (focusedInput) =>
+    dispatch({ type: "focusChange", payload: focusedInput });
 
   return (
     <Container>
       <FilterInsert>
         Show only verified contracts{" "}
-        <ToggleSwitch
-          callBack={handleToggleVerifiedFilter}
-          status={timelineFilters && timelineFilters.length > 0}
-          tooltip="Only show NFTs from verified contracts"
-        />
+        <SwitchContainer>
+          <ToggleSwitch
+            callBack={handleToggleVerifiedFilter}
+            status={timelineFilters && activeFilters?.verified}
+            tooltip="Only show NFTs from verified contracts"
+            id="verifiedToggle"
+          />
+        </SwitchContainer>
       </FilterInsert>
       <FilterInsert>
-        <Datepicker
-          startDate={null}
-          focusedInput={null}
-          endDate={null}
-          onDatesChange={handleDatesChange}
+        Filter by date range
+        <DateRangeInput
+          displayFormat={dateToLocal}
+          placement="bottom"
+          onDatesChange={handleOnDateChange}
+          onFocusChange={handleOnFocuseChange}
+          startDate={state.startDate}
+          endDate={state.endDate}
+          focusedInput={state.focusedInput}
         />
+        <SwitchContainer>
+          <ToggleSwitch
+            callBack={handleToggleDateFilter}
+            status={timelineFilters && activeFilters?.date}
+            tooltip="Only show NFTs inside the date range"
+            id="dateToggle"
+          />
+        </SwitchContainer>
       </FilterInsert>
       <ButtonContainer>
         <Button onClick={handleResetAllFilters} fontSize="1rem">
@@ -111,3 +169,20 @@ function FilterOptions({}: FilterOptionsProps) {
 }
 
 export default FilterOptions;
+
+const initialState = {
+  startDate: new Date("01/01/2018"),
+  endDate: new Date(),
+  focusedInput: new Date(),
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "focusChange":
+      return { ...state, focusedInput: action.payload };
+    case "dateChange":
+      return action.payload;
+    default:
+      throw new Error();
+  }
+}

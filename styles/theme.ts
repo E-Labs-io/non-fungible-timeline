@@ -1,5 +1,7 @@
 /** @format */
 
+import { reactDatepicker } from "styles/DatepickerStyles";
+
 export const theme: themeInterface = {
   offWhite: "#f8f8ff",
   offBlack: "#0e1111",
@@ -32,6 +34,8 @@ export const theme: themeInterface = {
     medium: "20px",
     large: "24px",
   },
+  breakpoints: ["32em", "48em", "64em"],
+  reactDatepicker: reactDatepicker,
 };
 
 export type themeInterface = {
@@ -67,6 +71,8 @@ export type themeInterface = {
     medium: string;
     large: string;
   };
+  breakpoints: string[];
+  reactDatepicker: { [key: string]: any };
 };
 
 export type ThemeProps = { theme: typeof theme };

@@ -95,8 +95,7 @@ function TimeLine({
 
   useEffect(() => {
     const active = checkIfFilterIsActive();
-    let changed = active !== activeFilter;
-    if (changed) {
+
       setIsReady(false);
       let history = filterFilteredDays(
         combineHistory(sortedInHistory, sortedOutHistory),
@@ -104,7 +103,7 @@ function TimeLine({
         checkIfValidContract
       );
       setSortedData(history);
-    }
+
     setActiveFilter(active);
   }, [timelineFilters]);
 

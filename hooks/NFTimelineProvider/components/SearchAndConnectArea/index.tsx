@@ -4,7 +4,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "../../../../components/common";
 import { ConnectButton, useWeb3Provider } from "../../../web3";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import LoadingNotice from "./loadingNotice";
+import FilterOptions from "components/timeline/components/userInfo/components/FilterOptions";
 
 const PreLoadLayout = styled.div`
   justify-content: center;
@@ -51,6 +54,15 @@ const EnsWarning = styled.div`
   font-size: large;
 `;
 
+const FilterArea = styled.div`
+  padding: 5px;
+`;
+const FilterLabel = styled.div`
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+`;
+
 interface ConnectionAreaProps {
   handleInputChange: (input: any) => void;
   searchUsersHistory: () => void;
@@ -67,6 +79,7 @@ function SearchAndConnectArea({
   usersAddress,
   ensError,
 }: ConnectionAreaProps) {
+  const [isFiltersOpen, setFiltersOpen] = useState(false);
   const handleSubmit = () => {
     loadingState = 1;
     searchUsersHistory();
@@ -92,6 +105,17 @@ function SearchAndConnectArea({
             >
               Search
             </Button>
+            <FilterArea>
+              <FilterLabel
+                onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
+              >
+                Filters
+                <FontAwesomeIcon
+                  icon={isFiltersOpen ? faAngleDown : faAngleUp}
+                />
+              </FilterLabel>
+              {isFiltersOpen && <FilterOptions />}
+            </FilterArea>
           </>
         )}
         <LoadingNotice loadingState={loadingState} />

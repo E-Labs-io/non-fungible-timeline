@@ -216,7 +216,7 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
               onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
             >
               Filters
-              <FontAwesomeIcon icon={isFiltersOpen ? faAngleUp : faAngleDown} />
+              <FontAwesomeIcon icon={isFiltersOpen ? faAngleDown: faAngleUp } />
             </FilterLabel>
           </FilterArea>
         </InteractionArea>

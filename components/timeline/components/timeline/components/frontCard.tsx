@@ -35,23 +35,6 @@ const Wrapper = styled.div`
     cursor: pointer;
   }
 `;
-
-const BoldText = styled.span`
-  font-weight: bold;
-`;
-
-const BlockData = styled.div`
-  text-align: right;
-`;
-
-const Title = styled.h3``;
-
-const Text = styled.p``;
-const Link = styled.a``;
-const SmallButton = styled.button`
-  border-radius: 30px;
-`;
-
 //////  CARD BUILD
 const SingleCard = styled.div`
   width: 200px;
