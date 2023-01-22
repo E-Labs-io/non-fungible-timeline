@@ -151,11 +151,8 @@ const SingleNFTView = ({
   direction,
 }: SingleNFTViewProps) => {
   //console.log(NFTData, metadata, transactionData);
-  const {
-    checkIfValidContract,
-    verifiedContractList,
-    getVerifiedContractData,
-  } = useNFTimelineProvider();
+  const { checkIfValidContract, verifiedContractList } =
+    useNFTimelineProvider();
   const [verified, setVerified] = useState(undefined);
   const [verifiedData, setVerifiedData] = useState<VerifiedContractData>();
   const [loading, setLoading] = useState(false);
@@ -221,6 +218,9 @@ const SingleNFTView = ({
   };
 
   useEffect(() => {
+    if (!loading) {
+      console.log(metadata);
+    }
     if (!!!verified && verifiedContractList && !loading) {
       setLoading(true);
       let isValied = checkIfValidContract(transactionData.contractAddress);

@@ -103,7 +103,15 @@ const NFTimelineProvider = ({ children }) => {
     setTimelineFilters([]);
   };
 
-  const removeTimelineFilter = (filterType: timelineFilterTypes) => {};
+  const removeTimelineFilter = (filterType: timelineFilterTypes) => {
+    if (timelineFilters) {
+      const newFilters: timelineFilterStore[] = [];
+      timelineFilters.forEach((filter) => {
+        if (filter.filterType !== filterType) newFilters.push(filter);
+      });
+      setTimelineFilters(newFilters);
+    }
+  };
 
   const checkIfValidContract = (
     contractAddress: string
@@ -120,9 +128,6 @@ const NFTimelineProvider = ({ children }) => {
     return isVerified;
   };
 
-  const getVerifiedContractData = (contractAddress) =>
-    verifiedContractList[contractAddress];
-
   return (
     <NFTimelineProviderContext.Provider
       value={{
@@ -135,7 +140,6 @@ const NFTimelineProvider = ({ children }) => {
         removeAllTimelineFilters,
         removeTimelineFilter,
         checkIfValidContract,
-        getVerifiedContractData,
         timelineFilters,
         activeTimeline,
         verifiedContractList,

@@ -83,7 +83,6 @@ function MainPage({}: MainPageProps) {
   });
 
   const handleOpenModal = (allSelectedData) => {
-    console.log("CLICK OPEN MODAL");
     setSelectedDayData(allSelectedData);
     setIsModalOpen(true);
   };

@@ -18,16 +18,11 @@ export interface NFTimelineProviderContextType {
   removeTimelineFilter: removeTimelineFilter;
   removeAllTimelineFilters: removeAllTimelineFilters;
   checkIfValidContract: checkIfValidContract;
-  getVerifiedContractData: getVerifiedContractData;
   timelineFilters: timelineFilterStore[];
   activeTimeline: addressSplitHistory;
   verifiedContractList: VerifiedContractData[];
   activeAddress: string;
 }
-
-export type getVerifiedContractData = (
-  contractAddress: string
-) => VerifiedContractData;
 
 export type timelineFilterTypes = "date" | "verified";
 export interface timelineFilterStore {
