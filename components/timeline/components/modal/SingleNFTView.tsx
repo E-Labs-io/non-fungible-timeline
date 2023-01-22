@@ -88,7 +88,9 @@ const InfoBadge = styled.div`
 const InformationTextLarge = styled.div`
   font-size: 30px;
 `;
-const InformationTextMedium = styled.div``;
+const InformationTextMedium = styled.div`
+  font-size: 1rem;
+`;
 const InformationDescription = styled.div`
   padding: 5px;
   width: 500px;
@@ -148,7 +150,9 @@ const SingleNFTView = ({
   direction,
 }: SingleNFTViewProps) => {
   //console.log(NFTData, metadata, transactionData);
-  const { checkIfValidContract } = useNFTimelineProvider();
+  const { checkIfValidContract, verifiedContractList } =
+    useNFTimelineProvider();
+  const [verified, setVerified] = useState(undefined);
 
   const figureMethod = () => {
     let method;
@@ -210,6 +214,11 @@ const SingleNFTView = ({
     );
   };
 
+  useEffect(() => {
+    if (!!!verified && verifiedContractList)
+      setVerified(checkIfValidContract(transactionData.contractAddress));
+  });
+
   return (
     <Container>
       <CloseView onClick={closeView}>Back</CloseView>
@@ -219,14 +228,16 @@ const SingleNFTView = ({
         </ImageContainer>
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>
+          <InformationTextMedium>
+            Name of Project if Verified
+          </InformationTextMedium>
           <BadgeArea>
             <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
             <InfoBadge>{NFTData.contract_type}</InfoBadge>
             <InfoBadge>Ethereum</InfoBadge>
-            {checkIfValidContract(transactionData.contractAddress) && (
-              <InfoBadge>Verified</InfoBadge>
-            )}
+            {verified && <InfoBadge>Verified</InfoBadge>}
           </BadgeArea>
+
           <InformationDescription>
             {metadata.description}
           </InformationDescription>

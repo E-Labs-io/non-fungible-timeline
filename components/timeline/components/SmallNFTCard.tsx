@@ -122,6 +122,7 @@ function SmallNFTCard({
   const { getTokenMetadata } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [verified, setVerified] = useState();
 
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
