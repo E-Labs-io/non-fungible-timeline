@@ -5,29 +5,39 @@ import ToggleSwitch from "components/common/ToggleSwitch";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import {
+  DateRangeInput,
+  DateSingleInput,
+  Datepicker,
+  OnDatesChangeProps,
+  START_DATE,
+} from "@datepicker-react/styled";
 
 const Container = styled.div`
-  background-color: #86848447;
   transition: all 0.3s linear;
   border-radius: 10px;
-  width: 80%;
-  height: 200px;
+  width: 100%;
+  height: auto;
   align-items: left;
   justify-content: center;
   padding: 10px;
   margin: auto;
   row-gap: 20px;
-  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+
   display: flex;
   flex-direction: column;
   text-align: left;
 `;
 
 const FilterInsert = styled.div`
+  transition: all 0.3s linear;
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 10px;
   column-gap: 30px;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 
 const ButtonContainer = styled.div`
@@ -59,6 +69,20 @@ function FilterOptions({}: FilterOptionsProps) {
 
   const handleResetAllFilters = () => removeAllTimelineFilters();
 
+  const [dateState, setDateState] = useState({
+    startDate: null,
+    endDate: null,
+    focusedInput: START_DATE,
+  });
+
+  function handleDatesChange(data: OnDatesChangeProps) {
+    if (!data.focusedInput) {
+      setDateState({ ...data, focusedInput: START_DATE });
+    } else {
+      setDateState(data);
+    }
+  }
+
   return (
     <Container>
       <FilterInsert>
@@ -66,6 +90,15 @@ function FilterOptions({}: FilterOptionsProps) {
         <ToggleSwitch
           callBack={handleToggleVerifiedFilter}
           status={timelineFilters && timelineFilters.length > 0}
+          tooltip="Only show NFTs from verified contracts"
+        />
+      </FilterInsert>
+      <FilterInsert>
+        <Datepicker
+          startDate={null}
+          focusedInput={null}
+          endDate={null}
+          onDatesChange={handleDatesChange}
         />
       </FilterInsert>
       <ButtonContainer>

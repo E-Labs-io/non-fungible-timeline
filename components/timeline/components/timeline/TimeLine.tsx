@@ -22,6 +22,7 @@ import {
 import combineHistory from "helpers/dataSorting/combinedSortedHistory";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { timelineFilterStore } from "hooks/NFTimelineProvider/types/ProviderTypes";
+import filterFilteredDays from "./helpers/filterDays";
 
 const Container = styled.div`
   height: 100%;
@@ -83,7 +84,8 @@ function TimeLine({
         : setActiveFilter(false);
       const history = filterFilteredDays(
         combineHistory(sortedInHistory, sortedOutHistory),
-        activeFilter
+        timelineFilters,
+        checkIfValidContract
       );
       setSortedData(history);
       setIsReady(true);
@@ -94,6 +96,15 @@ function TimeLine({
   useEffect(() => {
     const active = checkIfFilterIsActive();
     let changed = active !== activeFilter;
+    if (changed) {
+      setIsReady(false);
+      let history = filterFilteredDays(
+        combineHistory(sortedInHistory, sortedOutHistory),
+        timelineFilters,
+        checkIfValidContract
+      );
+      setSortedData(history);
+    }
     setActiveFilter(active);
   }, [timelineFilters]);
 
@@ -132,59 +143,6 @@ function TimeLine({
   const checkIfFilterIsActive = () => {
     if (timelineFilters && timelineFilters.length > 0) return true;
     else return false;
-  };
-
-  const filterFilteredDays = (history: combinedHistory, active: boolean) => {
-    if (active) {
-      let filteredHistory: combinedHistory = history;
-      console.log(timelineFilters);
-      //  Get the filters
-      //  Check what filters are active
-      const filters: timelineFilterStore[] = timelineFilters;
-      const isData = filters.find((a) => a.filterType === "date");
-      const isVerified = filters.find((a) => a.filterType === "verified");
-
-      if (!!isData) {
-        //  Filter for days
-      }
-      if (!!isVerified) {
-        const filtered: combinedHistory = [];
-        //  Filter for verified contracts
-        for (let day = 0; day < filteredHistory.length; day++) {
-          //  For each day, lets check if the contracts are allowed
-          //  Set the vars to collect allowed data
-          const allowedHash: string[] = [];
-          const allowedSortedData: sortedHashData = {};
-          //  Get the original data
-          const dayData = filteredHistory[day];
-          const hashes = dayData[2];
-          const contracts = dayData[3];
-
-          //  Check each contract
-          hashes.forEach((hash) => {
-            contracts[hash].forEach((contract) => {
-              if (checkIfValidContract(contract.contractAddress)) {
-                allowedSortedData[hash]
-                  ? allowedSortedData[hash].push(contract)
-                  : (allowedSortedData[hash] = [contract]);
-              }
-            });
-            if (!!allowedSortedData[hash] && allowedSortedData[hash].length > 0)
-              allowedHash.push(hash);
-          });
-          filtered.push([
-            dayData[0],
-            dayData[1],
-            allowedHash,
-            allowedSortedData,
-          ]);
-        }
-        //  Save the filtered contracts as the history
-        filteredHistory = filtered;
-      }
-
-      return filteredHistory;
-    } else return history;
   };
 
   return (

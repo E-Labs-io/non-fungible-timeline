@@ -28,18 +28,20 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  min-height: ${({ extension }) => (extension ? "auto" : "20vh")};
+  min-height: auto;
   align-items: center;
   justify-content: center;
   padding: 5px;
+  padding-top: 10px;
   row-gap: 20px;
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 const DisplayAddress = styled.a`
   justify-content: center;
   display: flex;
-  font-size: 40px;
+  font-size: 2.5rem;
   text-align: center;
+
   color: white;
   :hover {
     color: #ff49f0;
@@ -75,6 +77,7 @@ const FilterLabel = styled.div`
 
   display: flex;
   padding-right: 30px;
+  padding-bottom: 10px;
   justify-content: right;
   align-items: center;
   text-align: center;
@@ -218,7 +221,6 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
           </FilterArea>
         </InteractionArea>
         {isFiltersOpen && <FilterOptions />}
-        <br />
       </Container>
     );
   else

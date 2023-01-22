@@ -2,7 +2,7 @@
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { dailyHistory } from "../timeline/TimeLine";
 import SingleNFTView from "./SingleNFTView";
@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   min-height: ${({ overlay }) => (overlay ? "400px" : "300px")};
   padding: 10px;
   color: black;
+  transition: all 0.3s linear;
 `;
 
 const TxArea = styled.div`
@@ -23,6 +24,7 @@ interface DayModalProps {
   allDayData: dailyHistory;
 }
 const DayModal = ({ allDayData }: DayModalProps) => {
+  const selectedNFTRef = useRef(null);
   const { getTokenMetadata } = useNFTimelineProvider();
   const [loading, setLoading] = useState(false);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
@@ -53,6 +55,11 @@ const DayModal = ({ allDayData }: DayModalProps) => {
     }
   }, [loading, allDayData]);
 
+  const scrollToTop = () =>
+    selectedNFTRef &&
+    selectedNFTRef.current &&
+    selectedNFTRef.current.scrollIntoView();
+
   const handleSelectedNFT = (
     NFTData: SingleNFTDataType,
     metadata: NFTMetaDataType,
@@ -65,12 +72,13 @@ const DayModal = ({ allDayData }: DayModalProps) => {
     };
     setSelectedNFT(toView);
     setShowOverlay(true);
+    scrollToTop();
   };
 
   const handleCloseModal = () => setShowOverlay(false);
 
   return allDayData && allDayData.length === 4 ? (
-    <Wrapper overlay={showOverlay}>
+    <Wrapper overlay={showOverlay} ref={selectedNFTRef}>
       {showOverlay && (
         <SingleNFTView
           NFTData={selectedNFT.NFTData}
