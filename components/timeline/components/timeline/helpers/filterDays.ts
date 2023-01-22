@@ -2,10 +2,8 @@
 
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import {
-  checkIfValidContract,
-  timelineFilterStore,
-} from "hooks/NFTimelineProvider/types/ProviderTypes";
+import { timelineFilterStore } from "hooks/NFTimelineProvider/types/FilterTypes";
+import { checkIfValidContract } from "hooks/NFTimelineProvider/types/ProviderTypes";
 import { combinedHistory } from "../TimeLine";
 
 const filterFilteredDays = (
@@ -18,6 +16,7 @@ const filterFilteredDays = (
   //  Check what filters are active
   const isData = filters.find((a) => a.filterType === "date");
   const isVerified = filters.find((a) => a.filterType === "verified");
+  const isOrder = filters.find((a) => a.filterType === "order");
 
   if (!!isData) {
     const filtered: combinedHistory = [];
@@ -60,6 +59,15 @@ const filterFilteredDays = (
         filtered.push([dayData[0], dayData[1], allowedHash, allowedSortedData]);
     }
     //  Save the filtered contracts as the history
+    filteredHistory = filtered;
+  }
+  if (!!isOrder) {
+    const filtered = [];
+    for (let i = filteredHistory.length; i > 0; i--) {
+      const item = filteredHistory[i - 1];
+      filtered.push(item);
+    }
+
     filteredHistory = filtered;
   }
 

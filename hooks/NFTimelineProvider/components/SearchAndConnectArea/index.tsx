@@ -14,7 +14,6 @@ const PreLoadLayout = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-
   display: flex;
   column-gap: 30px;
 `;
@@ -61,6 +60,7 @@ const FilterLabel = styled.div`
   align-items: center;
   justify-content: center;
   padding: 5px;
+  text-align: center;
 `;
 
 interface ConnectionAreaProps {
@@ -70,6 +70,7 @@ interface ConnectionAreaProps {
   loadingState: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   usersAddress: string;
   ensError: boolean;
+  badAddressError: boolean;
 }
 function SearchAndConnectArea({
   handleInputChange,
@@ -78,6 +79,7 @@ function SearchAndConnectArea({
   loadingState,
   usersAddress,
   ensError,
+  badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
   const handleSubmit = () => {
@@ -98,6 +100,12 @@ function SearchAndConnectArea({
             />
             {ensError && (
               <EnsWarning>*ENS not recognised, please try another</EnsWarning>
+            )}
+            {badAddressError && (
+              <EnsWarning>
+                *Must be a baby wallet, we cant find any history for that
+                address
+              </EnsWarning>
             )}
             <Button
               onClick={handleSubmit}

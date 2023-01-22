@@ -21,7 +21,6 @@ import {
 } from "helpers/dataSorting/compileHistoryIntoDays";
 import combineHistory from "helpers/dataSorting/combinedSortedHistory";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import { timelineFilterStore } from "hooks/NFTimelineProvider/types/ProviderTypes";
 import filterFilteredDays from "./helpers/filterDays";
 
 const Container = styled.div`

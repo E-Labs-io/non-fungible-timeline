@@ -12,6 +12,7 @@ import {
   OnDatesChangeProps,
   START_DATE,
 } from "@datepicker-react/styled";
+import { filtersInitalState } from "hooks/NFTimelineProvider/types/FilterTypes";
 
 const Container = styled.div`
   transition: all 0.3s linear;
@@ -34,10 +35,11 @@ const FilterInsert = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 10px;
   column-gap: 30px;
   border-radius: 10px;
-  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+  box-shadow: inset 0px 0px 15px 2px #cfcfcfad;
 `;
 
 const ButtonContainer = styled.div`
@@ -65,10 +67,9 @@ function FilterOptions({}: FilterOptionsProps) {
     timelineFilters,
   } = useNFTimelineProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [activeFilters, setActiveFilters] = useState<{
-    date: boolean;
-    verified: boolean;
-  }>();
+  const [activeFilters, setActiveFilters] = useState<filtersInitalState>();
+
+  const initState = { date: false, verified: false, order: false };
 
   useEffect(() => {
     if (!!!activeFilters) {
@@ -76,10 +77,7 @@ function FilterOptions({}: FilterOptionsProps) {
       if (timelineFilters && timelineFilters.length > 0) {
         console.log("useEffect, there acr filters");
         //  Setting foilters from store
-        const actualActive: {
-          date: boolean;
-          verified: boolean;
-        } = { date: false, verified: false };
+        const actualActive: filtersInitalState = initState;
         timelineFilters.forEach((filter) => {
           actualActive[filter.filterType] = true;
         });
@@ -91,7 +89,7 @@ function FilterOptions({}: FilterOptionsProps) {
   const handleResetAllFilters = () => {
     dispatch({ type: "dateChange", payload: initialState });
     removeAllTimelineFilters();
-    setActiveFilters({ date: false, verified: false });
+    setActiveFilters(initState);
   };
 
   const handleToggleVerifiedFilter = (flag: boolean) => {
@@ -101,6 +99,16 @@ function FilterOptions({}: FilterOptionsProps) {
     } else {
       removeTimelineFilter("verified");
       setActiveFilters({ ...activeFilters, verified: false });
+    }
+  };
+
+  const handleToggleOrderFilter = (flag: boolean) => {
+    if (flag) {
+      addTimelineFilter({ filterType: "order" });
+      setActiveFilters({ ...activeFilters, order: true });
+    } else {
+      removeTimelineFilter("order");
+      setActiveFilters({ ...activeFilters, order: false });
     }
   };
 
@@ -140,7 +148,18 @@ function FilterOptions({}: FilterOptionsProps) {
         </SwitchContainer>
       </FilterInsert>
       <FilterInsert>
-        Filter by date range
+        Show latest first
+        <SwitchContainer>
+          <ToggleSwitch
+            callBack={handleToggleOrderFilter}
+            status={timelineFilters && activeFilters?.order}
+            tooltip="Show Timeline with newest first"
+            id="orderToggle"
+          />
+        </SwitchContainer>
+      </FilterInsert>
+      <FilterInsert>
+        By Date
         <DateRangeInput
           displayFormat={dateToLocal}
           placement="bottom"

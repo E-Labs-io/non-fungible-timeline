@@ -5,12 +5,11 @@ import React, { useEffect, useState, createContext } from "react";
 import getTokenMetadata from "../hooks/getTokenMetadata";
 import getVerifiedContractList from "../hooks/getVerifiedContracts";
 import { NFTimelineProviderContextType } from "../types";
+import { timelineFilterStore, timelineFilterTypes } from "../types/FilterTypes";
 import {
   addressCollection,
   addressSplitHistory,
   StoredMetadataType,
-  timelineFilterStore,
-  timelineFilterTypes,
 } from "../types/ProviderTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
 

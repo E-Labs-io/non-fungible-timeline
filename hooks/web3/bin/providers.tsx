@@ -8,7 +8,7 @@ const rcps = {
   4: "https://goerli.infura.io/v3/",
 };
 
-const infuraKey = process.env.ALCHEMY_KEY;
+const infuraKey = process.env.INFURA_KEY;
 
 const walletConnectProviderOption = (chainId: number) => {
   return {
@@ -16,7 +16,7 @@ const walletConnectProviderOption = (chainId: number) => {
     options: {
       infuraId: infuraKey, // required
       rpc: rcps,
-      chainId: chainId ? chainId : 4,
+      chainId: chainId ? chainId : 1,
     },
   };
 };
@@ -32,7 +32,7 @@ const coinbaseWalletProviderOptions = (
       infuraId: infuraKey, // Required
       rpc: "", // Optional if `infuraId` is provided; otherwise it's required
       darkMode: darkMode ? darkMode : false, // Optional. Use dark theme, defaults to false
-      chainId: chainId ? chainId : 4,
+      chainId: chainId ? chainId : 1,
     },
   };
 };

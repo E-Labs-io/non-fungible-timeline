@@ -168,9 +168,7 @@ const UserWeb3Provider = ({ children }) => {
             balance?: number;
             web3ModalInstance?: any;
           }
-        | false = await web3Connection(
-        config.deployedContracts.testing.network.chainId
-      );
+        | false = await web3Connection(1);
 
       if (walletDetails) {
         //    If the connection was successful save up

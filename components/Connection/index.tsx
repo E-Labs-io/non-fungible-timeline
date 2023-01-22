@@ -24,6 +24,7 @@ function Connection({}) {
   const [EnsResolver, setEnsResolver] = useState<any>();
   const [usersAddress, setUsersAddress] = useState<string>();
   const [ensError, setEnsError] = useState<boolean>(false);
+  const [badAddressError, setBadAddressError] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
   const [loadingState, setLoadingState] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(
     0
@@ -41,6 +42,7 @@ function Connection({}) {
     if (!connected && userProvider) {
       setUsersAddress(walletAddress);
       setEnsError(false);
+       setBadAddressError(false);
       setConnected(true);
     }
     //  If no connection or given, reset
@@ -52,6 +54,7 @@ function Connection({}) {
   const handleInputChange = (input) => {
     setUsersAddress(input.target.value);
     setEnsError(false);
+    setBadAddressError(false);
   };
 
   const handelSearchUsersHistory = async () => {
@@ -70,6 +73,7 @@ function Connection({}) {
         setActiveAddress(usersTimeline.searchAddress);
         router.push("/timeline");
       } else {
+        setBadAddressError(true);
         setLoadingState(0);
       }
     } else {
@@ -99,9 +103,10 @@ function Connection({}) {
   return (
     <ConnectionContainer>
       <SearchAndConnectArea
-        handleInputChange={handleInputChange}
+        badAddressError={badAddressError}
         searchUsersHistory={handelSearchUsersHistory}
         handleIsDisabled={handleIsDisabled}
+        handleInputChange={handleInputChange}
         loadingState={loadingState}
         usersAddress={usersAddress}
         ensError={ensError}

@@ -24,12 +24,6 @@ export interface NFTimelineProviderContextType {
   activeAddress: string;
 }
 
-export type timelineFilterTypes = "date" | "verified";
-export interface timelineFilterStore {
-  filterType: timelineFilterTypes;
-  optionA?: string;
-  optionB?: string;
-}
 export type addTimelineFilter = (filterOptions: timelineFilterStore) => void;
 export type removeTimelineFilter = (filterType: timelineFilterTypes) => void;
 export type removeAllTimelineFilters = () => void;

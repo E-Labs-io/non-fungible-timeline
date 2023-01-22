@@ -10,9 +10,12 @@ const combineHistory = (
   inBound: compileHistoryIntoDaysReturn,
   outBound: compileHistoryIntoDaysReturn
 ) => {
+  console.log(outBound);
   const finalisedHistory: combinedHistory = [];
-  const inCount = Object.keys(inBound.history).length;
-  const outCount = Object.keys(outBound.history).length;
+  const inCount = !!inBound.history ? Object.keys(inBound.history).length : 0;
+  const outCount = !!outBound.history
+    ? Object.keys(outBound.history).length
+    : 0;
   for (let i = 0; i < inCount; i++) {
     let date = Object.keys(inBound.history)[i];
     let insert: dailyHistory = [

@@ -9,8 +9,10 @@ const getFirstAndLastTransactions = (
   let first, last;
   let dates = [];
 
-  Object.keys(sortedInHistory.hashes).forEach((date) => dates.push(date));
-  Object.keys(sortedOutHistory.hashes).forEach((date) => dates.push(date));
+  if (!!sortedInHistory.hashes)
+    Object.keys(sortedInHistory.hashes).forEach((date) => dates.push(date));
+  if (!!sortedOutHistory.hashes)
+    Object.keys(sortedOutHistory.hashes).forEach((date) => dates.push(date));
 
   const sortedDates = dates.sort(
     (a, b) => new Date(a).getTime() - new Date(b).getTime()
@@ -26,8 +28,12 @@ const countTokens = (
   sortedInHistory: compileHistoryIntoDaysReturn,
   sortedOutHistory: compileHistoryIntoDaysReturn
 ): { totalIn: number; totalOut: number } => {
-  const inDates = Object.keys(sortedInHistory.hashes);
-  const outDates = Object.keys(sortedOutHistory.hashes);
+  const inDates = !!sortedInHistory.history
+    ? Object.keys(sortedInHistory.hashes)
+    : [];
+  const outDates = !!sortedOutHistory.history
+    ? Object.keys(sortedOutHistory.hashes)
+    : [];
 
   const countTokens = (history, dates) => {
     let count = 0;
@@ -55,8 +61,12 @@ const countTransactions = (
 ): number => {
   let count = 0;
 
-  const inDates = Object.keys(sortedInHistory.hashes);
-  const outDates = Object.keys(sortedOutHistory.hashes);
+  const inDates = !!sortedInHistory.history
+    ? Object.keys(sortedInHistory.hashes)
+    : [];
+  const outDates = !!sortedOutHistory.history
+    ? Object.keys(sortedOutHistory.hashes)
+    : [];
 
   const countTXs = (history, dates) => {
     let count = 0;

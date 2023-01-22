@@ -15,6 +15,7 @@ const HomeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  margin: auto;
 `;
 
 const TitleContainer = styled.div`
