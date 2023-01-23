@@ -35,7 +35,7 @@ const alchemyGetAssetTransfers = async (
     headers: { "Content-Type": "application/json" },
     body: data,
   };
-  const baseURL = `https://eth-mainnet.alchemyapi.io/v2/qrcPcRle3fW-m9Kq27bW7haAq5LaLIqk`;
+  const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`;
 
   const returnedData = await fetch(baseURL, requestOptions)
     .then((result) => result.json())
