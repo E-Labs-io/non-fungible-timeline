@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useMemo, useState, useRef, Children } from "react";
-import { device } from "config/media";
+import { device } from "constants/media";
 import styled from "styled-components";
 
 interface GenericCompProps {

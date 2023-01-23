@@ -3,7 +3,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { device } from "config/media";
+import { device } from "constants/media";
 import { Layout, TextExpandList } from "components/common";
 import faqQuestions from "constants/faqQuestions";
 import Header from "components/common/Layout/Header/Header";
