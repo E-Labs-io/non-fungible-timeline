@@ -11,6 +11,8 @@ export const reactDatepicker = {
   inputLabelBorderRadius: "10px",
   datepickerWidth: "auto",
   inputMinHeight: "30px",
+  inputLabelDisplay: "flex",
+  inputCalendarWrapperPosition: "column",
   colors: {
     accessibility: "#D80249",
     selectedDay: "#f7518b",

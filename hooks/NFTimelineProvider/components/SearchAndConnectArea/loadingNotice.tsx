@@ -1,6 +1,14 @@
 /** @format */
 import React from "react";
+import styled from "styled-components";
+
 import { Loader } from "../../../../components/common";
+
+const NoticeContainer = styled.div`
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+`;
 
 interface LoadingNoticeProps {
   loadingState: 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -8,7 +16,7 @@ interface LoadingNoticeProps {
 
 const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
   return (
-    <div>
+    <NoticeContainer>
       {loadingState > 1 && <Loader />}
       {loadingState === 1 && <h3>Stalking your NFT history</h3>}
       {loadingState === 2 && <h3>Tracking all your rugs</h3>}
@@ -18,7 +26,7 @@ const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
         <h3>Found, sorted and laughed over your timeline...</h3>
       )}
       {loadingState === 6 && null}
-    </div>
+    </NoticeContainer>
   );
 };
 

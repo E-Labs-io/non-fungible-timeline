@@ -7,6 +7,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import styled from "styled-components";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { filtersInitalState } from "hooks/NFTimelineProvider/types/FilterTypes";
+import { device } from "constants/media";
 
 const Container = styled.div`
   transition: all 0.3s linear;
@@ -34,6 +35,9 @@ const FilterInsert = styled.div`
   column-gap: 30px;
   border-radius: 10px;
   box-shadow: inset 0px 0px 15px 2px #cfcfcfad;
+  @media ${device.mobileL} {
+    flex-direction: column;
+  }
 `;
 
 const ButtonContainer = styled.div`

@@ -17,6 +17,7 @@ import {
 } from "./helpers/sortUserStats";
 import FilterOptions from "./components/FilterOptions";
 import UsersVotingArea from "./components/UsersVotingArea";
+import { device } from "constants/media";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -67,20 +68,46 @@ const FilterArea = styled.div`
 
   display: flex;
   padding-right: 30px;
+  flex-direction: column;
   justify-content: right;
   align-items: center;
   text-align: center;
+  @media ${device.mobileL} {
+    justify-content: space-evenly;
+    padding-right: 0px;
+  }
 `;
 const FilterLabel = styled.div`
   width: 100%;
   height: 100%;
-
+  padding: 5px;
   display: flex;
+
+  color: ${({ isOpen }) => (isOpen ? "#49c2ff" : "white")};
+
   padding-right: 30px;
   padding-bottom: 10px;
+
   justify-content: right;
   align-items: center;
   text-align: center;
+  @media ${device.mobileL} {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    display: flex;
+
+    color: ${({ isOpen }) => (isOpen ? "#49c2ff" : "white")};
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    :hover {
+      color: #ff47e6;
+      cursor: pointer;
+    }
+  }
+
   :hover {
     color: #ff47e6;
     cursor: pointer;
@@ -102,6 +129,8 @@ const VoteLabel = styled.div`
   height: 100%;
   padding: 5px;
   display: flex;
+
+  color: ${({ isOpen }) => (isOpen ? "#49c2ff" : "white")};
 
   justify-content: center;
   align-items: center;
@@ -218,9 +247,12 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
           {hasENS ? ensAddress : walletAddress}
         </DisplayAddress>
         <VotingArea>
-          <VoteLabel onClick={() => setVotingOpen(isVotingOpen ? false : true)}>
+          <VoteLabel
+            onClick={() => setVotingOpen(isVotingOpen ? false : true)}
+            isOpen={isVotingOpen}
+          >
             <FontAwesomeIcon icon={isVotingOpen ? faAngleDown : faAngleRight} />
-            {"  "}VOTE
+            VOTE
           </VoteLabel>
           {isVotingOpen && <UsersVotingArea />}
         </VotingArea>
@@ -236,6 +268,7 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
           <FilterArea>
             <FilterLabel
               onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
+              isOpen={isFiltersOpen}
             >
               <FontAwesomeIcon
                 icon={isFiltersOpen ? faAngleDown : faAngleRight}
