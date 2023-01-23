@@ -101,10 +101,8 @@ function UserStats({
   useEffect(() => {
     console.log("Width change");
     if (width <= tablet && !reduceSize) {
-      console.log("Small Screen : ", width);
       setReduceSize(true);
     } else if (reduceSize && width > tablet) {
-      console.log("Normal Screen : ", width);
       setReduceSize(false);
     }
   }, [width]);

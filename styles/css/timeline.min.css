@@ -9,16 +9,8 @@
   margin: 0 auto;
   position: relative;
   padding: 2em 0;
-  margin-left: 12%;
 }
-@media only screen and (min-width: 768px) {
-  .vertical-timeline {
-    margin-left: 10%;
-  }
-  .vertical-timeline:before {
-    margin-left: 100px;
-  }
-}
+
 .vertical-timeline::after {
   content: "";
   display: table;
@@ -35,7 +27,6 @@
 }
 .vertical-timeline.vertical-timeline--one-column-right::before {
   right: 18px;
-  left: unset;
 }
 @media only screen and (min-width: 768px) {
   .vertical-timeline.vertical-timeline--two-columns {
@@ -46,6 +37,11 @@
     margin-left: -2px;
   }
 }
+/* @media only screen and (min-width: 768px) {
+  .vertical-timeline:before {
+    margin-left: 12%;
+  }
+} */
 .vertical-timeline-element {
   position: relative;
   margin: 2em 0;
