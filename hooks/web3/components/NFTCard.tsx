@@ -3,7 +3,7 @@ import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
 import Image from "next/image";
 
-import { device, tablet } from "config/media";
+import { device, tablet } from "constants/media";
 import placeHolder from "../assets/placeHolder.jpeg";
 
 import { ExtraStyleProps } from "types/genericTypes";

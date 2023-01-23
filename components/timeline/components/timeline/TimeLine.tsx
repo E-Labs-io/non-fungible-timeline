@@ -13,7 +13,8 @@ import {
   VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
+//import "react-vertical-timeline-component/style.min.css";
+
 import FrontCard from "./components/frontCard";
 import {
   compileHistoryIntoDaysReturn,
@@ -22,6 +23,8 @@ import {
 import combineHistory from "helpers/dataSorting/combinedSortedHistory";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import filterFilteredDays from "./helpers/filterDays";
+import useWindowSize from "hooks/window/useWindowSize";
+import { mobileL, tablet } from "constants/media";
 
 const Container = styled.div`
   height: 100%;
@@ -65,11 +68,17 @@ function TimeLine({
   handleOpenModal,
 }: TimeLineProps) {
   const { timelineFilters, checkIfValidContract } = useNFTimelineProvider();
+  const { width } = useWindowSize();
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [firstLoad, setFirstLoad] = useState<boolean>(false);
   const [lastItemNumber, setLastItemNumber] = useState<number>(10);
   const [sortedData, setSortedData] = useState<combinedHistory>();
-  const [activeFilter, setActiveFilter] = useState<boolean>(false);
+  const [isSmallScreen, setSmallScreen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isSmallScreen && width <= tablet) {
+      setSmallScreen(true);
+    } else if (isSmallScreen && width > tablet) setSmallScreen(false);
+  });
 
   const loadMore = () => {
     let lastNum = lastItemNumber + 10;
@@ -78,9 +87,6 @@ function TimeLine({
 
   useEffect(() => {
     if (ready && !!sortedInHistory && !!sortedOutHistory && !isReady) {
-      timelineFilters && timelineFilters.length > 0
-        ? setActiveFilter(true)
-        : setActiveFilter(false);
       const history = filterFilteredDays(
         combineHistory(sortedInHistory, sortedOutHistory),
         timelineFilters,
@@ -88,22 +94,19 @@ function TimeLine({
       );
       setSortedData(history);
       setIsReady(true);
-      setFirstLoad(true);
     }
   });
 
   useEffect(() => {
     const active = checkIfFilterIsActive();
 
-      setIsReady(false);
-      let history = filterFilteredDays(
-        combineHistory(sortedInHistory, sortedOutHistory),
-        timelineFilters,
-        checkIfValidContract
-      );
-      setSortedData(history);
-
-    setActiveFilter(active);
+    setIsReady(false);
+    let history = filterFilteredDays(
+      combineHistory(sortedInHistory, sortedOutHistory),
+      timelineFilters,
+      checkIfValidContract
+    );
+    setSortedData(history);
   }, [timelineFilters]);
 
   const addButton = () => (
@@ -121,22 +124,20 @@ function TimeLine({
       <FontAwesomeIcon size="2xl" icon={faCircleMinus} />
     );
 
-  const timelineElementStyle = (side) =>
-    side === "left"
-      ? {
-          alignItems: "center",
-          justifyContent: "right",
-          background: "transparent",
-          boxShadow: "none",
-          display: "flex",
-        }
-      : {
-          background: "transparent",
-          justifyContent: "left",
-          alignItems: "left",
-          boxShadow: "none",
-          display: "flex",
-        };
+  const timelineElementStyle = (side) => {
+    const style: any = {
+      background: "transparent",
+      alignItems: "left",
+      boxShadow: "none",
+      display: "flex",
+      justifyContent: "left",
+    };
+    if (isSmallScreen) {
+      style.justifyContent = "left";
+      if (side === "right") style.marginLeft = "125px";
+    } else style.justifyContent = side === "left" ? "right" : "left";
+    return style;
+  };
 
   const checkIfFilterIsActive = () => {
     if (timelineFilters && timelineFilters.length > 0) return true;

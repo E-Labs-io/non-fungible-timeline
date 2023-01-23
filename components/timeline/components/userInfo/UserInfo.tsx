@@ -72,7 +72,7 @@ const FilterArea = styled.div`
   justify-content: right;
   align-items: center;
   text-align: center;
-  @media ${device.mobileL} {
+  @media ${device.tablet} {
     justify-content: space-evenly;
     padding-right: 0px;
   }
@@ -91,7 +91,7 @@ const FilterLabel = styled.div`
   justify-content: right;
   align-items: center;
   text-align: center;
-  @media ${device.mobileL} {
+  @media ${device.tablet} {
     width: 100%;
     height: 100%;
     padding: 5px;

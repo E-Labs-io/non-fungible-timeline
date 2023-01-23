@@ -1,6 +1,6 @@
 /** @format */
 
-import { device, mobileM } from "constants/media";
+import { device, mobileL, mobileM, tablet } from "constants/media";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
 import useWindowSize from "hooks/window/useWindowSize";
 import React, { useState, useEffect } from "react";
@@ -19,7 +19,7 @@ const Container = styled.div`
 
   columns: 5;
 
-  @media ${device.mobileL} {
+  @media ${device.tablet} {
     flex-direction: column;
     row-gap: 5px;
   }
@@ -100,10 +100,10 @@ function UserStats({
 
   useEffect(() => {
     console.log("Width change");
-    if (width <= mobileM && !reduceSize) {
+    if (width <= tablet && !reduceSize) {
       console.log("Small Screen : ", width);
       setReduceSize(true);
-    } else if (reduceSize && width > mobileM) {
+    } else if (reduceSize && width > tablet) {
       console.log("Normal Screen : ", width);
       setReduceSize(false);
     }

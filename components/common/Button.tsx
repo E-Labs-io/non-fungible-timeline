@@ -2,7 +2,7 @@
 
 import React, { ReactElement } from "react";
 import styled from "styled-components";
-import { device, tablet } from "config/media";
+import { device, tablet } from "constants/media";
 import { ExtraStyleProps } from "types/genericTypes";
 
 const Wrapper = styled.button<ExtraStyleProps>`

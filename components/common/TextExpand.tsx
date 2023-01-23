@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
-import { device } from "config/media";
+import { device } from "constants/media";
 
 const Wrapper = styled.div`
   width: 100%;
