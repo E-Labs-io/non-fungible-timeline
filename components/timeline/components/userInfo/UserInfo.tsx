@@ -246,16 +246,19 @@ function UserInformation({ handleOpenModal }: UserInformationProps) {
         >
           {hasENS ? ensAddress : walletAddress}
         </DisplayAddress>
-        <VotingArea>
-          <VoteLabel
-            onClick={() => setVotingOpen(isVotingOpen ? false : true)}
-            isOpen={isVotingOpen}
-          >
-            <FontAwesomeIcon icon={isVotingOpen ? faAngleDown : faAngleRight} />
-            VOTE
-          </VoteLabel>
-          {isVotingOpen && <UsersVotingArea />}
-        </VotingArea>
+        {/*     <VotingArea>
+            <VoteLabel
+              onClick={() => setVotingOpen(isVotingOpen ? false : true)}
+              isOpen={isVotingOpen}
+            >
+              <FontAwesomeIcon
+                icon={isVotingOpen ? faAngleDown : faAngleRight}
+              />
+              VOTE
+            </VoteLabel>
+            {isVotingOpen && <UsersVotingArea />}
+          </VotingArea>
+         */}
         <WalletInfo>
           <UserStats
             handleOpenModal={handleOpenModal}
