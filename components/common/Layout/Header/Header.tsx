@@ -7,22 +7,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAnglesLeft,
-  faBars,
-  faCircleMinus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
 
-import DegenXChangeLogo from "../../../../public/images/logo.png";
-import TwitterLogoWhite from "../../../../public/images/twitter-logo-white.png";
-import TwitterLogoBlack from "../../../../public/images/twitter-logo-black.png";
-import DiscordLogoWhite from "../../../../public/images/discord-logo-white.png";
-import DiscordLogoBlack from "../../../../public/images/discord-logo-black.png";
-import OpenseaLogoWhite from "../../../../public/images/opensea-logo-white.png";
-import OpenseaLogoBlack from "../../../../public/images/opensea-logo-black.png";
 import { Burger, Menu } from "./components";
 import { useOnClickOutside } from "hooks/component/useOnClickOutside";
-import { device } from "config/media";
+import { device } from "constants/media";
 import useWindowSize from "hooks/window/useWindowSize";
 import FlatMenu from "./components/FlatMenu";
 import { UserWeb3Context } from "hooks/web3/userWeb3Provider";

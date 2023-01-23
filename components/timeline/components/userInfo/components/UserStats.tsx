@@ -1,8 +1,12 @@
 /** @format */
 
+import { device, mobileL, mobileM, tablet } from "constants/media";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
+import useWindowSize from "hooks/window/useWindowSize";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.div`
   width: 100%;
@@ -14,6 +18,11 @@ const Container = styled.div`
   padding: 5px;
 
   columns: 5;
+
+  @media ${device.tablet} {
+    flex-direction: column;
+    row-gap: 5px;
+  }
 `;
 
 const StatBox = styled.div`
@@ -56,6 +65,23 @@ const Stat = styled.div`
   justify-content: center;
 `;
 
+const DropdownLabel = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  display: flex;
+
+  color: ${({ isOpen }) => (isOpen ? "#49c2ff" : "white")};
+
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  :hover {
+    color: #ff47e6;
+    cursor: pointer;
+  }
+`;
+
 interface UserStatsProps {
   firstAndLast: { first: string; last: string };
   totals: { totalIn: number; totalOut: number };
@@ -68,8 +94,22 @@ function UserStats({
   totalTX,
   handleOpenModal,
 }: UserStatsProps) {
-  return (
-    <Container>
+  const { width } = useWindowSize();
+  const [reduceSize, setReduceSize] = useState<boolean>(false);
+  const [isStatsOpen, setStatsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("Width change");
+    if (width <= tablet && !reduceSize) {
+      setReduceSize(true);
+    } else if (reduceSize && width > tablet) {
+      setReduceSize(false);
+    }
+  }, [width]);
+
+  const StatBoxs = () => (
+    <>
+      {" "}
       <StatBox active={true} onClick={() => handleOpenModal("first")}>
         <StatTitle>First Transaction</StatTitle>
         <Stat>{new Date(firstAndLast.first).toLocaleDateString()}</Stat>
@@ -90,6 +130,23 @@ function UserStats({
         <StatTitle>Total Transactions</StatTitle>
         <Stat>{totalTX}</Stat>
       </StatBox>
+    </>
+  );
+
+  return reduceSize ? (
+    <Container>
+      <DropdownLabel
+        isOpen={isStatsOpen}
+        onClick={() => setStatsOpen(isStatsOpen ? false : true)}
+      >
+        <FontAwesomeIcon icon={isStatsOpen ? faAngleDown : faAngleRight} />
+        STATS
+      </DropdownLabel>
+      {isStatsOpen && <StatBoxs />}
+    </Container>
+  ) : (
+    <Container>
+      <StatBoxs />
     </Container>
   );
 }

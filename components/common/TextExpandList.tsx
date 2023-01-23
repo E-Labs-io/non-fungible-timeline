@@ -4,7 +4,7 @@ import React, { Fragment } from "react";
 import styled, { useTheme } from "styled-components";
 
 import TextExpand from "./TextExpand";
-import { device } from "config/media";
+import { device } from "constants/media";
 
 const Wrapper = styled.dl`
   width: 100%;

@@ -8,6 +8,8 @@ import UserWeb3Provider from "hooks/web3/userWeb3Provider";
 import "../styles/timeline-loadmore.css";
 import { NFTimelineProvider } from "hooks/NFTimelineProvider";
 
+import "../styles/css/timeline.min.css";
+
 export default function App({ Component, pageProps }) {
   return (
     <>
