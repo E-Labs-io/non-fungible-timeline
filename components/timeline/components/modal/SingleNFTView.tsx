@@ -13,6 +13,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
+import StateSkeleton from "components/common/SkeletonLoader";
 
 const Container = styled.div`
   width: 100%;
@@ -239,7 +240,17 @@ const SingleNFTView = ({
       <CloseView onClick={closeView}>Back</CloseView>
       <ViewArea>
         <ImageContainer>
-          <TokenImage src={checkIfIPFSUrl(metadata.image)} />
+          {metadata.image ? (
+            <TokenImage src={checkIfIPFSUrl(metadata.image)} />
+          ) : (
+            <StateSkeleton
+              width={"296px"}
+              height={"296px"}
+              message="Image Not Available"
+              colorA="#41bdff"
+              colorB="#f448ee"
+            />
+          )}
         </ImageContainer>
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>

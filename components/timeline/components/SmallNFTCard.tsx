@@ -13,6 +13,7 @@ import {
 import getIPFSFormat from "helpers/getIPFSFormat";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import StateSkeleton from "components/common/SkeletonLoader";
 
 //////  CARD BUILD
 const SingleCard = styled.div`
@@ -194,7 +195,15 @@ function SmallNFTCard({
           <NFTImage alt="The NFT" src={imageUrl} />
         ) : mediaFormat === "video" ? (
           <NFTVideo alt="The NFT" src={imageUrl} />
-        ) : null}
+        ) : (
+          <StateSkeleton
+            width="200px"
+            height="190px"
+            message="Image Not Available"
+            colorA="#41bdff"
+            colorB="#f448ee"
+          />
+        )}
       </TopImageContainer>
       <InfoBox>
         <DateLine>{getTXDate(transactionData)}</DateLine>

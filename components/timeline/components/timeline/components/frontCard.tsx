@@ -15,6 +15,7 @@ import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { dailyHistory } from "../TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import StateSkeleton from "components/common/SkeletonLoader";
 
 const Wrapper = styled.div`
   width: 205px;
@@ -194,11 +195,21 @@ const FrontCard = ({
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
-          <NFTImage
-            alt="An NFT"
-            cursor="pointer"
-            src={checkIfIPFSUrl(imageUrl)}
-          ></NFTImage>
+          {imageUrl ? (
+            <NFTImage
+              alt="An NFT"
+              cursor="pointer"
+              src={checkIfIPFSUrl(imageUrl)}
+            />
+          ) : (
+            <StateSkeleton
+              width="190px"
+              height="189px"
+              message="Image Not Available"
+              colorA="#41bdff"
+              colorB="#f448ee"
+            />
+          )}
         </TopImageContainer>
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>
