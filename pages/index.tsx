@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 
 import Connection from "components/Connection";
-import Introduction from "components/timeline/Introduction";
+import Introduction from "components/Connection/Introduction";
 
 const HomeContainer = styled.div`
   position: absolute;
@@ -30,6 +30,9 @@ const TitleContainer = styled.div`
 
 const ConnectionContainer = styled.div`
   height: auto;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 `;
 const PageTitle = styled.div`
   justify-content: center;
@@ -40,7 +43,8 @@ const PageTitle = styled.div`
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #000000;
   font-family: "Kanit", sans-serif;
-  font-size: 70px;
+  font-size: 5rem;
+  font-size-adjust: auto;
   text-align: center;
 `;
 
@@ -51,10 +55,10 @@ const Home = () => {
         <PageTitle>Non-Fungible Timeline</PageTitle>
       </TitleContainer>
       <ConnectionContainer>
+        <Introduction />
+        <br />
         <Connection />
       </ConnectionContainer>
-
-      <Introduction />
     </HomeContainer>
   );
 };

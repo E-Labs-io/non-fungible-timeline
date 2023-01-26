@@ -8,7 +8,7 @@ import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistory
 import DayModal from "./components/modal/DayModal";
 import UserInformation from "./components/userInfo/UserInfo";
 import useWindowSize from "hooks/window/useWindowSize";
-import Introduction from "./Introduction";
+import Introduction from "../Connection/Introduction";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
 
