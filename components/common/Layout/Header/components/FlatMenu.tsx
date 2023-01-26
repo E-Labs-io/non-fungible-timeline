@@ -43,7 +43,7 @@ interface ButtonContainerProps {
 }
 
 const ButtonContainer = styled.div<ButtonContainerProps>`
-  z-index: 3;
+  z-index: 0;
 `;
 
 interface FlatMenuProps {

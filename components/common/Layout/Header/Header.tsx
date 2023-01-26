@@ -117,7 +117,7 @@ const PageTitle = styled.text`
 `;
 
 const menuItems = [
-  { label: "Score Board", link: "/" },
+  { label: "Home", link: "/" },
   { label: "F.A.Q.", link: "/faq" },
 ];
 

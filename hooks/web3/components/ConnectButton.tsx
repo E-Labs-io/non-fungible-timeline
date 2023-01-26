@@ -99,7 +99,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-
   :hover {
     color: white;
     div {
@@ -191,7 +190,7 @@ function Web3ConnectButton({
   const disconnectWallet = () => disconnectProvider();
 
   return (
-    <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <Container>
       {showDropdown && !!walletAddress && (
         <ActionListContainer>
           {actionText &&
@@ -217,6 +216,8 @@ function Web3ConnectButton({
         </ActionListContainer>
       )}
       <Button
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         color={color}
         backgroundColor={backgroundColor}
         fontSize={fontSize}
