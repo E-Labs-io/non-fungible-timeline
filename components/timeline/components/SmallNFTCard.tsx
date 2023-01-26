@@ -123,14 +123,13 @@ function SmallNFTCard({
   const { getTokenMetadata } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [verified, setVerified] = useState();
 
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
   const [mediaFormat, setMediaFormat] = useState("image");
-  const [imageUrl, setImageUrl] = useState<string>(
-    "/images/placeholder-image.png"
-  );
+  const [imageUrl, setImageUrl] = useState<string>(null);
 
   useEffect(() => {
     if (!ready && !loading) {
@@ -142,6 +141,7 @@ function SmallNFTCard({
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
             //setImageUrl(nft.metadata.image);
+            console.log("Check image : ", checkIfIPFSUrl(nft.metadata.image));
             const urlParsed = checkIfIPFSUrl(nft.metadata.image);
             setImageUrl(urlParsed);
             const format = getMediaFormat(urlParsed);
@@ -192,9 +192,31 @@ function SmallNFTCard({
     >
       <TopImageContainer onClick={() => {}}>
         {mediaFormat && mediaFormat === "image" ? (
-          <NFTImage alt="The NFT" src={imageUrl} />
+          !!!imageUrl ? (
+            <StateSkeleton
+              width="200px"
+              height="190px"
+              message="Image Not Available"
+              colorA="#41bdff"
+              colorB="#f448ee"
+            />
+          ) : loaded ? (
+            <NFTImage
+              alt="The NFT Image"
+              src={imageUrl}
+              onLoad={() => setLoaded(true)}
+            />
+          ) : (
+            <StateSkeleton
+              width="200px"
+              height="190px"
+              message="Loading Image"
+              colorA="#41bdff"
+              colorB="#f448ee"
+            />
+          )
         ) : mediaFormat === "video" ? (
-          <NFTVideo alt="The NFT" src={imageUrl} />
+          <NFTVideo alt="The NFT Video" src={imageUrl} />
         ) : (
           <StateSkeleton
             width="200px"

@@ -133,14 +133,13 @@ const FrontCard = ({
   const { getTokenMetadata } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   const [txData, setTxData] = useState<any>();
 
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
-  const [imageUrl, setImageUrl] = useState<string>(
-    "/images/placeholder-image.png"
-  );
+  const [imageUrl, setImageUrl] = useState<string>(null);
 
   const { width: windowWidth } = useWindowSize();
 
@@ -195,17 +194,18 @@ const FrontCard = ({
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
-          {imageUrl ? (
+          {loaded ? (
             <NFTImage
               alt="An NFT"
               cursor="pointer"
-              src={checkIfIPFSUrl(imageUrl)}
+              src={imageUrl && checkIfIPFSUrl(imageUrl)}
+              onLoad={() => setLoaded(true)}
             />
           ) : (
             <StateSkeleton
               width="190px"
               height="189px"
-              message="Image Not Available"
+              message="Image Loading"
               colorA="#41bdff"
               colorB="#f448ee"
             />
