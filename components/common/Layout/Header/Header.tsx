@@ -25,6 +25,7 @@ const StyledHeader = styled.header`
   display: flex;
   align-items: center;
   width: 100%;
+  z-index: 5;
   padding: 0 15px;
   box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.282);
   background: transparent;

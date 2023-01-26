@@ -3,27 +3,32 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import { Button } from "components/common";
-import UserWeb3Provider, { UserWeb3Context } from "hooks/web3/userWeb3Provider";
-import Web3ConnectButton from "hooks/web3/components/ConnectButton";
+
 import { ExtraStyleProps } from "types/genericTypes";
-import useWindowSize from "hooks/window/useWindowSize";
+
+/**
+ *   transform: ${({ open }) => (open ? "translateY(55px)" : "translateY(0)")};
+ *
+ * ${({ open }) => (open ? 1 : 0)};
+ */
 
 const StyledMenu = styled.nav<ExtraStyleProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   background: white;
-  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
-  height: 50px;
+  z-index: -1;
+  transform: ${({ open }) => (open ? "translateY(50px)" : "translateY(0px)")};
+  height: 55px;
   width: 100vw;
   text-align: center;
   padding: 10px;
   position: absolute;
-  top: 55px;
+
   right: 0;
-  transition: transform 0.3s ease-in-out;
-  z-index: 3;
+  opacity: ${({ open }) => (open ? "100%" : "0%")};
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out,
+    z-index 0.3s ease-in-out;
   column-gap: 200px;
   @media (max-width: ${({ theme }) => theme.mobile}) {
     width: 100%;
