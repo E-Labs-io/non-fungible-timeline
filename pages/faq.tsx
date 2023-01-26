@@ -6,24 +6,30 @@ import styled from "styled-components";
 import { device } from "constants/media";
 import { Layout, TextExpandList } from "components/common";
 import faqQuestions from "constants/faqQuestions";
-import Header from "components/common/Layout/Header/Header";
-import { useRouter } from "next/router";
+import About from "components/faq/About";
 
 const Page = styled.div`
   width: 100%;
   height: 100vh;
   background: ${({ theme }) => theme.coloredTheme.background};
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  padding: 10px;
+  margin: auto;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: auto;
 
   display: flex;
   flex-direction: column;
 
   align-items: center;
-  padding: 10px 30px 100px;
+  padding: 20px;
 `;
 
 const Title = styled.h2`
@@ -31,8 +37,7 @@ const Title = styled.h2`
   font-weight: 500;
   text-align: center;
   color: ${({ theme }) => theme.primaryLight};
-  margin: 80px 0 100px;
-
+  margin: auto;
   @media ${device.tablet} {
     font-size: 32px;
   }
@@ -43,15 +48,13 @@ const Title = styled.h2`
 `;
 
 function FAQ() {
-  const router = useRouter();
-
-  const onBack = () => router.push("/");
-
   return (
     <Layout>
       <Page>
+        <About />
         <Wrapper>
           <Title>F.A.Q.</Title>
+
           <TextExpandList data={faqQuestions} />
         </Wrapper>
       </Page>

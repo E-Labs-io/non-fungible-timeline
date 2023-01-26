@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  width: 50vw;
+  width: 70vw;
   min-height: 200px;
   background-color: #86848436;
   border-radius: 20px;
@@ -25,7 +25,9 @@ const Container = styled.div`
   justify-content: center;
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.329);
   padding: 5px;
+  padding-bottom: 20px;
   padding-left: 25px;
+  padding-right: 20px;
   text-align: center;
 `;
 const Title = styled.h2`
