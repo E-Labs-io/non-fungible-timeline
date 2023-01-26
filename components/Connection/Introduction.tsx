@@ -53,10 +53,10 @@ const Introduction = ({}: IntroductionProps) => {
       <Container>
         <Title>Welcome to NFTimeline!</Title>
         <Content>
-          Where the past and present of your favorite Ethereum wallets come to
+          Where the past and present of your favourite Ethereum wallets come to
           life. With our sleek, vertical timeline, scroll and vote on your
-          favorite wallets. Discover the ultimate way to track and engage with a
-          wallets NFTs.
+          favourite wallets. Discover the ultimate way to track and engage with
+          a wallets NFTs.
         </Content>
       </Container>
     </Wrapper>
