@@ -89,7 +89,16 @@ function NFTMedia({
         setLoading(false);
       }
     }
+    if (ready && imageUrl && imageUrl !== mediaUrl) {
+      setReady(false);
 
+      const urlParsed = checkIfIPFSUrl(mediaUrl);
+      setImageUrl(urlParsed);
+      const format = getMediaFormat(urlParsed);
+      setMediaFormat(format);
+      setReady(true);
+      setLoading(false);
+    }
     if (!loaded && ready) {
       var vid = document.getElementById(`NFTMedia-${index}`);
       vid.onloadeddata = function () {

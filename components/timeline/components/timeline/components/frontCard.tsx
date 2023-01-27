@@ -252,7 +252,7 @@ const FrontCard = ({
             colorA="#41bdff"
             colorB="#f448ee"
             color="white"
-            index={`fontCard-${index}`}
+            index={`frontCard-${index}`}
           />
         </TopImageContainer>
         <InfoBox>

@@ -295,7 +295,7 @@ const SingleNFTView = ({
       <ViewArea>
         <ImageContainer>
           <NFTMedia
-            mediaUrl={imageUrl}
+            mediaUrl={metadata.image}
             width="296px"
             height="296px"
             colorA="#41bdff"
