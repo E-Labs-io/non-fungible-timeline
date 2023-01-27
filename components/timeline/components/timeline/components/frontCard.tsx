@@ -16,6 +16,7 @@ import { dailyHistory } from "../TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import StateSkeleton from "components/common/SkeletonLoader";
+import NFTMedia from "components/common/NFTMedia";
 
 const Wrapper = styled.div`
   width: 205px;
@@ -244,44 +245,15 @@ const FrontCard = ({
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
-          {(!!!imageUrl || loadError) && (
-            <StateSkeleton
-              width="200px"
-              height="190px"
-              message="Image Not Available"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )}
-          {!loaded && !loadError && (
-            <StateSkeleton
-              width="190px"
-              height="189px"
-              message="Loading Media"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )}
-          {mediaFormat && mediaFormat === "image" && (
-            <NFTImage
-              alt="The NFT Image"
-              id={`frontCardVideo-${index}`}
-              crossorigin="anonymous"
-              src={imageUrl}
-              onLoad={handelOnLoad}
-              onerror={handelMediaError}
-            />
-          )}
-
-          {mediaFormat && mediaFormat === "video" && (
-            <NFTVideo
-              id={`frontCardVideo-${index}`}
-              alt="The NFT Video"
-              crossorigin="anonymous"
-              src={imageUrl}
-              onerror={handelMediaError}
-            />
-          )}
+          <NFTMedia
+            mediaUrl={imageUrl}
+            width="190px"
+            height="189px"
+            colorA="#41bdff"
+            colorB="#f448ee"
+            color="white"
+            index={`fontCard-${index}`}
+          />
         </TopImageContainer>
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>

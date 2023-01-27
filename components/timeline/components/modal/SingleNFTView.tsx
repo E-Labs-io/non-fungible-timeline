@@ -14,6 +14,10 @@ import styled from "styled-components";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
 import StateSkeleton from "components/common/SkeletonLoader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGears, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Tooltip } from "react-tooltip";
+import NFTMedia from "components/common/NFTMedia";
 
 const Container = styled.div`
   width: 100%;
@@ -134,19 +138,28 @@ const IconContainer = styled.div`
   flex-direction: row;
 `;
 
-const Icon = styled.img`
+const IconFrame = styled.div`
   height: 50px;
   width: 50px;
   overflow: hidden;
   border-radius: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 100%;
   border-color: black;
-  border-width: 2px;
+  border-width: 1px;
   border-style: solid;
-  box-shadow: 0px 0px 42px 2px rgba(112, 110, 110, 0.682);
+  box-shadow: 0px 0px 42px 2px rgba(112, 110, 110, 0.396);
   :hover {
     cursor: pointer;
     scale: 1.1;
   }
+`;
+
+const Icon = styled.img`
+  height: 50px;
+  width: 50px;
 `;
 
 interface SingleNFTViewProps {
@@ -172,7 +185,6 @@ const SingleNFTView = ({
   const [imageLoading, setImageLoading] = useState<boolean>(true);
   const [mediaFormat, setMediaFormat] = useState("image");
   const [imageUrl, setImageUrl] = useState<string>(null);
-  const [loadError, setLoadError] = useState<boolean>(false);
 
   const figureMethod = () => {
     let method;
@@ -259,21 +271,8 @@ const SingleNFTView = ({
         setVerifiedData(undefined);
       }
     }
-    if (mediaFormat === "video") {
-      var vid = document.getElementById("singleNFTVideo");
-      vid.onloadeddata = function () {
-        handelOnLoad(null);
-        console.log("Video Loaded: ", `singleNFTVideo`);
-      };
-    }
   });
-  const handelOnLoad = (e) => {
-    setImageLoading(false);
-  };
-  const handelMediaError = (e) => {
-    console.log("Media Load Error: ", e);
-    setLoadError(true);
-  };
+
   const getMediaFormat = (theURL) => {
     const extension = theURL.split(".").pop();
     if (
@@ -295,42 +294,15 @@ const SingleNFTView = ({
       <CloseView onClick={closeView}>Back</CloseView>
       <ViewArea>
         <ImageContainer>
-          {(!!!imageUrl || loadError) && (
-            <StateSkeleton
-              width="200px"
-              height="190px"
-              message="Media Not Available"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )}
-          {imageLoading && !loadError && (
-            <StateSkeleton
-              width={"296px"}
-              height={"296px"}
-              message="Loading Media"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )}
-
-          {!loadError && mediaFormat && mediaFormat === "image" && (
-            <TokenImage
-              onLoad={handelOnLoad}
-              src={imageUrl}
-              crossorigin="anonymous"
-              onerror={handelMediaError}
-            />
-          )}
-          {!loadError && mediaFormat && mediaFormat === "video" && (
-            <NFTVideo
-              id="singleNFTVideo"
-              alt="The NFT Video"
-              crossorigin="anonymous"
-              src={imageUrl}
-              onerror={handelMediaError}
-            />
-          )}
+          <NFTMedia
+            mediaUrl={imageUrl}
+            width="296px"
+            height="296px"
+            colorA="#41bdff"
+            colorB="#f448ee"
+            color="white"
+            index="SingleNFTShow"
+          />
         </ImageContainer>
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>
@@ -351,31 +323,49 @@ const SingleNFTView = ({
           <br />
           <InformationTextMedium>{figureMethod()}</InformationTextMedium>
           <IconContainer>
-            <Icon
-              src="/images/opensea-icon.png"
-              onClick={() =>
-                handleClickOpenURLInNewTab(
-                  buildOpenSeaLink({
-                    address: transactionData.contractAddress,
-                    tokenId: NFTData.token_id,
-                  })
-                )
-              }
-            />
-            <Icon
-              src="/images/etherscan-logo-circle.png"
-              onClick={() =>
-                handleClickOpenURLInNewTab(
-                  buildNetworkScanLink({
-                    network: "eth",
-                    address: transactionData.contractAddress,
-                    tokenId: Number(NFTData.token_id),
-                  })
-                )
-              }
-            />
+            <IconFrame>
+              <Icon
+                id="openseaButton"
+                data-tooltip-content="View token on opensea"
+                src="/images/opensea-icon.png"
+                onClick={() =>
+                  handleClickOpenURLInNewTab(
+                    buildOpenSeaLink({
+                      address: transactionData.contractAddress,
+                      tokenId: NFTData.token_id,
+                    })
+                  )
+                }
+              />
+            </IconFrame>
+            <IconFrame>
+              <Icon
+                id="etherscanButton"
+                data-tooltip-content="View token on etherscan"
+                src="/images/etherscan-logo-circle.png"
+                onClick={() =>
+                  handleClickOpenURLInNewTab(
+                    buildNetworkScanLink({
+                      network: "eth",
+                      address: transactionData.contractAddress,
+                      tokenId: Number(NFTData.token_id),
+                    })
+                  )
+                }
+              />
+            </IconFrame>
+            <IconFrame
+              id="metadataButton"
+              data-tooltip-content="View raw metadata"
+              onClick={() => console.log("click")}
+            >
+              <FontAwesomeIcon size="2x" icon={faGears} />{" "}
+            </IconFrame>
           </IconContainer>
         </InformationContainer>
+        <Tooltip anchorId="metadataButton" />
+        <Tooltip anchorId="etherscanButton" />
+        <Tooltip anchorId="openseaButton" />
       </ViewArea>
     </Container>
   );
