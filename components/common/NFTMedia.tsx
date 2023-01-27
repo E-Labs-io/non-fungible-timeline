@@ -7,7 +7,7 @@ import StateSkeleton from "./SkeletonLoader";
 
 const MediaContainer = styled.div`
   border-radius: ${({ borderRadius }) =>
-    borderRadius ? borderRadius : "10px 10px 0 0"};
+    borderRadius ? borderRadius : "10px"};
   background-color: #f5f10946;
   border-width: 1px;
   border-style: solid;
@@ -42,7 +42,7 @@ const NFTVideo = styled.video`
   justify-content: center;
 `;
 
-interface NFTMediaProps {
+export interface NFTMediaProps {
   mediaUrl: string;
   index?: string;
   height?: string;

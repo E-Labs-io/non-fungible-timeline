@@ -58,28 +58,6 @@ const ImageContainer = styled.div`
   cursor: ${({ cursor }) => cursor || "default"};
 `;
 
-const TokenImage = styled.img`
-  border-radius: 10px;
-  width: 296px;
-  height: 296px;
-  background-color: white;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
-  align-items: center;
-  justify-content: center;
-`;
-const NFTVideo = styled.video`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
-  width: 296px;
-  height: 296px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
-  align-items: center;
-  justify-content: center;
-`;
-
 const InformationContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -289,21 +267,24 @@ const SingleNFTView = ({
     } else return "image";
   };
 
+  const handelOpenMetadata = () => {
+    handleClickOpenURLInNewTab(NFTData.token_uri);
+  };
+
   return (
     <Container>
       <CloseView onClick={closeView}>Back</CloseView>
       <ViewArea>
-        <ImageContainer>
-          <NFTMedia
-            mediaUrl={metadata.image}
-            width="296px"
-            height="296px"
-            colorA="#41bdff"
-            colorB="#f448ee"
-            color="white"
-            index="SingleNFTShow"
-          />
-        </ImageContainer>
+        <NFTMedia
+          mediaUrl={metadata.image}
+          width="296px"
+          height="296px"
+          colorA="#41bdff"
+          colorB="#f448ee"
+          color="white"
+          index="SingleNFTShow"
+        />
+
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>
           {verified && (
@@ -357,7 +338,7 @@ const SingleNFTView = ({
             <IconFrame
               id="metadataButton"
               data-tooltip-content="View raw metadata"
-              onClick={() => console.log("click")}
+              onClick={handelOpenMetadata}
             >
               <FontAwesomeIcon size="2x" icon={faGears} />{" "}
             </IconFrame>

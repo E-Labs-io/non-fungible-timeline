@@ -3,17 +3,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import {
   sortedHistoryData,
   TokenIds,
 } from "helpers/dataSorting/sortUsersHistory";
-import getIPFSFormat from "helpers/getIPFSFormat";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import StateSkeleton from "components/common/SkeletonLoader";
 import NFTMedia from "components/common/NFTMedia";
 
 //////  CARD BUILD
@@ -67,45 +64,6 @@ const TXData = styled.div`
   font-size: medium;
 `;
 
-const TopImageContainer = styled.div`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: #f5f10946;
-  border-width: 1px;
-  border-style: solid;
-  background: solid;
-  background-color: transparent;
-  display: flex;
-  align-items: left;
-  justify-content: center;
-  cursor: ${({ cursor }) => cursor || "default"};
-`;
-
-const NFTImage = styled.img`
-  background: solid;
-  background-color: transparent;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 190px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "pointer"};
-  align-items: center;
-  justify-content: center;
-`;
-const NFTVideo = styled.video`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 190px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
-  align-items: center;
-  justify-content: center;
-`;
-
 interface SmallNFTCardProps {
   contractAddress: string;
   index: string;
@@ -131,7 +89,6 @@ function SmallNFTCard({
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
   const [imageUrl, setImageUrl] = useState<string>(null);
-
 
   useEffect(() => {
     if (!ready && !loading) {
@@ -179,6 +136,7 @@ function SmallNFTCard({
         colorB="#f448ee"
         color="white"
         index={`smallNFTCard-${index}`}
+        borderRadius="10px 10px 0 0"
       />
       <InfoBox>
         <DateLine>{getTXDate(transactionData)}</DateLine>
