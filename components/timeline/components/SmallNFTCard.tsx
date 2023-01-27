@@ -105,6 +105,7 @@ const NFTVideo = styled.video`
 
 interface SmallNFTCardProps {
   contractAddress: string;
+  index: string;
   tokenId: TokenIds;
   transactionData: sortedHistoryData;
   handleSelectedNFT: (
@@ -117,6 +118,7 @@ interface SmallNFTCardProps {
 function SmallNFTCard({
   contractAddress,
   tokenId,
+  index,
   transactionData,
   handleSelectedNFT,
 }: SmallNFTCardProps) {
@@ -133,14 +135,13 @@ function SmallNFTCard({
 
   useEffect(() => {
     if (!ready && !loading) {
+      console.log(index);
       if (!!contractAddress) {
         setLoading(true);
-
         getTokenMetadata("eth", contractAddress, tokenId.hex).then((nft) => {
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata.image) {
-            //setImageUrl(nft.metadata.image);
             console.log("Check image : ", checkIfIPFSUrl(nft.metadata.image));
             const urlParsed = checkIfIPFSUrl(nft.metadata.image);
             setImageUrl(urlParsed);
@@ -155,6 +156,13 @@ function SmallNFTCard({
           }
         });
       }
+    }
+    if (mediaFormat === "video" && ready) {
+      var vid = document.getElementById(`smallNFTCardVideo-${index}`);
+      vid.onloadeddata = function () {
+        handelOnLoad(null);
+        console.log("Video Loaded: ", `smallNFTCardVideo-${index}`);
+      };
     }
   });
 
@@ -186,44 +194,43 @@ function SmallNFTCard({
       return "audio";
     } else return "image";
   };
+
+  const handelOnLoad = (e) => {
+    setLoaded(true);
+  };
+
   return ready ? (
     <SingleCard
       onClick={() => handleSelectedNFT(NFTData, metadata, transactionData)}
     >
       <TopImageContainer onClick={() => {}}>
-        {mediaFormat && mediaFormat === "image" ? (
-          !!!imageUrl ? (
-            <StateSkeleton
-              width="200px"
-              height="190px"
-              message="Image Not Available"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          ) : loaded ? (
-            <NFTImage
-              alt="The NFT Image"
-              src={imageUrl}
-              onLoad={() => setLoaded(true)}
-            />
-          ) : (
-            <StateSkeleton
-              width="200px"
-              height="190px"
-              message="Loading Image"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )
-        ) : mediaFormat === "video" ? (
-          <NFTVideo alt="The NFT Video" src={imageUrl} />
-        ) : (
+        {!!!imageUrl && (
           <StateSkeleton
             width="200px"
             height="190px"
             message="Image Not Available"
             colorA="#41bdff"
             colorB="#f448ee"
+          />
+        )}
+        {!loaded && imageUrl && (
+          <StateSkeleton
+            width="200px"
+            height="190px"
+            message="Loading Media"
+            colorA="#41bdff"
+            colorB="#f448ee"
+          />
+        )}
+        {mediaFormat && mediaFormat === "image" && (
+          <NFTImage alt="The NFT Image" src={imageUrl} onLoad={handelOnLoad} />
+        )}
+
+        {mediaFormat && mediaFormat === "video" && (
+          <NFTVideo
+            id={`smallNFTCardVideo-${index}`}
+            alt="The NFT Video"
+            src={imageUrl}
           />
         )}
       </TopImageContainer>

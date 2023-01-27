@@ -115,11 +115,22 @@ const NFTImage = styled.img`
   align-items: center;
   justify-content: center;
 `;
+const NFTVideo = styled.video`
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 200px;
+  height: 190px;
+  overflow: hidden;
+  cursor: ${({ cursor }) => cursor || "default"};
+  align-items: center;
+  justify-content: center;
+`;
 
 interface FrontCardProps {
   transactionDataBase: sortedHashData;
   date: string;
   handleOpenModal: Function;
+  index: number;
   txHashes: string[];
   allData: dailyHistory;
 }
@@ -127,6 +138,7 @@ const FrontCard = ({
   transactionDataBase,
   date,
   txHashes,
+  index,
   handleOpenModal,
   allData,
 }: FrontCardProps) => {
@@ -140,6 +152,7 @@ const FrontCard = ({
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
   const [imageUrl, setImageUrl] = useState<string>(null);
+  const [mediaFormat, setMediaFormat] = useState("image");
 
   const { width: windowWidth } = useWindowSize();
 
@@ -151,7 +164,7 @@ const FrontCard = ({
     if (!ready && !loading) {
       if (!!transactionDataBase) {
         setLoading(true);
-
+        let format;
         const toShow: sortedHistoryData = transactionDataBase[txHashes[0]][0];
         setTxData(toShow);
         setShowContract(toShow.contractAddress);
@@ -165,7 +178,10 @@ const FrontCard = ({
             setNFTData(nft);
             setMetadata(nft.metadata);
             if (!!nft.metadata.image) {
-              setImageUrl(nft.metadata.image);
+              const urlParsed = checkIfIPFSUrl(nft.metadata.image);
+              setImageUrl(urlParsed);
+              format = getMediaFormat(urlParsed);
+              setMediaFormat(format);
             } else {
               console.log("DIDN'T GET METADATA");
             }
@@ -175,8 +191,29 @@ const FrontCard = ({
           .catch((error) => console.log("Error getting token data: ", error));
       }
     }
+    if (mediaFormat === "video") {
+      var vid = document.getElementById(`frontCardVideo-${index}`);
+      vid.onloadeddata = function () {
+        handelOnLoad(null);
+        console.log("Video Loaded: ", `frontCardVideo-${index}`);
+      };
+    }
   });
-
+  const getMediaFormat = (theURL) => {
+    const extension = theURL.split(".").pop();
+    if (
+      extension === "jpg" ||
+      extension === "jpeg" ||
+      extension === "png" ||
+      extension === "gif"
+    ) {
+      return "image";
+    } else if (extension === "mp4") {
+      return "video";
+    } else if (extension === "wav" || extension === "mp3") {
+      return "audio";
+    } else return "image";
+  };
   const getTXDate = (toShow) => {
     const fullDate = new Date(toShow.timestamp);
     const toShowDate = fullDate.toLocaleDateString();
@@ -190,24 +227,45 @@ const FrontCard = ({
     return method;
   };
 
+  const handelOnLoad = (e) => {
+    setLoaded(true);
+  };
+
   return ready ? (
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
-          {loaded ? (
-            <NFTImage
-              alt="An NFT"
-              cursor="pointer"
-              src={imageUrl && checkIfIPFSUrl(imageUrl)}
-              onLoad={() => setLoaded(true)}
+          {!!!imageUrl && (
+            <StateSkeleton
+              width="200px"
+              height="190px"
+              message="Image Not Available"
+              colorA="#41bdff"
+              colorB="#f448ee"
             />
-          ) : (
+          )}
+          {!loaded && (
             <StateSkeleton
               width="190px"
               height="189px"
-              message="Image Loading"
+              message="Image Media"
               colorA="#41bdff"
               colorB="#f448ee"
+            />
+          )}
+          {mediaFormat && mediaFormat === "image" && (
+            <NFTImage
+              alt="The NFT Image"
+              src={imageUrl}
+              onLoad={handelOnLoad}
+            />
+          )}
+
+          {mediaFormat && mediaFormat === "video" && (
+            <NFTVideo
+              id={`frontCardVideo-${index}`}
+              alt="The NFT Video"
+              src={imageUrl}
             />
           )}
         </TopImageContainer>

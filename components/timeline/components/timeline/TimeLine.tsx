@@ -166,6 +166,8 @@ function TimeLine({
                 icon={timelineIcon(day[0])}
               >
                 <FrontCard
+                  key={key}
+                  index={key}
                   transactionDataBase={day[3]}
                   date={day[1]}
                   txHashes={day[2]}

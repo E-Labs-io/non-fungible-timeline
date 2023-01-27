@@ -6,7 +6,8 @@ import styled from "styled-components";
 const SkeletonPulse = styled.div`
   align-items: center;
   justify-content: center;
-  display: flex;
+
+  position: absolute;
   color: ${({ color }) => color ?? "inherit"};
   height: ${({ height }) => height ?? "100%"};
   width: ${({ width }) => width ?? "100%"};
@@ -24,6 +25,14 @@ const SkeletonPulse = styled.div`
       background-position: -135% 0%;
     }
   }
+`;
+
+const Message = styled.div`
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  height: 100%;
 `;
 interface StateSkeletonProps {
   height?: string;
@@ -49,7 +58,7 @@ const StateSkeleton = ({
       colorA={colorA}
       colorB={colorB}
     >
-      {message && message}
+      {message && <Message>{message}</Message>}
     </SkeletonPulse>
   );
 };

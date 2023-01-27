@@ -58,6 +58,18 @@ const TokenImage = styled.img`
   border-radius: 10px;
   width: 296px;
   height: 296px;
+  background-color: white;
+  overflow: hidden;
+  cursor: ${({ cursor }) => cursor || "default"};
+  align-items: center;
+  justify-content: center;
+`;
+const NFTVideo = styled.video`
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: white;
+  width: 296px;
+  height: 296px;
   overflow: hidden;
   cursor: ${({ cursor }) => cursor || "default"};
   align-items: center;
@@ -157,6 +169,10 @@ const SingleNFTView = ({
   const [verified, setVerified] = useState(undefined);
   const [verifiedData, setVerifiedData] = useState<VerifiedContractData>();
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
+  const [mediaFormat, setMediaFormat] = useState("image");
+  const [imageUrl, setImageUrl] = useState<string>(null);
+  const [loadError, setLoadError] = useState<boolean>(false);
 
   const figureMethod = () => {
     let method;
@@ -219,8 +235,17 @@ const SingleNFTView = ({
   };
 
   useEffect(() => {
-    if (!loading) {
-      console.log(metadata);
+    if (!!!imageUrl && imageLoading && metadata) {
+      const urlParsed = checkIfIPFSUrl(metadata.image);
+      setImageUrl(urlParsed);
+      const format = getMediaFormat(urlParsed);
+      setMediaFormat(format);
+    }
+    if (metadata && imageUrl && checkIfIPFSUrl(metadata.image) !== imageUrl) {
+      const urlParsed = checkIfIPFSUrl(metadata.image);
+      setImageUrl(urlParsed);
+      const format = getMediaFormat(urlParsed);
+      setMediaFormat(format);
     }
     if (!!!verified && verifiedContractList && !loading) {
       setLoading(true);
@@ -233,22 +258,74 @@ const SingleNFTView = ({
         setVerifiedData(undefined);
       }
     }
+    if (mediaFormat === "video") {
+      var vid = document.getElementById("singleNFTVideo");
+      vid.onloadeddata = function () {
+        handelOnLoad(null);
+        console.log("Video Loaded: ", `singleNFTVideo`);
+      };
+    }
   });
+  const handelOnLoad = (e) => {
+    setImageLoading(false);
+  };
+  const handelMediaError = (e) => {
+    console.log("Media Load Error: ", e);
+    setLoadError(true);
+  };
+  const getMediaFormat = (theURL) => {
+    const extension = theURL.split(".").pop();
+    if (
+      extension === "jpg" ||
+      extension === "jpeg" ||
+      extension === "png" ||
+      extension === "gif"
+    ) {
+      return "image";
+    } else if (extension === "mp4") {
+      return "video";
+    } else if (extension === "wav" || extension === "mp3") {
+      return "audio";
+    } else return "image";
+  };
 
   return (
     <Container>
       <CloseView onClick={closeView}>Back</CloseView>
       <ViewArea>
         <ImageContainer>
-          {metadata.image ? (
-            <TokenImage src={checkIfIPFSUrl(metadata.image)} />
-          ) : (
+          {(!!!imageUrl || loadError) && (
+            <StateSkeleton
+              width="200px"
+              height="190px"
+              message="Media Not Available"
+              colorA="#41bdff"
+              colorB="#f448ee"
+            />
+          )}
+          {imageLoading && !loadError && (
             <StateSkeleton
               width={"296px"}
               height={"296px"}
-              message="Image Not Available"
+              message="Loading Media"
               colorA="#41bdff"
               colorB="#f448ee"
+            />
+          )}
+
+          {!loadError && mediaFormat && mediaFormat === "image" && (
+            <TokenImage
+              onLoad={handelOnLoad}
+              src={imageUrl}
+              onerror={handelMediaError}
+            />
+          )}
+          {!loadError && mediaFormat && mediaFormat === "video" && (
+            <NFTVideo
+              id="singleNFTVideo"
+              alt="The NFT Video"
+              src={imageUrl}
+              onerror={handelMediaError}
             />
           )}
         </ImageContainer>

@@ -8,12 +8,13 @@
  */
 
 function checkIfIPFSUrl(url: string) {
-  console.log(url);
   if (url.includes("ipfs://")) {
     let prefix;
     prefix = "https://ipfs.io/";
     var newUri = url.split("//")[1];
-    console.log("Return IPFS: ", `${prefix}${newUri}`);
+    if (newUri.split("/")[0] !== "ipfs") {
+      prefix = prefix + "ipfs/";
+    }
     return `${prefix}${newUri}`;
   } else if (url.includes("ipfs.infura.io")) {
     var prefix = "https://ipfs.io/ipfs/";
