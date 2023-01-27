@@ -18,6 +18,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGears, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import NFTMedia from "components/common/NFTMedia";
+import SingleNFTViewIcons from "./Icons";
+import SingleDayViewBadges from "./Badges";
 
 const Container = styled.div`
   width: 100%;
@@ -41,22 +43,6 @@ const ViewArea = styled.div`
   column-gap: 10px;
 `;
 
-const ImageContainer = styled.div`
-  border-radius: 10px;
-  background-color: #ff00f2d8;
-  border-width: 2px;
-  border-style: solid;
-
-  box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.682);
-
-  width: 300px;
-  height: 300px;
-
-  display: flex;
-  align-items: left;
-  justify-content: center;
-  cursor: ${({ cursor }) => cursor || "default"};
-`;
 
 const InformationContainer = styled.div`
   display: flex;
@@ -66,21 +52,6 @@ const InformationContainer = styled.div`
   text-align: left;
 `;
 
-const BadgeArea = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  column-gap: 15px;
-  padding: 5px;
-`;
-
-const InfoBadge = styled.div`
-  border-radius: 10px;
-  border-color: black;
-  border-width: 2px;
-  border-style: solid;
-  padding: 5px;
-`;
 const InformationTextLarge = styled.div`
   font-size: 30px;
 `;
@@ -109,37 +80,6 @@ const InlineLine = styled.a`
   }
 `;
 
-const IconContainer = styled.div`
-  justify-content: space-around;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-`;
-
-const IconFrame = styled.div`
-  height: 50px;
-  width: 50px;
-  overflow: hidden;
-  border-radius: 100%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  border-radius: 100%;
-  border-color: black;
-  border-width: 1px;
-  border-style: solid;
-  box-shadow: 0px 0px 42px 2px rgba(112, 110, 110, 0.396);
-  :hover {
-    cursor: pointer;
-    scale: 1.1;
-  }
-`;
-
-const Icon = styled.img`
-  height: 50px;
-  width: 50px;
-`;
-
 interface SingleNFTViewProps {
   NFTData: SingleNFTDataType;
   metadata: NFTMetaDataType;
@@ -154,7 +94,6 @@ const SingleNFTView = ({
   closeView,
   direction,
 }: SingleNFTViewProps) => {
-  //console.log(NFTData, metadata, transactionData);
   const { checkIfValidContract, verifiedContractList } =
     useNFTimelineProvider();
   const [verified, setVerified] = useState(undefined);
@@ -267,10 +206,6 @@ const SingleNFTView = ({
     } else return "image";
   };
 
-  const handelOpenMetadata = () => {
-    handleClickOpenURLInNewTab(NFTData.token_uri);
-  };
-
   return (
     <Container>
       <CloseView onClick={closeView}>Back</CloseView>
@@ -290,63 +225,21 @@ const SingleNFTView = ({
           {verified && (
             <InformationTextMedium>{verifiedData?.name}</InformationTextMedium>
           )}
-          <BadgeArea>
-            <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
-            <InfoBadge>{mediaFormat}</InfoBadge>
-            <InfoBadge>{NFTData.contract_type}</InfoBadge>
-            <InfoBadge>Ethereum</InfoBadge>
-            {verified && <InfoBadge>Verified</InfoBadge>}
-          </BadgeArea>
-
+          <SingleDayViewBadges
+            NFTData={NFTData}
+            verified={verified}
+            mediaFormat={mediaFormat}
+          />
           <InformationDescription>
             {metadata.description}
           </InformationDescription>
           <br />
           <InformationTextMedium>{figureMethod()}</InformationTextMedium>
-          <IconContainer>
-            <IconFrame>
-              <Icon
-                id="openseaButton"
-                data-tooltip-content="View token on opensea"
-                src="/images/opensea-icon.png"
-                onClick={() =>
-                  handleClickOpenURLInNewTab(
-                    buildOpenSeaLink({
-                      address: transactionData.contractAddress,
-                      tokenId: NFTData.token_id,
-                    })
-                  )
-                }
-              />
-            </IconFrame>
-            <IconFrame>
-              <Icon
-                id="etherscanButton"
-                data-tooltip-content="View token on etherscan"
-                src="/images/etherscan-logo-circle.png"
-                onClick={() =>
-                  handleClickOpenURLInNewTab(
-                    buildNetworkScanLink({
-                      network: "eth",
-                      address: transactionData.contractAddress,
-                      tokenId: Number(NFTData.token_id),
-                    })
-                  )
-                }
-              />
-            </IconFrame>
-            <IconFrame
-              id="metadataButton"
-              data-tooltip-content="View raw metadata"
-              onClick={handelOpenMetadata}
-            >
-              <FontAwesomeIcon size="2x" icon={faGears} />{" "}
-            </IconFrame>
-          </IconContainer>
+          <SingleNFTViewIcons
+            transactionData={transactionData}
+            NFTData={NFTData}
+          />
         </InformationContainer>
-        <Tooltip anchorId="metadataButton" />
-        <Tooltip anchorId="etherscanButton" />
-        <Tooltip anchorId="openseaButton" />
       </ViewArea>
     </Container>
   );
