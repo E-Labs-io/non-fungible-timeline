@@ -6,7 +6,8 @@ import styled from "styled-components";
 const SkeletonPulse = styled.div`
   align-items: center;
   justify-content: center;
-
+  overflow: inherit;
+  border-radius: inherit;
   position: absolute;
   color: ${({ color }) => color ?? "inherit"};
   height: ${({ height }) => height ?? "100%"};

@@ -114,6 +114,7 @@ const NFTImage = styled.img`
   cursor: ${({ cursor }) => cursor || "default"};
   align-items: center;
   justify-content: center;
+  background-color: white;
 `;
 const NFTVideo = styled.video`
   border-top-left-radius: 10px;
@@ -124,6 +125,7 @@ const NFTVideo = styled.video`
   cursor: ${({ cursor }) => cursor || "default"};
   align-items: center;
   justify-content: center;
+  background-color: white;
 `;
 
 interface FrontCardProps {
@@ -158,6 +160,7 @@ const FrontCard = ({
 
   const [showContract, setShowContract] = useState<string>();
   const [showToken, setShowToken] = useState<TokenIds>();
+  const [loadError, setLoadError] = useState<boolean>(false);
   const network = "mainnet";
 
   useEffect(() => {
@@ -195,7 +198,9 @@ const FrontCard = ({
       var vid = document.getElementById(`frontCardVideo-${index}`);
       vid.onloadeddata = function () {
         handelOnLoad(null);
-        console.log("Video Loaded: ", `frontCardVideo-${index}`);
+      };
+      vid.onerror = () => {
+        handelMediaError(null);
       };
     }
   });
@@ -230,12 +235,16 @@ const FrontCard = ({
   const handelOnLoad = (e) => {
     setLoaded(true);
   };
+  const handelMediaError = (e) => {
+    console.log("Media Load Error: ", e);
+    setLoadError(true);
+  };
 
   return ready ? (
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
-          {!!!imageUrl && (
+          {(!!!imageUrl || loadError) && (
             <StateSkeleton
               width="200px"
               height="190px"
@@ -244,11 +253,11 @@ const FrontCard = ({
               colorB="#f448ee"
             />
           )}
-          {!loaded && (
+          {!loaded && !loadError && (
             <StateSkeleton
               width="190px"
               height="189px"
-              message="Image Media"
+              message="Loading Media"
               colorA="#41bdff"
               colorB="#f448ee"
             />
@@ -256,8 +265,11 @@ const FrontCard = ({
           {mediaFormat && mediaFormat === "image" && (
             <NFTImage
               alt="The NFT Image"
+              id={`frontCardVideo-${index}`}
+              crossorigin="anonymous"
               src={imageUrl}
               onLoad={handelOnLoad}
+              onerror={handelMediaError}
             />
           )}
 
@@ -265,7 +277,9 @@ const FrontCard = ({
             <NFTVideo
               id={`frontCardVideo-${index}`}
               alt="The NFT Video"
+              crossorigin="anonymous"
               src={imageUrl}
+              onerror={handelMediaError}
             />
           )}
         </TopImageContainer>
@@ -273,9 +287,7 @@ const FrontCard = ({
           <DateLine>{getTXDate(txData)}</DateLine>
           <TXData>
             {txData && getTXType(txData)} #
-            {txData.category === "erc721"
-              ? shortenTokenId(showToken.tokenId)
-              : shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
+            {shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
             <MoreText>
               {(txData && txData.groupedTokenIds.length > 1) ||
                 (txHashes.length > 1 && ` + others`)}

@@ -235,13 +235,14 @@ const SingleNFTView = ({
   };
 
   useEffect(() => {
-    if (!!!imageUrl && imageLoading && metadata) {
+    if (!!!imageUrl && imageLoading && metadata.image) {
       const urlParsed = checkIfIPFSUrl(metadata.image);
       setImageUrl(urlParsed);
       const format = getMediaFormat(urlParsed);
       setMediaFormat(format);
     }
     if (metadata && imageUrl && checkIfIPFSUrl(metadata.image) !== imageUrl) {
+      setImageLoading(true);
       const urlParsed = checkIfIPFSUrl(metadata.image);
       setImageUrl(urlParsed);
       const format = getMediaFormat(urlParsed);
@@ -317,6 +318,7 @@ const SingleNFTView = ({
             <TokenImage
               onLoad={handelOnLoad}
               src={imageUrl}
+              crossorigin="anonymous"
               onerror={handelMediaError}
             />
           )}
@@ -324,6 +326,7 @@ const SingleNFTView = ({
             <NFTVideo
               id="singleNFTVideo"
               alt="The NFT Video"
+              crossorigin="anonymous"
               src={imageUrl}
               onerror={handelMediaError}
             />
@@ -336,6 +339,7 @@ const SingleNFTView = ({
           )}
           <BadgeArea>
             <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
+            <InfoBadge>{mediaFormat}</InfoBadge>
             <InfoBadge>{NFTData.contract_type}</InfoBadge>
             <InfoBadge>Ethereum</InfoBadge>
             {verified && <InfoBadge>Verified</InfoBadge>}
