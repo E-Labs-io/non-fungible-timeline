@@ -97,7 +97,9 @@ function SingleNFTViewIcons({
       <IconFrame
         id="metadataButton"
         data-tooltip-content="View raw metadata"
-        onClick={() => handleClickOpenURLInNewTab(NFTData.token_uri)}
+        onClick={() =>
+          handleClickOpenURLInNewTab(checkIfIPFSUrl(NFTData.token_uri))
+        }
       >
         <FontAwesomeIcon size="2x" icon={faGears} />
       </IconFrame>
@@ -105,8 +107,6 @@ function SingleNFTViewIcons({
       <Tooltip anchorId="etherscanButton" />
       <Tooltip anchorId="mediaButton" />
       <Tooltip anchorId="metadataButton" />
-
-      
     </IconContainer>
   );
 }
