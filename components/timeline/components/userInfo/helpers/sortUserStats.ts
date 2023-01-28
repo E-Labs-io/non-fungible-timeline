@@ -124,7 +124,6 @@ const getMostActiveDay = (
 
   const inMost = countAction(sortedInHistory, inDates, "in");
   const outMost = countAction(sortedOutHistory, outDates, "out");
-  console.log(inMost, outMost);
 
   if (inMost.top > outMost.top) return inMost;
   else return outMost;

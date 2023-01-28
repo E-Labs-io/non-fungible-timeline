@@ -1,6 +1,5 @@
 /** @format */
 
-import { Loader } from "components/common";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useWeb3Provider } from "hooks/web3";
@@ -10,11 +9,6 @@ import styled from "styled-components";
 import UserStats from "./components/stats/UserStats";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import {
-  countTokens,
-  countTransactions,
-  getFirstAndLastTransactions,
-} from "./helpers/sortUserStats";
 import FilterOptions from "./components/FilterOptions";
 import UsersVotingArea from "./components/voting/UsersVotingArea";
 import { device } from "constants/media";
@@ -170,10 +164,6 @@ function UserInformation({
   //  Checks
   const [ready, setReady] = useState<boolean>(false);
   const [addressCheck, setAddressCheck] = useState<{
-    started: boolean;
-    finished: boolean;
-  }>({ started: false, finished: false });
-  const [statsCheck, setStatsCheck] = useState<{
     started: boolean;
     finished: boolean;
   }>({ started: false, finished: false });

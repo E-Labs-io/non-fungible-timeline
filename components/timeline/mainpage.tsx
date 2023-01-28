@@ -38,16 +38,6 @@ const BodyArea = styled.div`
   flex-direction: column;
 `;
 
-const PreLoad = styled.div`
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  padding-top: 10%;
-`;
-
 /**
  * @dev : Non-Fungible Timeline Home
  *
