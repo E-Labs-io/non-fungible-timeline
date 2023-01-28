@@ -106,18 +106,17 @@ function NFTMedia({
     }
     if (!loaded && ready) {
       var vid = document.getElementById(`NFTMedia-${index}`);
-      vid.onloadeddata = function () {
-        handelOnLoad(null);
+      vid.onloadeddata = function (e) {
+        handelOnLoad(e);
       };
-      vid.onerror = () => {
-        handelMediaError(null);
+      vid.onerror = (e) => {
+        handelMediaError(e);
       };
     }
   });
 
-  const handelOnLoad = (e) => {
-    setLoaded(true);
-  };
+  const handelOnLoad = (e) => setLoaded(true);
+
   const handelMediaError = (e) => {
     console.log("Media Load Error: ", e);
     setLoadError(true);

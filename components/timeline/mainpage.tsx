@@ -6,7 +6,6 @@ import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
 import DayModal from "./components/modal/DayModal";
 import UserInformation from "./components/userInfo/UserInfo";
-import useWindowSize from "hooks/window/useWindowSize";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
 
@@ -42,7 +41,6 @@ const BodyArea = styled.div`
  */
 interface MainPageProps {}
 function MainPage({}: MainPageProps) {
-  const { height } = useWindowSize();
   const { activeTimeline } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
