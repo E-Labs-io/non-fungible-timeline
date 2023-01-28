@@ -1,10 +1,7 @@
 /** @format */
 
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import shortenTokenId from "helpers/shorternTokenId";
-import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
-import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";

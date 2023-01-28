@@ -133,6 +133,30 @@ function MainPage({}: MainPageProps) {
     setIsModalOpen(true);
   };
 
+  const handleOpenModalFromActiveDay = (
+    date: string,
+    direction: "in" | "out"
+  ) => {
+    const hashes =
+      direction === "in"
+        ? sortedInHistory.hashes[date]
+        : sortedOutHistory.hashes[date];
+    let transactions =
+      direction === "in"
+        ? sortedInHistory.history[date]
+        : sortedOutHistory.history[date];
+
+    let selectedDay: dailyHistory = [
+      direction === "in" ? "left" : "right",
+      date,
+      hashes,
+      transactions,
+    ];
+    setSelectedDayData(selectedDay);
+
+    setIsModalOpen(true);
+  };
+
   return (
     <PageContainer>
       <BodyArea>
@@ -140,7 +164,10 @@ function MainPage({}: MainPageProps) {
         {ready && (
           <>
             <br />
-            <UserInformation handleOpenModal={handleOpenModalFromStats} />
+            <UserInformation
+              handleOpenModalForFirstAndLast={handleOpenModalFromStats}
+              handelOpenModalForActiveDate={handleOpenModalFromActiveDay}
+            />
             <TimeLine
               sortedInHistory={sortedInHistory}
               sortedOutHistory={sortedOutHistory}

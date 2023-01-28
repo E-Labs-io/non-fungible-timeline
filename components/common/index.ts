@@ -11,4 +11,4 @@ export { default as TextExpand } from "./TextExpand";
 export { default as TextExpandList } from "./TextExpandList";
 export { default as Toast } from "./Toast/index";
 export { default as ToastCall } from "./Toast/ToastCall";
-export { default as PaginationSimpleMenu } from "./PagnationSimpleMenu";
+export { default as PaginationSimpleMenu } from "../../hooks/web3/components/PagnationSimpleMenu";

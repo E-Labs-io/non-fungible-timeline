@@ -5,17 +5,16 @@ import styled from "styled-components";
 import {
   sortedHistoryData,
   TokenIds,
-} from "../../../../../helpers/dataSorting/sortUsersHistory";
+} from "../../../../helpers/dataSorting/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
-import { dailyHistory } from "../TimeLine";
+import { dailyHistory } from "./TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import StateSkeleton from "components/common/SkeletonLoader";
+import NFTMedia from "hooks/web3/components/NFTMedia";
 
 const Wrapper = styled.div`
   width: 205px;
@@ -103,29 +102,6 @@ const TopImageContainer = styled.div`
   align-items: left;
   justify-content: center;
   cursor: ${({ cursor }) => cursor || "default"};
-`;
-
-const NFTImage = styled.img`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  width: 190px;
-  height: 189px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-`;
-const NFTVideo = styled.video`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  width: 200px;
-  height: 190px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
-  align-items: center;
-  justify-content: center;
-  background-color: white;
 `;
 
 interface FrontCardProps {
@@ -244,44 +220,16 @@ const FrontCard = ({
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
-          {(!!!imageUrl || loadError) && (
-            <StateSkeleton
-              width="200px"
-              height="190px"
-              message="Image Not Available"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )}
-          {!loaded && !loadError && (
-            <StateSkeleton
-              width="190px"
-              height="189px"
-              message="Loading Media"
-              colorA="#41bdff"
-              colorB="#f448ee"
-            />
-          )}
-          {mediaFormat && mediaFormat === "image" && (
-            <NFTImage
-              alt="The NFT Image"
-              id={`frontCardVideo-${index}`}
-              crossorigin="anonymous"
-              src={imageUrl}
-              onLoad={handelOnLoad}
-              onerror={handelMediaError}
-            />
-          )}
-
-          {mediaFormat && mediaFormat === "video" && (
-            <NFTVideo
-              id={`frontCardVideo-${index}`}
-              alt="The NFT Video"
-              crossorigin="anonymous"
-              src={imageUrl}
-              onerror={handelMediaError}
-            />
-          )}
+          <NFTMedia
+            mediaUrl={imageUrl}
+            width="190px"
+            height="189px"
+            colorA="#41bdff"
+            colorB="#f448ee"
+            color="white"
+            index={`frontCard-${index}`}
+            borderRadius="10px 10px 0 0"
+          />
         </TopImageContainer>
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>

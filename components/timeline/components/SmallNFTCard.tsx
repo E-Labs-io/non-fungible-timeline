@@ -3,17 +3,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import { AlchemyGetSingleNFT } from "hooks/web3/api/alchemyGetters";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import {
   sortedHistoryData,
   TokenIds,
 } from "helpers/dataSorting/sortUsersHistory";
-import getIPFSFormat from "helpers/getIPFSFormat";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import StateSkeleton from "components/common/SkeletonLoader";
+import NFTMedia from "hooks/web3/components/NFTMedia";
 
 //////  CARD BUILD
 const SingleCard = styled.div`
@@ -66,45 +64,6 @@ const TXData = styled.div`
   font-size: medium;
 `;
 
-const TopImageContainer = styled.div`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: #f5f10946;
-  border-width: 1px;
-  border-style: solid;
-  background: solid;
-  background-color: transparent;
-  display: flex;
-  align-items: left;
-  justify-content: center;
-  cursor: ${({ cursor }) => cursor || "default"};
-`;
-
-const NFTImage = styled.img`
-  background: solid;
-  background-color: transparent;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 190px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "pointer"};
-  align-items: center;
-  justify-content: center;
-`;
-const NFTVideo = styled.video`
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 190px;
-  overflow: hidden;
-  cursor: ${({ cursor }) => cursor || "default"};
-  align-items: center;
-  justify-content: center;
-`;
-
 interface SmallNFTCardProps {
   contractAddress: string;
   index: string;
@@ -127,14 +86,9 @@ function SmallNFTCard({
   const { getTokenMetadata } = useNFTimelineProvider();
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const [verified, setVerified] = useState();
-
   const [NFTData, setNFTData] = useState<SingleNFTDataType>();
   const [metadata, setMetadata] = useState<NFTMetaDataType>();
-  const [mediaFormat, setMediaFormat] = useState("image");
   const [imageUrl, setImageUrl] = useState<string>(null);
-  const [loadError, setLoadError] = useState<boolean>(false);
 
   useEffect(() => {
     if (!ready && !loading) {
@@ -146,26 +100,14 @@ function SmallNFTCard({
           if (!!nft.metadata.image) {
             const urlParsed = checkIfIPFSUrl(nft.metadata.image);
             setImageUrl(urlParsed);
-            const format = getMediaFormat(urlParsed);
-            setMediaFormat(format);
             setReady(true);
             setLoading(false);
           } else {
-            setMediaFormat("image");
             setReady(true);
             setLoading(false);
           }
         });
       }
-    }
-    if (mediaFormat === "video" && ready) {
-      var vid = document.getElementById(`smallNFTCardVideo-${index}`);
-      vid.onloadeddata = function () {
-        handelOnLoad(null);
-      };
-      vid.onerror = () => {
-        handelMediaError(null);
-      };
     }
   });
 
@@ -182,74 +124,20 @@ function SmallNFTCard({
     return method;
   };
 
-  const getMediaFormat = (theURL) => {
-    const extension = theURL.split(".").pop();
-    if (
-      extension === "jpg" ||
-      extension === "jpeg" ||
-      extension === "png" ||
-      extension === "gif"
-    ) {
-      return "image";
-    } else if (extension === "mp4") {
-      return "video";
-    } else if (extension === "wav" || extension === "mp3") {
-      return "audio";
-    } else return "image";
-  };
-
-  const handelOnLoad = (e) => {
-    setLoaded(true);
-  };
-  const handelMediaError = (e) => {
-    console.log("Media Load Error: ", e);
-    setLoadError(true);
-  };
-
   return ready ? (
     <SingleCard
       onClick={() => handleSelectedNFT(NFTData, metadata, transactionData)}
     >
-      <TopImageContainer onClick={() => {}}>
-        {(!!!imageUrl || loadError) && (
-          <StateSkeleton
-            width="200px"
-            height="190px"
-            message="Image Not Available"
-            colorA="#41bdff"
-            colorB="#f448ee"
-          />
-        )}
-        {!loaded && !loadError && (
-          <StateSkeleton
-            width="200px"
-            height="190px"
-            message="Loading Media"
-            colorA="#41bdff"
-            colorB="#f448ee"
-          />
-        )}
-        {mediaFormat && mediaFormat === "image" && (
-          <NFTImage
-            id={`smallNFTCardVideo-${index}`}
-            alt="The NFT Image"
-            crossorigin="anonymous"
-            src={imageUrl}
-            onLoad={handelOnLoad}
-            onerror={handelMediaError}
-          />
-        )}
-
-        {mediaFormat && mediaFormat === "video" && (
-          <NFTVideo
-            id={`smallNFTCardVideo-${index}`}
-            alt="The NFT Video"
-            crossorigin="anonymous"
-            src={imageUrl}
-            onerror={handelMediaError}
-          />
-        )}
-      </TopImageContainer>
+      <NFTMedia
+        mediaUrl={imageUrl}
+        width="200px"
+        height="190px"
+        colorA="#41bdff"
+        colorB="#f448ee"
+        color="white"
+        index={`smallNFTCard-${index}`}
+        borderRadius="10px 10px 0 0"
+      />
       <InfoBox>
         <DateLine>{getTXDate(transactionData)}</DateLine>
         <TXData>

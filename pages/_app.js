@@ -9,7 +9,7 @@ import "../styles/timeline-loadmore.css";
 import { NFTimelineProvider } from "hooks/NFTimelineProvider";
 
 import "../styles/css/timeline.min.css";
-
+import "react-tooltip/dist/react-tooltip.css";
 export default function App({ Component, pageProps }) {
   return (
     <>
