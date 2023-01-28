@@ -12,9 +12,9 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  width: 70vw;
+  width: 60vw;
   min-height: 200px;
-  background-color: #86848436;
+  //background-color: #86848436;
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
@@ -23,7 +23,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.329);
+  //box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.329);
   padding: 5px;
   padding-bottom: 20px;
   padding-left: 25px;
@@ -43,7 +43,7 @@ const Title = styled.h2`
   -webkit-text-stroke-color: #000000;
 `;
 const Content = styled.div`
-  text-align: left;
+  text-align: center;
   width: 100%;
   font-size: 1.3rem;
 `;
