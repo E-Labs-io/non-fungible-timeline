@@ -5,16 +5,16 @@ import styled from "styled-components";
 import {
   sortedHistoryData,
   TokenIds,
-} from "../../../../../helpers/dataSorting/sortUsersHistory";
+} from "../../../../helpers/dataSorting/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
-import { dailyHistory } from "../TimeLine";
+import { dailyHistory } from "./TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import NFTMedia from "components/common/NFTMedia";
+import NFTMedia from "hooks/web3/components/NFTMedia";
 
 const Wrapper = styled.div`
   width: 205px;

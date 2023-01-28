@@ -3,7 +3,7 @@
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import StateSkeleton from "./SkeletonLoader";
+import StateSkeleton from "../../../components/common/SkeletonLoader";
 
 const MediaContainer = styled.div`
   border-radius: ${({ borderRadius }) =>
@@ -89,7 +89,7 @@ function NFTMedia({
         setLoading(false);
       }
     }
-    if (ready && imageUrl && imageUrl !== mediaUrl) {
+    if (ready && imageUrl && imageUrl !== mediaUrl && mediaUrl) {
       setReady(false);
 
       const urlParsed = checkIfIPFSUrl(mediaUrl);

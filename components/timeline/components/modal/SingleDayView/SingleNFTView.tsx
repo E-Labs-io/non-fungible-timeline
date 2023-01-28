@@ -5,19 +5,14 @@ import shortenTokenId from "helpers/shorternTokenId";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
-import buildOpenSeaLink from "hooks/web3/helpers/openseaLink";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
-import StateSkeleton from "components/common/SkeletonLoader";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGears, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip } from "react-tooltip";
-import NFTMedia from "components/common/NFTMedia";
+
+import NFTMedia from "hooks/web3/components/NFTMedia";
 import SingleNFTViewIcons from "./Icons";
 import SingleDayViewBadges from "./Badges";
 
@@ -42,7 +37,6 @@ const ViewArea = styled.div`
   flex-direction: row;
   column-gap: 10px;
 `;
-
 
 const InformationContainer = styled.div`
   display: flex;

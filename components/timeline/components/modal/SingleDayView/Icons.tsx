@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGears, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faGears } from "@fortawesome/free-solid-svg-icons";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { Tooltip } from "react-tooltip";
 import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";

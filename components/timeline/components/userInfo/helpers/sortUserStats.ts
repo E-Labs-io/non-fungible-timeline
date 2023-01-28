@@ -84,4 +84,55 @@ const countTransactions = (
   return count;
 };
 
-export { countTokens, countTransactions, getFirstAndLastTransactions };
+const getMostActiveDay = (
+  sortedInHistory: compileHistoryIntoDaysReturn,
+  sortedOutHistory: compileHistoryIntoDaysReturn
+) => {
+  const inDates = !!sortedInHistory.history
+    ? Object.keys(sortedInHistory.hashes)
+    : [];
+  const outDates = !!sortedOutHistory.history
+    ? Object.keys(sortedOutHistory.hashes)
+    : [];
+
+  const countAction = (
+    history: compileHistoryIntoDaysReturn,
+    dates,
+    dir: "in" | "out"
+  ): {
+    data: { date: string; index: number };
+    top: number;
+    dir: "in" | "out";
+  } => {
+    let top = 0;
+    let data: { date: string; index: number };
+    dates.forEach((date, index) => {
+      let tokens = 0;
+      let tx = history.hashes[date].length;
+      history.hashes[date].forEach((hash) => {
+        history.history[date][hash].forEach((contract) => {
+          tokens += contract.groupedTokenIds.length;
+        });
+        if (tokens + tx > top) {
+          top = tokens + tx;
+          data = { date, index };
+        }
+      });
+    });
+    return { data, top, dir };
+  };
+
+  const inMost = countAction(sortedInHistory, inDates, "in");
+  const outMost = countAction(sortedOutHistory, outDates, "out");
+  console.log(inMost, outMost);
+
+  if (inMost.top > outMost.top) return inMost;
+  else return outMost;
+};
+
+export {
+  countTokens,
+  countTransactions,
+  getFirstAndLastTransactions,
+  getMostActiveDay,
+};

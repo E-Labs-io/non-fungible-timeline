@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 const CheckBoxWrapper = styled.div`
   position: relative;
 `;
@@ -97,8 +98,8 @@ function ToggleSwitch({
 
   return (
     <CheckBoxWrapper
-      data-tip
-      data-for="toggle"
+      id={`toggleSwitch-${id}`}
+      data-tooltip-content={tooltip}
       backgroundColor={backgroundColor}
       buttonColor={buttonColor}
       selectedColor={selectedColor}
@@ -130,11 +131,7 @@ function ToggleSwitch({
         }}
       />
       <CheckBoxLabel htmlFor={id} />
-      {tooltip && (
-        <ReactTooltip id="toggle" place="top" type="dark" effect="float">
-          {tooltip}
-        </ReactTooltip>
-      )}
+      {tooltip && <Tooltip anchorId="toggleSwitch" />}
     </CheckBoxWrapper>
   );
 }

@@ -11,7 +11,7 @@ import {
 } from "helpers/dataSorting/sortUsersHistory";
 import shortenTokenId from "helpers/shorternTokenId";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import NFTMedia from "components/common/NFTMedia";
+import NFTMedia from "hooks/web3/components/NFTMedia";
 
 //////  CARD BUILD
 const SingleCard = styled.div`

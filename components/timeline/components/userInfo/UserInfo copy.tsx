@@ -18,7 +18,6 @@ import {
 import FilterOptions from "./components/FilterOptions";
 import UsersVotingArea from "./components/voting/UsersVotingArea";
 import { device } from "constants/media";
-import StateSkeleton from "components/common/SkeletonLoader";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -39,25 +38,12 @@ const Container = styled.div`
   row-gap: 20px;
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
-
-const AddressContainer = styled.div`
-  width: 400px;
-  height: 50px;
-  border-radius: 20px;
-  border-width: 1px;
-  border-style: none;
-  border-color: white;
-
-  position: relative;
+const DisplayAddress = styled.a`
+  justify-content: center;
   display: flex;
-  justify-content: center;
-`;
-const Address = styled.a`
-  justify-content: center;
   font-size: 2.5rem;
   text-align: center;
-  height: 100%;
-  width: 100%;
+
   color: white;
   :hover {
     color: #ff49f0;
@@ -156,14 +142,10 @@ const VoteLabel = styled.div`
 `;
 
 interface UserInformationProps {
-  handleOpenModalForFirstAndLast: (selected: "first" | "last") => void;
-  handelOpenModalForActiveDate: (date: string, direction: "in" | "out") => void;
+  handleOpenModal: (selected: "first" | "last") => void;
 }
 
-function UserInformation({
-  handleOpenModalForFirstAndLast,
-  handelOpenModalForActiveDate,
-}: UserInformationProps) {
+function UserInformation({ handleOpenModal }: UserInformationProps) {
   const { useEnsResolver } = useWeb3Provider();
   const { activeTimeline, activeAddress } = useNFTimelineProvider();
 
@@ -182,6 +164,16 @@ function UserInformation({
   const [hasENS, setHasENS] = useState<boolean | undefined>(undefined);
   const [ensAddress, setEnsAddress] = useState<string>();
   const [walletAddress, setWalletAddress] = useState<string>();
+  //    Stats States
+  const [firstAndLast, setFirstAndLast] = useState<{
+    first: string;
+    last: string;
+  }>(undefined);
+  const [totalTokens, setTotals] = useState<{
+    totalIn: number;
+    totalOut: number;
+  }>(undefined);
+  const [totalTX, setTotalTX] = useState<number>(0);
   //  History
   const [sortedInHistory, setSortedInHistory] =
     useState<compileHistoryIntoDaysReturn>();
@@ -196,7 +188,7 @@ function UserInformation({
     if (!ensResolver)
       useEnsResolver("mainnet").then((resolver) => setEnsResolver(resolver));
     //  Check ENS
-    if (!addressCheck.started && activeAddress && ensResolver) {
+    if (!ready && !addressCheck.started && activeAddress && ensResolver) {
       setAddressCheck({ started: true, finished: false });
       const isEns = ensResolver.isENS(activeAddress);
       if (isEns) {
@@ -224,32 +216,39 @@ function UserInformation({
       setSortedInHistory(activeTimeline.inByDate);
       setSortedOutHistory(activeTimeline.outByDate);
     }
+    //  Start building starts
+    if (!ready && !statsCheck.started && sortedInHistory && sortedOutHistory) {
+      setStatsCheck({ started: true, finished: false });
+      //  Build the stats data
+      const dates = getFirstAndLastTransactions(
+        sortedInHistory,
+        sortedOutHistory
+      );
+      const totals = countTokens(sortedInHistory, sortedOutHistory);
+      const totalTXs = countTransactions(sortedInHistory, sortedOutHistory);
+      setFirstAndLast(dates);
+      setTotals(totals);
+      setTotalTX(totalTXs);
+
+      setStatsCheck({ started: true, finished: true });
+    }
+    //  I fall finished set ready
+    if (statsCheck.finished && addressCheck.finished && !ready) setReady(true);
   });
 
-  return (
-    <Container extension={isFiltersOpen}>
-      <AddressContainer>
-        {!addressCheck.finished && (
-          <StateSkeleton
-            colorA="#3298ce"
-            colorB="#a82da4"
-            height="50px"
-            width="400px"
-          />
-        )}
-        {addressCheck.finished && (
-          <Address
-            href={buildNetworkScanLink({
-              network: "eth",
-              address: walletAddress,
-            })}
-            target="blank"
-          >
-            {hasENS ? ensAddress : walletAddress}
-          </Address>
-        )}
-      </AddressContainer>
-      {/*     <VotingArea>
+  if (ready)
+    return (
+      <Container extension={isFiltersOpen}>
+        <DisplayAddress
+          href={buildNetworkScanLink({
+            network: "eth",
+            address: walletAddress,
+          })}
+          target="blank"
+        >
+          {hasENS ? ensAddress : walletAddress}
+        </DisplayAddress>
+        {/*     <VotingArea>
             <VoteLabel
               onClick={() => setVotingOpen(isVotingOpen ? false : true)}
               isOpen={isVotingOpen}
@@ -262,30 +261,36 @@ function UserInformation({
             {isVotingOpen && <UsersVotingArea />}
           </VotingArea>
          */}
-      <WalletInfo>
-        <UserStats
-          handleOpenModalForFirstAndLast={handleOpenModalForFirstAndLast}
-          handelOpenModalForActiveDate={handelOpenModalForActiveDate}
-          sortedInHistory={sortedInHistory}
-          sortedOutHistory={sortedOutHistory}
-        />
-      </WalletInfo>
-      <InteractionArea>
-        <FilterArea>
-          <FilterLabel
-            onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
-            isOpen={isFiltersOpen}
-          >
-            <FontAwesomeIcon
-              icon={isFiltersOpen ? faAngleDown : faAngleRight}
-            />
-            FILTERS
-          </FilterLabel>
-        </FilterArea>
-      </InteractionArea>
-      {isFiltersOpen && <FilterOptions />}
-    </Container>
-  );
+        <WalletInfo>
+          <UserStats
+            handleOpenModal={handleOpenModal}
+            firstAndLastProp={firstAndLast}
+            totalsProp={totalTokens}
+            totalTXProp={totalTX}
+          />
+        </WalletInfo>
+        <InteractionArea>
+          <FilterArea>
+            <FilterLabel
+              onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
+              isOpen={isFiltersOpen}
+            >
+              <FontAwesomeIcon
+                icon={isFiltersOpen ? faAngleDown : faAngleRight}
+              />
+              FILTERS
+            </FilterLabel>
+          </FilterArea>
+        </InteractionArea>
+        {isFiltersOpen && <FilterOptions />}
+      </Container>
+    );
+  else
+    return (
+      <Container>
+        <Loader />
+      </Container>
+    );
 }
 
 export default UserInformation;
