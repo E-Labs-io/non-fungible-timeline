@@ -1,7 +1,6 @@
 /** @format */
 
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import shortenTokenId from "helpers/shorternTokenId";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
@@ -198,7 +197,6 @@ const SingleNFTView = ({
           color="white"
           index="SingleNFTShow"
         />
-
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>
           {verified && (
