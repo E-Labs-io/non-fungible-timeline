@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGears } from "@fortawesome/free-solid-svg-icons";
+import { faGears, faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { Tooltip } from "react-tooltip";
 import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";
 import buildOpenSeaLink from "hooks/web3/helpers/openseaLink";
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 
 const IconContainer = styled.div`
   justify-content: space-around;
@@ -85,14 +86,24 @@ function SingleNFTViewIcons({
         />
       </IconFrame>
       <IconFrame
+        id="mediaButton"
+        data-tooltip-content="View raw media"
+        onClick={() =>
+          handleClickOpenURLInNewTab(checkIfIPFSUrl(NFTData.metadata.image))
+        }
+      >
+        <FontAwesomeIcon size="2x" icon={faPhotoFilm} />
+      </IconFrame>
+      <IconFrame
         id="metadataButton"
         data-tooltip-content="View raw metadata"
         onClick={() => handleClickOpenURLInNewTab(NFTData.token_uri)}
       >
-        <FontAwesomeIcon size="2x" icon={faGears} />{" "}
+        <FontAwesomeIcon size="2x" icon={faGears} />
       </IconFrame>
       <Tooltip anchorId="metadataButton" />
       <Tooltip anchorId="etherscanButton" />
+      <Tooltip anchorId="mediaButton" />
       <Tooltip anchorId="openseaButton" />
     </IconContainer>
   );

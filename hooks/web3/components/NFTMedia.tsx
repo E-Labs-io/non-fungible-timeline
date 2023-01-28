@@ -53,6 +53,8 @@ export interface NFTMediaProps {
   color?: string;
   border?: string;
   borderRadius?: string;
+  videoControls?: true;
+  autoPlayVideo?: true;
   onClick?: () => void;
 }
 
@@ -66,6 +68,8 @@ function NFTMedia({
   colorB,
   color,
   border,
+  videoControls,
+  autoPlayVideo,
   borderRadius,
 }: NFTMediaProps) {
   const [loading, setLoading] = useState<boolean>(false);
@@ -164,6 +168,8 @@ function NFTMedia({
           alt="The NFT Video"
           crossorigin="anonymous"
           src={imageUrl}
+          controls={videoControls}
+          autoplay={autoPlayVideo}
         />
       )}
     </MediaContainer>

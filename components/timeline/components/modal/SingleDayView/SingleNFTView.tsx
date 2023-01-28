@@ -196,6 +196,8 @@ const SingleNFTView = ({
           colorB="#f448ee"
           color="white"
           index="SingleNFTShow"
+          videoControls
+          autoPlayVideo
         />
         <InformationContainer>
           <InformationTextLarge>{metadata.name}</InformationTextLarge>

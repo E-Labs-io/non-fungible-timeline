@@ -13,6 +13,7 @@ import FilterOptions from "./components/FilterOptions";
 import UsersVotingArea from "./components/voting/UsersVotingArea";
 import { device } from "constants/media";
 import StateSkeleton from "components/common/SkeletonLoader";
+import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -35,7 +36,7 @@ const Container = styled.div`
 `;
 
 const AddressContainer = styled.div`
-  width: 400px;
+  width: 100%;
   height: 50px;
   border-radius: 20px;
   border-width: 1px;
@@ -45,11 +46,15 @@ const AddressContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 const Address = styled.a`
   justify-content: center;
-  font-size: 2.5rem;
   text-align: center;
+  align-items: center;
+  font-size: 2rem;
+
   height: 100%;
   width: 100%;
   color: white;
@@ -187,9 +192,11 @@ function UserInformation({
       useEnsResolver("mainnet").then((resolver) => setEnsResolver(resolver));
     //  Check ENS
     if (!addressCheck.started && activeAddress && ensResolver) {
+      console.log("Address Check: ", activeAddress);
       setAddressCheck({ started: true, finished: false });
       const isEns = ensResolver.isENS(activeAddress);
       if (isEns) {
+        console.log("is ens");
         setHasENS(true);
         setEnsAddress(activeAddress);
         ensResolver.addressFromEns(activeAddress).then((address) => {
@@ -198,10 +205,17 @@ function UserInformation({
           setReady(true);
         });
       } else {
+        console.log("is not ens: ", activeAddress);
         setWalletAddress(activeAddress);
         ensResolver.ensFromAddress(activeAddress).then((ens) => {
+          console.log("resolved Ens from Address: ", ens);
           if (ens) {
             setHasENS(true);
+            setEnsAddress(ens);
+            setAddressCheck({ started: true, finished: true });
+            setReady(true);
+          } else {
+            setHasENS(false);
             setEnsAddress(ens);
             setAddressCheck({ started: true, finished: true });
             setReady(true);
@@ -235,7 +249,7 @@ function UserInformation({
             })}
             target="blank"
           >
-            {hasENS ? ensAddress : walletAddress}
+            {hasENS ? ensAddress : shortenWalletAddress(walletAddress)}
           </Address>
         )}
       </AddressContainer>
