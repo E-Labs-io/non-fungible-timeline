@@ -101,10 +101,12 @@ function SingleNFTViewIcons({
       >
         <FontAwesomeIcon size="2x" icon={faGears} />
       </IconFrame>
-      <Tooltip anchorId="metadataButton" />
+      <Tooltip anchorId="openseaButton" />
       <Tooltip anchorId="etherscanButton" />
       <Tooltip anchorId="mediaButton" />
-      <Tooltip anchorId="openseaButton" />
+      <Tooltip anchorId="metadataButton" />
+
+      
     </IconContainer>
   );
 }
