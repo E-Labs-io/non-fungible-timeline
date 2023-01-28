@@ -1,5 +1,6 @@
 /** @format */
 
+import getMediaFormat from "helpers/media/getMediaFormat";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
@@ -116,22 +117,6 @@ function NFTMedia({
   const handelMediaError = (e) => {
     console.log("Media Load Error: ", e);
     setLoadError(true);
-  };
-
-  const getMediaFormat = (theURL) => {
-    const extension = theURL.split(".").pop();
-    if (
-      extension === "jpg" ||
-      extension === "jpeg" ||
-      extension === "png" ||
-      extension === "gif"
-    ) {
-      return "image";
-    } else if (extension === "mp4") {
-      return "video";
-    } else if (extension === "wav" || extension === "mp3") {
-      return "audio";
-    } else return "image";
   };
 
   return (

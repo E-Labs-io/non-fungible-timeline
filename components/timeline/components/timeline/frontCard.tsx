@@ -7,7 +7,6 @@ import {
   TokenIds,
 } from "../../../../helpers/dataSorting/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
-import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
@@ -127,16 +126,12 @@ const FrontCard = ({
 
   const [txData, setTxData] = useState<any>();
 
-  const [NFTData, setNFTData] = useState<SingleNFTDataType>();
-  const [metadata, setMetadata] = useState<NFTMetaDataType>();
   const [imageUrl, setImageUrl] = useState<string>(null);
-  const [mediaFormat, setMediaFormat] = useState("image");
 
   const { width: windowWidth } = useWindowSize();
 
-  const [showContract, setShowContract] = useState<string>();
   const [showToken, setShowToken] = useState<TokenIds>();
-  const [loadError, setLoadError] = useState<boolean>(false);
+
   const network = "mainnet";
 
   useEffect(() => {
@@ -146,7 +141,6 @@ const FrontCard = ({
         let format;
         const toShow: sortedHistoryData = transactionDataBase[txHashes[0]][0];
         setTxData(toShow);
-        setShowContract(toShow.contractAddress);
         setShowToken(toShow.groupedTokenIds[0]);
         getTokenMetadata(
           "eth",
@@ -154,13 +148,9 @@ const FrontCard = ({
           toShow.groupedTokenIds[0].hex
         )
           .then((nft) => {
-            setNFTData(nft);
-            setMetadata(nft.metadata);
             if (!!nft.metadata.image) {
               const urlParsed = checkIfIPFSUrl(nft.metadata.image);
               setImageUrl(urlParsed);
-              format = getMediaFormat(urlParsed);
-              setMediaFormat(format);
             } else {
               console.log("DIDN'T GET METADATA");
             }
@@ -170,31 +160,8 @@ const FrontCard = ({
           .catch((error) => console.log("Error getting token data: ", error));
       }
     }
-    if (mediaFormat === "video") {
-      var vid = document.getElementById(`frontCardVideo-${index}`);
-      vid.onloadeddata = function () {
-        handelOnLoad(null);
-      };
-      vid.onerror = () => {
-        handelMediaError(null);
-      };
-    }
   });
-  const getMediaFormat = (theURL) => {
-    const extension = theURL.split(".").pop();
-    if (
-      extension === "jpg" ||
-      extension === "jpeg" ||
-      extension === "png" ||
-      extension === "gif"
-    ) {
-      return "image";
-    } else if (extension === "mp4") {
-      return "video";
-    } else if (extension === "wav" || extension === "mp3") {
-      return "audio";
-    } else return "image";
-  };
+
   const getTXDate = (toShow) => {
     const fullDate = new Date(toShow.timestamp);
     const toShowDate = fullDate.toLocaleDateString();
@@ -206,14 +173,6 @@ const FrontCard = ({
     if (toShow.from === zeroAddress()) method = "Mint";
     else if (toShow.to === zeroAddress()) method = "Burn";
     return method;
-  };
-
-  const handelOnLoad = (e) => {
-    setLoaded(true);
-  };
-  const handelMediaError = (e) => {
-    console.log("Media Load Error: ", e);
-    setLoadError(true);
   };
 
   return ready ? (

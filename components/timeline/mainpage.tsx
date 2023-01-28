@@ -1,6 +1,5 @@
 /** @format */
 import { Loader, Modal } from "../common";
-import { useWeb3Provider } from "../../hooks/web3";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
@@ -8,7 +7,6 @@ import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistory
 import DayModal from "./components/modal/DayModal";
 import UserInformation from "./components/userInfo/UserInfo";
 import useWindowSize from "hooks/window/useWindowSize";
-import Introduction from "../Connection/Introduction";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
 

@@ -18,7 +18,6 @@ import {
 const Container = styled.div`
   width: 100%;
   height: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -29,26 +28,6 @@ const Container = styled.div`
   @media ${device.tablet} {
     flex-direction: column;
     row-gap: 5px;
-  }
-`;
-
-const StatBox = styled.div`
-  width: 150px;
-  height: 60px;
-  padding: 10px;
-
-  box-shadow: 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
-  border-radius: 10px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 10%;
-
-  :hover {
-    scale: ${({ active }) => (active ? "1.05" : "1")};
-    cursor: ${({ active }) => (active ? "pointer" : "default")};
-    color: ${({ active }) => (active ? "#49c2ff" : "white")};
   }
 `;
 

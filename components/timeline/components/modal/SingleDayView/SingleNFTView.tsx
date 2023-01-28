@@ -15,6 +15,7 @@ import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedCon
 import NFTMedia from "hooks/web3/components/NFTMedia";
 import SingleNFTViewIcons from "./Icons";
 import SingleDayViewBadges from "./Badges";
+import getMediaFormat from "helpers/media/getMediaFormat";
 
 const Container = styled.div`
   width: 100%;
@@ -183,22 +184,6 @@ const SingleNFTView = ({
       }
     }
   });
-
-  const getMediaFormat = (theURL) => {
-    const extension = theURL.split(".").pop();
-    if (
-      extension === "jpg" ||
-      extension === "jpeg" ||
-      extension === "png" ||
-      extension === "gif"
-    ) {
-      return "image";
-    } else if (extension === "mp4") {
-      return "video";
-    } else if (extension === "wav" || extension === "mp3") {
-      return "audio";
-    } else return "image";
-  };
 
   return (
     <Container>
