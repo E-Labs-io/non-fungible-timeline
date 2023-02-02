@@ -13,16 +13,16 @@ const Container = styled.div`
 const AboutContainer = styled.div`
   width: 85%;
   height: auto;
-  background-color: #86848436;
+  background-color: ${({ theme }) => theme.coloredTheme.transparentBG};
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
-  border-color: white;
+  border-color: ${({ theme }) => theme.coloredTheme.borderColor};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.329);
+  box-shadow: ${({ theme }) => theme.shadow.innerShadow};
   padding: 5px;
   padding-left: 25px;
   padding-bottom: 10px;

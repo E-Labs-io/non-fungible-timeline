@@ -10,8 +10,7 @@ import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
 
 const PageContainer = styled.div`
-  background: ${({ theme }) =>
-    theme ? theme.coloredTheme.background : "white"};
+  background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
   width: 100vw;
   height: 100%;
   overflow: hidden;

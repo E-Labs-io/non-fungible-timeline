@@ -27,6 +27,7 @@ export const theme: themeInterface = {
     accentColor: "",
     shadowColor: "rgba(207, 207, 207, 0.682)",
     primaryHover: "",
+    transparentBG: "#86848436",
   },
   shadow: {
     outerShadow: "",
@@ -80,6 +81,7 @@ export type themeInterface = {
     shadowColor?: string;
     gradient?: string;
     primaryHover?: string;
+    transparentBG: string;
   };
   shadow?: {
     outerShadow?: string;
