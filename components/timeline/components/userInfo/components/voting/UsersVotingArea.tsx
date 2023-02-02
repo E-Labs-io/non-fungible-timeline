@@ -1,7 +1,10 @@
 /** @format */
 
+import initialVotingState from "constants/votingInit";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { votingCategoryList } from "types/votingTypes";
+import VotingCategoryBox from "./VotingCategoryBox";
 
 const Container = styled.div`
   width: 100%;
@@ -27,14 +30,29 @@ const ConnectionArea = styled.div`
   box-shadow: inset 0px 0px 15px 2px #cfcfcfad;
 `;
 
-interface UsersVotingAreaProps {}
+interface WalletsVotingAreaProps {
+  handleOpenModalVoting: (
+    selected: string,
+    category: votingCategoryList
+  ) => void;
+}
 
-function UsersVotingArea({}: UsersVotingAreaProps) {
+function WalletsVotingArea({ handleOpenModalVoting }: WalletsVotingAreaProps) {
+  const [walletsVotingStats, setWalletsVotingStats] = useState();
+
   return (
     <Container>
-      <ConnectionArea>dasfdadfadfd</ConnectionArea>
+      <ConnectionArea>
+        {initialVotingState.categories.map((category, key) => (
+          <VotingCategoryBox
+            category={category}
+            walletVotingStats={null}
+            handleOpenModalVoting={handleOpenModalVoting}
+          />
+        ))}
+      </ConnectionArea>
     </Container>
   );
 }
 
-export default UsersVotingArea;
+export default WalletsVotingArea;

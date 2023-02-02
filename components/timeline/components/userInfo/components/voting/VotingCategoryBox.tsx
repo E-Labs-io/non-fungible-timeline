@@ -1,11 +1,12 @@
 /** @format */
 
-/* import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   votingCategoryList,
   votingWalletsStatsReturn,
 } from "types/votingTypes";
+import initialVotingState from "constants/votingInit";
 
 const CategoryContainer = styled.div`
   border-radius: 10px;
@@ -60,6 +61,3 @@ function VotingCategoryBox({
 }
 
 export default VotingCategoryBox;
- */
-
-export const thing = () => {};

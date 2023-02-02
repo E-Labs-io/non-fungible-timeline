@@ -14,6 +14,8 @@ import UsersVotingArea from "./components/voting/UsersVotingArea";
 import { device } from "constants/media";
 import StateSkeleton from "components/common/SkeletonLoader";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
+import { votingCategoryList } from "types/votingTypes";
+import WalletsVotingArea from "./components/voting/UsersVotingArea";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -157,11 +159,16 @@ const VoteLabel = styled.div`
 interface UserInformationProps {
   handleOpenModalForFirstAndLast: (selected: "first" | "last") => void;
   handelOpenModalForActiveDate: (date: string, direction: "in" | "out") => void;
+  handleOpenModalFromVote: (
+    selected: string,
+    category: votingCategoryList
+  ) => void;
 }
 
 function UserInformation({
   handleOpenModalForFirstAndLast,
   handelOpenModalForActiveDate,
+  handleOpenModalFromVote,
 }: UserInformationProps) {
   const { useEnsResolver } = useWeb3Provider();
   const { activeTimeline, activeAddress } = useNFTimelineProvider();
@@ -253,19 +260,22 @@ function UserInformation({
           </Address>
         )}
       </AddressContainer>
-      {/*     <VotingArea>
-            <VoteLabel
-              onClick={() => setVotingOpen(isVotingOpen ? false : true)}
-              isOpen={isVotingOpen}
-            >
-              <FontAwesomeIcon
-                icon={isVotingOpen ? faAngleDown : faAngleRight}
-              />
-              VOTE
-            </VoteLabel>
-            {isVotingOpen && <UsersVotingArea />}
-          </VotingArea>
-         */}
+      {
+        <VotingArea>
+          <VoteLabel
+            onClick={() => setVotingOpen(isVotingOpen ? false : true)}
+            isOpen={isVotingOpen}
+          >
+            <FontAwesomeIcon icon={isVotingOpen ? faAngleDown : faAngleRight} />
+            VOTE
+          </VoteLabel>
+          {isVotingOpen && (
+            <WalletsVotingArea
+              handleOpenModalVoting={handleOpenModalFromVote}
+            />
+          )}
+        </VotingArea>
+      }
       <WalletInfo>
         <UserStats
           handleOpenModalForFirstAndLast={handleOpenModalForFirstAndLast}

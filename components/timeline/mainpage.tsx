@@ -8,6 +8,8 @@ import DayModal from "./components/modal/DayModal";
 import UserInformation from "./components/userInfo/UserInfo";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
+import VotingModal from "./components/userInfo/components/voting/VotingModal";
+import { votingCategoriesType, votingCategoryList } from "types/votingTypes";
 
 const PageContainer = styled.div`
   background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
@@ -33,6 +35,17 @@ const BodyArea = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const PreLoad = styled.div`
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10%;
+`;
+
+type TModalType = "nft" | "vote";
 
 /**
  * @dev : Non-Fungible Timeline Home
@@ -49,6 +62,10 @@ function MainPage({}: MainPageProps) {
     useState<compileHistoryIntoDaysReturn>();
   const [sortedOutHistory, setSortedOutHistory] =
     useState<compileHistoryIntoDaysReturn>();
+  const [modalType, seTModalType] = useState<TModalType>();
+  const [voteCategory, setVoteCategory] = useState<votingCategoriesType>();
+  const [selectedCategory, setSelectedCategory] =
+    useState<votingCategoryList>();
 
   const router = useRouter();
 
@@ -72,6 +89,7 @@ function MainPage({}: MainPageProps) {
     setIsModalOpen(true);
   };
   const handleCloseModal = () => {
+    seTModalType(null);
     setIsModalOpen(false);
     setSelectedDayData(undefined);
   };
@@ -114,7 +132,22 @@ function MainPage({}: MainPageProps) {
     ];
 
     setSelectedDayData(selectedDay);
-
+    seTModalType("nft");
+    setIsModalOpen(true);
+  };
+  const handleOpenModalNFT = (allSelectedData) => {
+    setSelectedDayData(allSelectedData);
+    seTModalType("nft");
+    setIsModalOpen(true);
+  };
+  const handleOpenModalFromVote = (
+    selected: votingCategoriesType,
+    category: votingCategoryList
+  ) => {
+    console.log("open Vote Modal : ", selected);
+    setVoteCategory(selected);
+    setSelectedCategory(category);
+    seTModalType("vote");
     setIsModalOpen(true);
   };
 
@@ -142,6 +175,25 @@ function MainPage({}: MainPageProps) {
     setIsModalOpen(true);
   };
 
+  const modalTitle = (modalType: TModalType) => {
+    if (modalType === "nft") {
+      return `${selectedDayData[1]}  |  ${
+        selectedDayData[0] === "left" ? "In-bound" : "Out-bound"
+      }`;
+    } else if (modalType === "vote") {
+      return "Voting Time";
+    }
+  };
+
+  const modalContent = (modalType) => {
+    if (modalType === "nft") return <DayModal allDayData={selectedDayData} />;
+    if (modalType === "vote")
+      return (
+        <VotingModal categoryType={voteCategory} category={selectedCategory} />
+      );
+    return null;
+  };
+
   return (
     <PageContainer>
       <BodyArea>
@@ -152,28 +204,24 @@ function MainPage({}: MainPageProps) {
             <UserInformation
               handleOpenModalForFirstAndLast={handleOpenModalFromStats}
               handelOpenModalForActiveDate={handleOpenModalFromActiveDay}
+              handleOpenModalFromVote={handleOpenModalFromVote}
             />
             <TimeLine
               sortedInHistory={sortedInHistory}
               sortedOutHistory={sortedOutHistory}
               ready={ready}
-              handleOpenModal={handleOpenModal}
+              handleOpenModal={handleOpenModalNFT}
             />
           </>
         )}
       </BodyArea>
 
       <Modal
-        title={
-          selectedDayData &&
-          `${selectedDayData[1]}  |  ${
-            selectedDayData[0] === "left" ? "In-bound" : "Out-bound"
-          }`
-        }
+        title={isModalOpen && modalTitle(modalType)}
         isOpen={isModalOpen}
         onRequestClose={handleCloseModal}
       >
-        <DayModal allDayData={selectedDayData}></DayModal>
+        {modalContent(modalType)}
       </Modal>
     </PageContainer>
   );
