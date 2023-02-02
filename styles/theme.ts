@@ -2,6 +2,9 @@
 
 import { reactDatepicker } from "styles/DatepickerStyles";
 
+// "linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#ffffff 100%)",
+// "linear-gradient(204deg,#8c61ff 0%,#44c2fd 77%,#5f59f7 100%)"
+
 export const theme: themeInterface = {
   offWhite: "#f8f8ff",
   offBlack: "#0e1111",
@@ -14,10 +17,20 @@ export const theme: themeInterface = {
   blue: "#c23616",
   silver: "#7f8c8d",
   coloredTheme: {
-    background: "linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#ffffff 100%)",
+    background: "#324690",
     backgroundSecondary: "#7f8c8d",
-    color: "#0D0C1D",
+    color: "#ffffff",
+    colorLight: "#ffffff",
+    colorDark: "#000000",
     borderColor: "#EFFFFA",
+    gradient: "linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#ffffff 100%)",
+    accentColor: "",
+    shadowColor: "rgba(207, 207, 207, 0.682)",
+    primaryHover: "",
+  },
+  shadow: {
+    outerShadow: "",
+    innerShadow: "inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682)",
   },
   lightTheme: {
     background: "#FCF4D7",
@@ -33,6 +46,10 @@ export const theme: themeInterface = {
     small: "16px",
     medium: "20px",
     large: "24px",
+  },
+  fontFamily: {
+    mainFont: `"Kanit", sans-serif`,
+    titleFont: `"Kanit", sans-serif`,
   },
   breakpoints: ["32em", "48em", "64em"],
   reactDatepicker: reactDatepicker,
@@ -56,7 +73,21 @@ export type themeInterface = {
     background: string;
     backgroundSecondary: string;
     color: string;
+    colorLight?: string;
+    colorDark?: string;
     borderColor: string;
+    accentColor?: string;
+    shadowColor?: string;
+    gradient?: string;
+    primaryHover?: string;
+  };
+  shadow?: {
+    outerShadow?: string;
+    innerShadow?: string;
+  };
+  fontFamily?: {
+    mainFont?: string;
+    titleFont?: string;
   };
   lightTheme: {
     background: string;

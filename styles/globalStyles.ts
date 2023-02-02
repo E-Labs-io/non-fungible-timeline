@@ -14,11 +14,11 @@ export const GlobalStyles = createGlobalStyle<ThemeProps>`
     box-sizing: border-box;
   }
   body {
-    background: ${({ theme }) => theme.darkTheme.background};
-    color: ${({ theme }) => theme.primaryLight};
+    background: ${({ theme }) => theme.coloredTheme.gradient};
+    color: ${({ theme }) => theme.coloredTheme.color};
     min-height: 100vh;
     text-rendering: optimizeLegibility;
-    font-family: 'Sofia Sans', sans-serif;
+    font-family: ${({ theme }) => theme.fontFamily.mainFont}
   }
 
   a {

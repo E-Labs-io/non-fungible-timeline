@@ -10,8 +10,7 @@ const HomeContainer = styled.div`
   position: absolute;
   width: 100vw;
   min-height: 100vh;
-  background: ${({ theme }) =>
-    theme ? theme.coloredTheme.background : "white"};
+  background: ${({ theme }) => theme.coloredTheme.gradient};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,7 +41,7 @@ const PageTitle = styled.div`
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #000000;
-  font-family: "Kanit", sans-serif;
+  font-family: ${({ theme }) => theme.fontFamily.titleFont};
   font-size: 5rem;
   font-size-adjust: auto;
   text-align: center;

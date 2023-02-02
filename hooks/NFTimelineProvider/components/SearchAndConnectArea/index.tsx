@@ -32,7 +32,7 @@ const ConnectionArea = styled.div`
   justify-content: center;
   padding: 5px;
   row-gap: 20px;
-  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+  box-shadow: ${({ theme }) => theme.shadow.innerShadow};
 `;
 
 const Input = styled.input`
