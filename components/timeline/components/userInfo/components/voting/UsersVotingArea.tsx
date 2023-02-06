@@ -1,6 +1,9 @@
 /** @format */
 
 import initialVotingState from "constants/votingInit";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";
+import { Votes } from "hooks/NFTimelineProvider/types";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { votingCategoryList } from "types/votingTypes";
@@ -38,7 +41,22 @@ interface WalletsVotingAreaProps {
 }
 
 function WalletsVotingArea({ handleOpenModalVoting }: WalletsVotingAreaProps) {
-  const [walletsVotingStats, setWalletsVotingStats] = useState();
+  const { activeAddress } = useNFTimelineProvider();
+  const [walletsVotingStats, setWalletsVotingStats] = useState<{
+    [ballotId: string]: Votes[];
+  }>();
+  const [usersVotingData, setUserVotingData] = useState();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!loading && !!!usersVotingData) {
+      setLoading(true);
+      getWalletsVotingData(activeAddress).then((result) => {
+        setUserVotingData(result);
+        setWalletsVotingStats(result);
+      });
+    }
+  });
 
   return (
     <Container>
@@ -46,7 +64,9 @@ function WalletsVotingArea({ handleOpenModalVoting }: WalletsVotingAreaProps) {
         {initialVotingState.categories.map((category, key) => (
           <VotingCategoryBox
             category={category}
-            walletVotingStats={null}
+            walletVotingStats={
+              walletsVotingStats && walletsVotingStats[category.name]
+            }
             handleOpenModalVoting={handleOpenModalVoting}
           />
         ))}

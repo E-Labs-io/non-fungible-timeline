@@ -19,7 +19,7 @@ const PreLoadLayout = styled.div`
 `;
 
 const ConnectionArea = styled.div`
-  background-color: #86848447;
+  background-color: ${({ theme }) => theme.coloredTheme.transparentBG};
   border-radius: 20px;
   border-width: 1px;
   border-style: none;

@@ -42,6 +42,10 @@ const NFTimelineProvider = ({ children }) => {
     }
   });
 
+  /**
+   *  Timeline Management
+   */
+
   const getMetadata = async (
     network: string,
     contractAddress: string,

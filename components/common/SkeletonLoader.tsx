@@ -7,6 +7,7 @@ const SkeletonPulse = styled.div`
   height: ${({ height }) => height ?? "100%"};
   width: ${({ width }) => width ?? "100%"};
   align-items: center;
+  border: ${({ border }) => (border ? border : "none")};
   justify-content: center;
   overflow: inherit;
   border-radius: inherit;
@@ -47,6 +48,7 @@ interface StateSkeletonProps {
   color?: string;
   padding?: string;
   opacity?: string;
+  border?: string;
 }
 const StateSkeleton = ({
   height,
@@ -57,6 +59,7 @@ const StateSkeleton = ({
   colorB,
   padding,
   opacity,
+  border,
 }: StateSkeletonProps) => {
   return (
     <SkeletonPulse
@@ -67,6 +70,7 @@ const StateSkeleton = ({
       colorB={colorB}
       padding={padding}
       opacity={opacity}
+      border={border}
     >
       {message && <Message>{message}</Message>}
     </SkeletonPulse>

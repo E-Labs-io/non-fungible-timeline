@@ -18,4 +18,5 @@ const ensResolver = async (provider: ethers.providers.Provider) => {
   return { ensFromAddress, addressFromEns, isENS, switchEnsAndAddress };
 };
 
+
 export default ensResolver;

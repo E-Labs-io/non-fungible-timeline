@@ -2,6 +2,7 @@
 
 import { Button, Loader } from "components/common";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import postVote from "hooks/NFTimelineProvider/api/postVote";
 import { useWeb3Provider } from "hooks/web3";
 import WalletEtherscanLink from "hooks/web3/components/WalletEtherlink";
 import React, { useState, useEffect } from "react";
@@ -44,7 +45,7 @@ interface VotingModalProps {
 function VotingModal({ categoryType, category }: VotingModalProps) {
   //  Hooks
   const { activeAddress } = useNFTimelineProvider();
-  const { userSigner, userSignMessage } = useWeb3Provider();
+  const { userSigner, userSignMessage, walletAddress } = useWeb3Provider();
   //    State
   const [process, setProcess] = useState(0);
 
@@ -66,6 +67,13 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     setProcess(2);
     if (signedMessage) {
       //  Add the vote to the database
+      await postVote(categoryType, {
+        voter: walletAddress,
+        votedFor: activeAddress,
+        timestamp: new Date(),
+      }).then((result) => {
+        console.log("return from vote: ", result);
+      });
     } else {
     }
   };

@@ -1,5 +1,9 @@
 /** @format */
 
+export type BallotIndex = {
+  [category: string]: Ballot;
+};
+
 export type Ballot = {
   ballotId: number;
   title: string;
@@ -8,10 +12,8 @@ export type Ballot = {
 };
 
 export type Votes = {
-  voteId: number;
+  voteId?: string;
   voter: string;
   votedFor: string;
   timestamp: Date;
-  ballotBallotId: number;
-  ballot: Ballot;
 };

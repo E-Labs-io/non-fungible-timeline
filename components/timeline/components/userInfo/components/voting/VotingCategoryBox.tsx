@@ -7,6 +7,7 @@ import {
   votingWalletsStatsReturn,
 } from "types/votingTypes";
 import initialVotingState from "constants/votingInit";
+import { Votes } from "hooks/NFTimelineProvider/types";
 
 const CategoryContainer = styled.div`
   border-radius: 10px;
@@ -36,7 +37,7 @@ const CategoryVoteCount = styled.div`
 
 interface VotingCategoryBoxProps {
   category: votingCategoryList;
-  walletVotingStats: votingWalletsStatsReturn;
+  walletVotingStats: Votes[];
   handleOpenModalVoting: (
     selected: string,
     category: votingCategoryList
@@ -55,7 +56,9 @@ function VotingCategoryBox({
       onClick={() => handleOpenModalVoting(category.name, category)}
     >
       <CategoryName>{category.label}</CategoryName>
-      <CategoryVoteCount>0/{category.totalVotes}</CategoryVoteCount>
+      <CategoryVoteCount>
+        {walletVotingStats?.length}/{category.totalVotes}
+      </CategoryVoteCount>
     </CategoryContainer>
   );
 }

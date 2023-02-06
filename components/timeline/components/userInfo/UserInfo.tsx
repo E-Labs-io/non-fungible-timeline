@@ -238,14 +238,15 @@ function UserInformation({
   });
 
   return (
-    <Container extension={isFiltersOpen}>
-      <AddressContainer>
+    <Container>
+      <AddressContainer ready={addressCheck.finished}>
         {!addressCheck.finished && (
           <StateSkeleton
             colorA="#3298ce"
             colorB="#a82da4"
             height="50px"
             width="400px"
+            border="1px solid white"
           />
         )}
         {addressCheck.finished && (

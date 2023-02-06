@@ -10,13 +10,19 @@ const category1: votingCategoryList = {
 };
 const category2: votingCategoryList = {
   name: "diamondhands",
-  label: "Diamond Hands",
+  label: "💎 Hands",
+  active: true,
+  totalVotes: 50,
+};
+const category3: votingCategoryList = {
+  name: "whale",
+  label: "🐳",
   active: true,
   totalVotes: 50,
 };
 
 const initialVotingState: initialVotingState = {
-  categories: [category1, category2],
+  categories: [category1, category2, category3],
   votingData: {},
 };
 
