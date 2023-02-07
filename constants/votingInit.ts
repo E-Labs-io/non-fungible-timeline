@@ -4,18 +4,21 @@ import { initialVotingState, votingCategoryList } from "types/votingTypes";
 
 const category1: votingCategoryList = {
   name: "degen",
-  label: "Degen",
+  title: "Degen",
+  label: "🤷🏼‍♂️",
   active: true,
   totalVotes: 10,
 };
 const category2: votingCategoryList = {
   name: "diamondhands",
-  label: "💎 Hands",
+  title: "DIamond Hands",
+  label: "💎🙌🏼",
   active: true,
   totalVotes: 50,
 };
 const category3: votingCategoryList = {
   name: "whale",
+  title: "Whale",
   label: "🐳",
   active: true,
   totalVotes: 50,

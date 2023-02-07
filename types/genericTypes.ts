@@ -19,3 +19,12 @@ export interface ExtraStyleProps {
   open?: boolean;
   showSmallMenu?: boolean;
 }
+
+export class ApiError {
+  readonly status: number;
+  readonly message: string;
+  constructor(errorStatus: number, errorMessage: string) {
+    this.status = errorStatus;
+    this.message = errorMessage;
+  }
+}

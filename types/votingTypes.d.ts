@@ -7,6 +7,7 @@ export type initialVotingState = {
 
 export type votingCategoryList = {
   name: string;
+  title: string;
   label: string;
   icon?: string;
   active: boolean;

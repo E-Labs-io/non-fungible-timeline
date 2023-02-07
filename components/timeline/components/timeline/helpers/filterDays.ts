@@ -11,7 +11,6 @@ const filterFilteredDays = (
   filters: timelineFilterStore[],
   checkIfValidContract: checkIfValidContract
 ) => {
-  console.log("Filters Active: ", filters);
   let filteredHistory: combinedHistory = history;
   //  Check what filters are active
   const isData = filters.find((a) => a.filterType === "date");

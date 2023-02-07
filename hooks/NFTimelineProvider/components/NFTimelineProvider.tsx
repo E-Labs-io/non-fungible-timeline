@@ -2,6 +2,8 @@
 
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useEffect, useState, createContext } from "react";
+import { ApiError } from "types/genericTypes";
+import { getAllRankingData } from "../api/getRankingData";
 import getTokenMetadata from "../hooks/getTokenMetadata";
 import getVerifiedContractList from "../hooks/getVerifiedContracts";
 import { NFTimelineProviderContextType } from "../types";
@@ -11,6 +13,7 @@ import {
   addressSplitHistory,
   StoredMetadataType,
 } from "../types/ProviderTypes";
+import { AllBallotRankingData } from "../types/RankingTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
 
 export const NFTimelineProviderContext = createContext({
@@ -35,10 +38,28 @@ const NFTimelineProvider = ({ children }) => {
     []
   );
 
+  const [initalRankingLoad, setInitalRankingLoad] = useState<boolean>(false);
+  const [allBallotRankings, setAllBallotRankings] =
+    useState<AllBallotRankingData>();
+
   useEffect(() => {
     if (!!!verifiedContractList) {
       //  Get verified contract data from API
       getVerifiedContractList().then((list) => setVerifiedContractList(list));
+    }
+
+    if (!!!allBallotRankings && !initalRankingLoad) {
+      setInitalRankingLoad(true);
+      getAllRankingData().then((result: AllBallotRankingData | ApiError) => {
+        console.log(result);
+        if (typeof result === typeof ApiError) {
+          console.log("Error getting Ranking Data: ", result.message);
+          setInitalRankingLoad(false);
+        } else {
+          setAllBallotRankings(result as AllBallotRankingData);
+          setInitalRankingLoad(false);
+        }
+      });
     }
   });
 

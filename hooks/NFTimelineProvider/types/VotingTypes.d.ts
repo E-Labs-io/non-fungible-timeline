@@ -17,3 +17,5 @@ export type Votes = {
   votedFor: string;
   timestamp: Date;
 };
+
+export type WalletsVotes = { [ballotId: string]: Votes[] };

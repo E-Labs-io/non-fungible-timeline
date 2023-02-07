@@ -1,9 +1,7 @@
 /** @format */
 
 import initialVotingState from "constants/votingInit";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";
-import { Votes } from "hooks/NFTimelineProvider/types";
+import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { votingCategoryList } from "types/votingTypes";
@@ -26,7 +24,7 @@ const ConnectionArea = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 10px;
   column-gap: 30px;
   border-radius: 10px;
@@ -38,34 +36,22 @@ interface WalletsVotingAreaProps {
     selected: string,
     category: votingCategoryList
   ) => void;
+  walletVotingStats?: WalletsVotes;
 }
 
-function WalletsVotingArea({ handleOpenModalVoting }: WalletsVotingAreaProps) {
-  const { activeAddress } = useNFTimelineProvider();
-  const [walletsVotingStats, setWalletsVotingStats] = useState<{
-    [ballotId: string]: Votes[];
-  }>();
-  const [usersVotingData, setUserVotingData] = useState();
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (!loading && !!!usersVotingData) {
-      setLoading(true);
-      getWalletsVotingData(activeAddress).then((result) => {
-        setUserVotingData(result);
-        setWalletsVotingStats(result);
-      });
-    }
-  });
-
+function WalletsVotingArea({
+  handleOpenModalVoting,
+  walletVotingStats,
+}: WalletsVotingAreaProps) {
   return (
     <Container>
       <ConnectionArea>
         {initialVotingState.categories.map((category, key) => (
           <VotingCategoryBox
+            key={key}
             category={category}
             walletVotingStats={
-              walletsVotingStats && walletsVotingStats[category.name]
+              walletVotingStats && walletVotingStats[category.name]
             }
             handleOpenModalVoting={handleOpenModalVoting}
           />

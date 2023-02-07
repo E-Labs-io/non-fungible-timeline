@@ -16,6 +16,9 @@ import StateSkeleton from "components/common/SkeletonLoader";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
 import { votingCategoryList } from "types/votingTypes";
 import WalletsVotingArea from "./components/voting/UsersVotingArea";
+import { Votes } from "hooks/NFTimelineProvider/types";
+import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";
+import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -189,6 +192,8 @@ function UserInformation({
     useState<compileHistoryIntoDaysReturn>();
   const [sortedOutHistory, setSortedOutHistory] =
     useState<compileHistoryIntoDaysReturn>();
+  //  Voting Headline
+  const [walletsVotingStats, setWalletsVotingStats] = useState<WalletsVotes>();
 
   const [isFiltersOpen, setFiltersOpen] = useState(false);
   const [isVotingOpen, setVotingOpen] = useState(false);
@@ -234,6 +239,11 @@ function UserInformation({
     if (activeTimeline && !sortedInHistory && !sortedOutHistory) {
       setSortedInHistory(activeTimeline.inByDate);
       setSortedOutHistory(activeTimeline.outByDate);
+      if (!!!walletsVotingStats) {
+        getWalletsVotingData(activeAddress).then((result) => {
+          setWalletsVotingStats(result);
+        });
+      }
     }
   });
 
@@ -273,6 +283,7 @@ function UserInformation({
           {isVotingOpen && (
             <WalletsVotingArea
               handleOpenModalVoting={handleOpenModalFromVote}
+              walletVotingStats={walletsVotingStats && walletsVotingStats}
             />
           )}
         </VotingArea>

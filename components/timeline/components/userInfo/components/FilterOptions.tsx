@@ -110,7 +110,6 @@ function FilterOptions({}: FilterOptionsProps) {
   };
 
   const handleToggleDateFilter = (flag: boolean) => {
-    console.log("Toggle Date: ", flag);
     if (flag) {
       const optionA = state.startDate;
       const optionB = !!state.endDate ? state.endDate : new Date();

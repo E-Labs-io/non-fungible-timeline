@@ -59,7 +59,7 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     //  Sign message to prove of user
     const signedMessage = await userSignMessage(
       userSigner,
-      `NFTimeline: Giving ${activeAddress} a vote for ${category.label}`
+      `NFTimeline: Giving ${activeAddress} a vote for ${category.title}`
     ).catch((error) => {
       console.log("ERROR Signing Message: ", error);
       setProcess(0);
@@ -72,7 +72,7 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
         votedFor: activeAddress,
         timestamp: new Date(),
       }).then((result) => {
-        console.log("return from vote: ", result);
+        setProcess(result);
       });
     } else {
     }
@@ -81,7 +81,9 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     return (
       <Container>
         <TitleBlock>
-          <CategoryName>{category.label}</CategoryName>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
           <SelectedWallet>
             You need to connect your wallet to vote!
           </SelectedWallet>
@@ -93,10 +95,12 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     return (
       <Container>
         <TitleBlock>
-          <CategoryName>{category.label}</CategoryName>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
           <SelectedWallet>
             You are voting <WalletEtherscanLink walletAddress={activeAddress} />{" "}
-            as a {category.label}!
+            as a {category.title}!
           </SelectedWallet>
           <VotingInfo>
             Voting costs nothing, and only requires a signed message.
@@ -114,10 +118,12 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     return (
       <Container>
         <TitleBlock>
-          <CategoryName>{category.label}</CategoryName>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
           <SelectedWallet>
-            You are voting <WalletEtherscanLink walletAddress={activeAddress} />{" "}
-            as a {category.label}!
+            You are voting <WalletEtherscanLink walletAddress={activeAddress} />
+            as a {category.title}!
           </SelectedWallet>
           <VotingInfo>
             Signing message, please confirm in your wallet.
@@ -131,14 +137,69 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     return (
       <Container>
         <TitleBlock>
-          <CategoryName>{category.label}</CategoryName>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
           <SelectedWallet>
-            You are voting <WalletEtherscanLink walletAddress={activeAddress} />{" "}
-            as a {category.label}!
+            You are voting <WalletEtherscanLink walletAddress={activeAddress} />
+            as a {category.title}!
           </SelectedWallet>
           <VotingInfo>Signing complete, placing your vote!</VotingInfo>
         </TitleBlock>
         <Loader />
+      </Container>
+    );
+  else if (process === 3)
+    //    Saving to DB State
+    return (
+      <Container>
+        <TitleBlock>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
+          <SelectedWallet>
+            You are voting <WalletEtherscanLink walletAddress={activeAddress} />
+            as a {category.title}!
+          </SelectedWallet>
+          <VotingInfo>
+            Sorry there has been an error, please refresh and try again
+          </VotingInfo>
+        </TitleBlock>
+        <Loader />
+      </Container>
+    );
+  else if (process === 4)
+    //    Saving to DB State
+    return (
+      <Container>
+        <TitleBlock>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
+          <SelectedWallet>
+            You already voted{" "}
+            <WalletEtherscanLink walletAddress={activeAddress} />
+            as a {category.title}!
+          </SelectedWallet>
+          <VotingInfo>Trying exploring some new wallets</VotingInfo>
+        </TitleBlock>
+      </Container>
+    );
+  else if (process === 5)
+    //    Saving to DB State
+    return (
+      <Container>
+        <TitleBlock>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
+          <SelectedWallet>
+            Done! You voted
+            <WalletEtherscanLink walletAddress={activeAddress} />
+            as a {category.title}!
+          </SelectedWallet>
+          <VotingInfo>How about exploring some new wallets</VotingInfo>
+        </TitleBlock>
       </Container>
     );
 }
