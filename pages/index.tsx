@@ -59,7 +59,7 @@ const Home = () => {
         <br />
         <Connection />
       </ConnectionContainer>
-      <BallotRanking maxRankings={5} />
+      <BallotRanking maxRankings={3} />
       <br />
     </HomeContainer>
   );
