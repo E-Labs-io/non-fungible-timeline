@@ -60,6 +60,7 @@ const Home = () => {
         <Connection />
       </ConnectionContainer>
       <BallotRanking maxRankings={5} />
+      <br />
     </HomeContainer>
   );
 };

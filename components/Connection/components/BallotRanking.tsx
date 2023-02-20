@@ -56,10 +56,11 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
 
   return (
     <Wrapper>
+      <Title>Rankings</Title>
       <Container>
         {ready &&
           ballotIds.map((id, keyA) => (
-            <Ballot key={keyA} count={ballotRankings[id].length}>
+            <Ballot key={keyA} count={ballotIds.length}>
               <BallotId>{id}</BallotId>
               {ready &&
                 ballotRankings[id]
@@ -88,14 +89,23 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const Title = styled.div`
+  font-size: 2rem;
+  display: flex;
+  justify-content: left;
+  text-align: left;
+  width: 70%;
+`;
+
 const Container = styled.div`
   justify-content: center;
-  align-items: center;
+  align-items: top;
   padding: 20px;
   width: 70%;
   border: 1px solid #ddd;
   border-radius: 10px;
   display: flex;
+
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 

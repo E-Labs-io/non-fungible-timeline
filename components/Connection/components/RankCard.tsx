@@ -18,6 +18,7 @@ const Card = styled.div`
   padding: 5px;
   margin: 3px;
   border: 1px solid #ddd;
+  width: 100%;
   border-radius: 5px;
   color: black;
   background-color: #a3a3a398;
