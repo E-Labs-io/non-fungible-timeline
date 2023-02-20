@@ -28,7 +28,7 @@ const ConnectionArea = styled.div`
   padding: 10px;
   column-gap: 30px;
   border-radius: 10px;
-  box-shadow: inset 0px 0px 15px 2px #cfcfcfad;
+  box-shadow: inset 0px 0px 10px 1px #cfcfcfad;
 `;
 
 interface WalletsVotingAreaProps {

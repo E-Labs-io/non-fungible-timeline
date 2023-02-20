@@ -84,10 +84,6 @@ function MainPage({}: MainPageProps) {
     }
   });
 
-  const handleOpenModal = (allSelectedData) => {
-    setSelectedDayData(allSelectedData);
-    setIsModalOpen(true);
-  };
   const handleCloseModal = () => {
     seTModalType(null);
     setIsModalOpen(false);
@@ -204,7 +200,6 @@ function MainPage({}: MainPageProps) {
             <UserInformation
               handleOpenModalForFirstAndLast={handleOpenModalFromStats}
               handelOpenModalForActiveDate={handleOpenModalFromActiveDay}
-              handleOpenModalFromVote={handleOpenModalFromVote}
             />
             <TimeLine
               sortedInHistory={sortedInHistory}

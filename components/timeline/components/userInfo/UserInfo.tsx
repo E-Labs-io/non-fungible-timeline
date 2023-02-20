@@ -14,11 +14,13 @@ import UsersVotingArea from "./components/voting/UsersVotingArea";
 import { device } from "constants/media";
 import StateSkeleton from "components/common/SkeletonLoader";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
-import { votingCategoryList } from "types/votingTypes";
+import { votingCategoriesType, votingCategoryList } from "types/votingTypes";
 import WalletsVotingArea from "./components/voting/UsersVotingArea";
 import { Votes } from "hooks/NFTimelineProvider/types";
 import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";
 import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
+import { Modal } from "components/common";
+import VotingModal from "./components/voting/VotingModal";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -162,16 +164,11 @@ const VoteLabel = styled.div`
 interface UserInformationProps {
   handleOpenModalForFirstAndLast: (selected: "first" | "last") => void;
   handelOpenModalForActiveDate: (date: string, direction: "in" | "out") => void;
-  handleOpenModalFromVote: (
-    selected: string,
-    category: votingCategoryList
-  ) => void;
 }
 
 function UserInformation({
   handleOpenModalForFirstAndLast,
   handelOpenModalForActiveDate,
-  handleOpenModalFromVote,
 }: UserInformationProps) {
   const { useEnsResolver } = useWeb3Provider();
   const { activeTimeline, activeAddress } = useNFTimelineProvider();
@@ -197,6 +194,10 @@ function UserInformation({
 
   const [isFiltersOpen, setFiltersOpen] = useState(false);
   const [isVotingOpen, setVotingOpen] = useState(false);
+  const [votingModalOpen, setVotingModalOpen] = useState(false);
+  const [voteCategory, setVoteCategory] = useState<votingCategoriesType>();
+  const [selectedCategory, setSelectedCategory] =
+    useState<votingCategoryList>();
 
   useEffect(() => {
     //  Get the ENS resolver
@@ -235,6 +236,7 @@ function UserInformation({
         });
       }
     }
+
     //  Set the active timeline data
     if (activeTimeline && !sortedInHistory && !sortedOutHistory) {
       setSortedInHistory(activeTimeline.inByDate);
@@ -246,6 +248,23 @@ function UserInformation({
       }
     }
   });
+
+  const handleOpenModalFromVote = (
+    selected: votingCategoriesType,
+    category: votingCategoryList
+  ) => {
+    console.log("open Vote Modal : ", selected);
+    setVoteCategory(selected);
+    setSelectedCategory(category);
+    setVotingModalOpen(true);
+  };
+
+  const handleCloseModalFromVote = () => {
+    getWalletsVotingData(activeAddress).then((result) => {
+      setWalletsVotingStats(result);
+    });
+    setVotingModalOpen(false);
+  };
 
   return (
     <Container>
@@ -310,6 +329,13 @@ function UserInformation({
         </FilterArea>
       </InteractionArea>
       {isFiltersOpen && <FilterOptions />}
+      <Modal
+        title={"user modal"}
+        isOpen={votingModalOpen}
+        onRequestClose={handleCloseModalFromVote}
+      >
+        <VotingModal categoryType={voteCategory} category={selectedCategory} />
+      </Modal>
     </Container>
   );
 }
