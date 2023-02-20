@@ -8,7 +8,7 @@ const postVote = async (ballotId: string, voteData: Votes): Promise<number> => {
     ballotId,
   });
   const postResult = await fetch(
-    `${process.env.NEXT_PUBLIC_NFT_SERVER}/newIndex`,
+    `${process.env.NEXT_PUBLIC_NFT_SERVER}/newVote`,
     {
       method: "POST",
       headers: {
