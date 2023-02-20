@@ -243,6 +243,7 @@ function UserInformation({
       setSortedOutHistory(activeTimeline.outByDate);
       if (!!!walletsVotingStats) {
         getWalletsVotingData(activeAddress).then((result) => {
+            console.log("result: ", result);
           setWalletsVotingStats(result);
         });
       }

@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-
 import Connection from "components/Connection";
 import Introduction from "components/Connection/Introduction";
+import BallotRanking from "components/Connection/components/BallotRanking";
 
 const HomeContainer = styled.div`
   position: absolute;
@@ -53,11 +53,13 @@ const Home = () => {
       <TitleContainer>
         <PageTitle>Non-Fungible Timeline</PageTitle>
       </TitleContainer>
+
       <ConnectionContainer>
         <Introduction />
         <br />
         <Connection />
       </ConnectionContainer>
+      <BallotRanking maxRankings={5} />
     </HomeContainer>
   );
 };

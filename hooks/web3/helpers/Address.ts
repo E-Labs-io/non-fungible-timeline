@@ -1,8 +1,9 @@
 /** @format */
 
 import { ethers } from "ethers";
+import { EventEmitter } from "events";
 
-export default class Address {
+export default class Address extends EventEmitter {
   private walletLabel: string;
   private hasENS: boolean;
   private address: string;
@@ -10,6 +11,8 @@ export default class Address {
   public readonly zeroAddress: string =
     "0x0000000000000000000000000000000000000000";
   private provider: ethers.providers.Provider;
+
+  private ready: boolean = false;
 
   public readonly etherscanPrefix = {
     eth: "https://etherscan.io",
@@ -24,6 +27,7 @@ export default class Address {
     givenProvider?: ethers.providers.Provider,
     walletLabel?: string
   ) {
+    super();
     this.provider = givenProvider;
     this.walletLabel = walletLabel ?? "";
 
@@ -37,6 +41,8 @@ export default class Address {
           } else {
             this.hasENS = false;
           }
+          this.ready = true;
+          this.emit("ready");
         });
       } else if (this.isENS(addressOrEns)) {
         this.addressFromEns(addressOrEns).then((address: string) => {
@@ -44,6 +50,7 @@ export default class Address {
             this.address = address;
             this.hasENS = true;
             this.ens = addressOrEns;
+            this.ready = true;
           } else {
             throw new Error("Address or ENS is not valid");
           }
@@ -51,6 +58,8 @@ export default class Address {
       } else throw new Error("Address or ENS is not valid");
     } else {
       this.address = addressOrEns;
+      this.ready = true;
+      this.emit("ready");
     }
   }
 
@@ -83,4 +92,6 @@ export default class Address {
   public getWalletEtherscanUrl = (network: string) =>
     `${this.etherscanPrefix[network]}/address/${this.address}`;
   public getWalletOpenSeaUrl = () => `https://opensea.io/${this.address}`;
+
+  public isReady = () => this.ready;
 }
