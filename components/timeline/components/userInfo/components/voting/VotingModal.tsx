@@ -69,7 +69,7 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
       //  Add the vote to the database
       await postVote(categoryType, {
         voter: walletAddress,
-        votedFor: activeAddress,
+        votedFor: activeAddress.getAddress(),
         timestamp: new Date(),
       }).then((result) => {
         setProcess(result);
@@ -99,7 +99,8 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             {category.label} - {category.title}
           </CategoryName>
           <SelectedWallet>
-            You are voting <WalletEtherscanLink walletAddress={activeAddress} />{" "}
+            You are voting{" "}
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />{" "}
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>
@@ -122,7 +123,8 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             {category.label} - {category.title}
           </CategoryName>
           <SelectedWallet>
-            You are voting <WalletEtherscanLink walletAddress={activeAddress} />
+            You are voting{" "}
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>
@@ -141,7 +143,8 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             {category.label} - {category.title}
           </CategoryName>
           <SelectedWallet>
-            You are voting <WalletEtherscanLink walletAddress={activeAddress} />
+            You are voting{" "}
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>Signing complete, placing your vote!</VotingInfo>
@@ -158,7 +161,8 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             {category.label} - {category.title}
           </CategoryName>
           <SelectedWallet>
-            You are voting <WalletEtherscanLink walletAddress={activeAddress} />
+            You are voting{" "}
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>
@@ -178,7 +182,7 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
           </CategoryName>
           <SelectedWallet>
             You already voted{" "}
-            <WalletEtherscanLink walletAddress={activeAddress} />
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>Trying exploring some new wallets</VotingInfo>
@@ -195,7 +199,7 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
           </CategoryName>
           <SelectedWallet>
             Done! You voted
-            <WalletEtherscanLink walletAddress={activeAddress} />
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>How about exploring some new wallets</VotingInfo>

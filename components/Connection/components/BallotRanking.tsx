@@ -1,5 +1,6 @@
 /** @format */
 
+import { Loader } from "components/common";
 import { ethers } from "ethers";
 import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { getAllRankingData } from "hooks/NFTimelineProvider/api/getRankingData";
@@ -32,6 +33,7 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
     setActiveAddress,
     addNewTimelineData,
   } = useNFTimelineProvider();
+  const [loadingTimeline, setLoadingTimeline] = useState(false);
   const [ranking, setRanking] = useState<AllBallotRankingData>();
   const [provider, setProvider] = useState<ethers.providers.Provider>();
   const [ballotIds, setBallotIds] = useState<string[]>([]);
@@ -113,12 +115,16 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
 
   const handelAddressSelect = async (address: Address) => {
     console.log(address);
+    setLoadingTimeline(true);
     const check = getTimelineData(address.getAddress());
+    setActiveTimelineData(null);
+    setActiveAddress(null);
     console.log(check);
     if (!check) {
       console.log("Getting Timeline data from API");
       //addNewTimelineData(searchedAddress.getAddress(), usersTimeline);
       // Logic to search for the data though API
+
       const usersTimeline = await searchUsersHistory({
         address: address,
         loadingStateCallback: () => {},
@@ -131,6 +137,7 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
         addNewTimelineData(address.getAddress(), usersTimeline);
         router.push("/timeline");
       }
+      setLoadingTimeline(false);
     } else {
       // Logic to display the stored data
       setActiveTimelineData(check);
@@ -142,8 +149,15 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
   return (
     <Wrapper>
       <Title>Rankings</Title>
+
       <Container>
+        {loadingTimeline && (
+          <LoadingOver>
+            <Loader />
+          </LoadingOver>
+        )}
         {ready &&
+          !loadingTimeline &&
           ballotIds.map((id, keyA) => (
             <Ballot key={keyA} count={ballotIds.length}>
               <BallotId>{id}</BallotId>
@@ -204,6 +218,14 @@ const Ballot = styled.div`
 
 const BallotId = styled.h2`
   font-size: 1.5rem;
+`;
+const LoadingOver = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #f0f8ff9c;
+  position: absolute;
+  overflow: clip;
+  display: contents;
 `;
 
 export default BallotRanking;
