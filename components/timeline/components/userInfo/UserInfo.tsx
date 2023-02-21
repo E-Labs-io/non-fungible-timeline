@@ -21,6 +21,7 @@ import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVot
 import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 import { Modal } from "components/common";
 import VotingModal from "./components/voting/VotingModal";
+import Address from "hooks/web3/helpers/Address";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -56,7 +57,7 @@ const AddressContainer = styled.div`
   align-items: center;
   text-align: center;
 `;
-const Address = styled.a`
+const AddressLabel = styled.a`
   justify-content: center;
   text-align: center;
   align-items: center;
@@ -170,7 +171,7 @@ function UserInformation({
   handleOpenModalForFirstAndLast,
   handelOpenModalForActiveDate,
 }: UserInformationProps) {
-  const { useEnsResolver } = useWeb3Provider();
+  const { localProvider } = useWeb3Provider();
   const { activeTimeline, activeAddress } = useNFTimelineProvider();
 
   //  Checks
@@ -180,7 +181,7 @@ function UserInformation({
     finished: boolean;
   }>({ started: false, finished: false });
   //    ENS & Address States
-  const [ensResolver, setEnsResolver] = useState<any>(undefined);
+
   const [hasENS, setHasENS] = useState<boolean | undefined>(undefined);
   const [ensAddress, setEnsAddress] = useState<string>();
   const [walletAddress, setWalletAddress] = useState<string>();
@@ -200,41 +201,42 @@ function UserInformation({
     useState<votingCategoryList>();
 
   useEffect(() => {
-    //  Get the ENS resolver
-    if (!ensResolver)
-      useEnsResolver("mainnet").then((resolver) => setEnsResolver(resolver));
     //  Check ENS
-    if (!addressCheck.started && activeAddress && ensResolver) {
+    if (!addressCheck.started && activeAddress) {
       console.log("Address Check: ", activeAddress);
       setAddressCheck({ started: true, finished: false });
-      const isEns = ensResolver.isENS(activeAddress);
-      if (isEns) {
-        console.log("is ens");
-        setHasENS(true);
-        setEnsAddress(activeAddress);
-        ensResolver.addressFromEns(activeAddress).then((address) => {
-          setWalletAddress(address);
+      if (activeAddress.isReady()) {
+        if (activeAddress.hasEns()) {
+          console.log("is ens");
+          setHasENS(true);
+          setEnsAddress(activeAddress.getEns());
+          setWalletAddress(activeAddress.getAddress());
           setAddressCheck({ started: true, finished: true });
           setReady(true);
-        });
-      } else {
-        console.log("is not ens: ", activeAddress);
-        setWalletAddress(activeAddress);
-        ensResolver.ensFromAddress(activeAddress).then((ens) => {
-          console.log("resolved Ens from Address: ", ens);
-          if (ens) {
+        } else {
+          console.log("is not ens");
+          setWalletAddress(activeAddress.getAddress());
+          setHasENS(false);
+          setAddressCheck({ started: true, finished: true });
+          setReady(true);
+        }
+      } else
+        activeAddress.on("ready", () => {
+          if (activeAddress.hasEns()) {
+            console.log("is ens");
             setHasENS(true);
-            setEnsAddress(ens);
+            setEnsAddress(activeAddress.getEns());
+            setWalletAddress(activeAddress.getAddress());
             setAddressCheck({ started: true, finished: true });
             setReady(true);
           } else {
+            console.log("is not ens");
+            setWalletAddress(activeAddress.getAddress());
             setHasENS(false);
-            setEnsAddress(ens);
             setAddressCheck({ started: true, finished: true });
             setReady(true);
           }
         });
-      }
     }
 
     //  Set the active timeline data
@@ -242,8 +244,7 @@ function UserInformation({
       setSortedInHistory(activeTimeline.inByDate);
       setSortedOutHistory(activeTimeline.outByDate);
       if (!!!walletsVotingStats) {
-        getWalletsVotingData(activeAddress).then((result) => {
-            console.log("result: ", result);
+        getWalletsVotingData(activeAddress.getAddress()).then((result) => {
           setWalletsVotingStats(result);
         });
       }
@@ -254,14 +255,13 @@ function UserInformation({
     selected: votingCategoriesType,
     category: votingCategoryList
   ) => {
-    console.log("open Vote Modal : ", selected);
     setVoteCategory(selected);
     setSelectedCategory(category);
     setVotingModalOpen(true);
   };
 
   const handleCloseModalFromVote = () => {
-    getWalletsVotingData(activeAddress).then((result) => {
+    getWalletsVotingData(activeAddress.getAddress()).then((result) => {
       setWalletsVotingStats(result);
     });
     setVotingModalOpen(false);
@@ -280,7 +280,7 @@ function UserInformation({
           />
         )}
         {addressCheck.finished && (
-          <Address
+          <AddressLabel
             href={buildNetworkScanLink({
               network: "eth",
               address: walletAddress,
@@ -288,7 +288,7 @@ function UserInformation({
             target="blank"
           >
             {hasENS ? ensAddress : shortenWalletAddress(walletAddress)}
-          </Address>
+          </AddressLabel>
         )}
       </AddressContainer>
       {

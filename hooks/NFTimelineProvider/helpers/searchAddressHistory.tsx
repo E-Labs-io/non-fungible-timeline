@@ -3,30 +3,22 @@
 import compileHistoryIntoDays from "helpers/dataSorting/compileHistoryIntoDays";
 import sortUsersHistory from "helpers/dataSorting/sortUsersHistory";
 import getUsersHistory from "helpers/getters/getUsersHistory";
+import Address from "hooks/web3/helpers/Address";
 import { getTImelineDataReturn } from "../types/ProviderTypes";
 
 interface searchUsersHistoryProps {
-  addressOrEns: string;
+  address: Address;
   loadingStateCallback: (state) => void;
   hasErrorCallback: (flag: boolean) => void;
-  ensResolver;
 }
 const searchUsersHistory = async ({
-  addressOrEns,
+  address,
   loadingStateCallback,
   hasErrorCallback,
-  ensResolver,
 }: searchUsersHistoryProps): Promise<getTImelineDataReturn | false> => {
   hasErrorCallback(false);
 
-  const isEns = ensResolver.isENS(addressOrEns);
-  var searchAddress;
-
-  if (isEns) {
-    await ensResolver
-      .addressFromEns(addressOrEns)
-      .then((address) => (searchAddress = address));
-  } else searchAddress = addressOrEns;
+  var searchAddress = address.getAddress();
 
   if (searchAddress === null) {
     console.log("ENS isn't real: ");
@@ -50,9 +42,7 @@ const searchUsersHistory = async ({
     outBound.length
   );
   if (outBound.length === 0 && inBoundTransfers.length === 0) {
-    console.log(
-      "No tokens"
-    );
+    console.log("No tokens");
     return false;
   }
   const sortedDataIn = sortUsersHistory(inBoundTransfers);

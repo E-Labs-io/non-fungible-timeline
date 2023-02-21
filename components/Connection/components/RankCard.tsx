@@ -21,7 +21,7 @@ const Card = styled.div`
   width: 100%;
   border-radius: 5px;
   color: black;
-  background-color: #a3a3a398;
+  background-color: #a3a3a352;
 `;
 
 const TopLine = styled.div`
@@ -53,6 +53,7 @@ type RankCardProps = {
   percentOfVotes: number;
   totalVotes: number;
   provider: ethers.providers.Provider;
+  handelAddressSelect: (address: Address) => void;
 };
 
 export default function RankCard({
@@ -60,6 +61,7 @@ export default function RankCard({
   percentOfVotes,
   totalVotes,
   provider,
+  handelAddressSelect,
 }: RankCardProps) {
   const [walletAddress, setWalletAddress] = useState<Address>();
   const [displayAddress, setDisplayAddress] = useState<string>();
@@ -89,7 +91,7 @@ export default function RankCard({
     <Card>
       <TopLine>
         <Rank>{rank.rank}.</Rank>
-        <WalletAddress>
+        <WalletAddress onClick={() => handelAddressSelect(walletAddress)}>
           {displayAddress ?? (
             <StateSkeleton
               height="15px"

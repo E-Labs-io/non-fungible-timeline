@@ -136,16 +136,6 @@ function MainPage({}: MainPageProps) {
     seTModalType("nft");
     setIsModalOpen(true);
   };
-  const handleOpenModalFromVote = (
-    selected: votingCategoriesType,
-    category: votingCategoryList
-  ) => {
-    console.log("open Vote Modal : ", selected);
-    setVoteCategory(selected);
-    setSelectedCategory(category);
-    seTModalType("vote");
-    setIsModalOpen(true);
-  };
 
   const handleOpenModalFromActiveDay = (
     date: string,

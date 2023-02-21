@@ -30,11 +30,13 @@ export interface UserWeb3ProviderContextType {
   disconnectProvider: Function;
   connectToGivenProvider: Function;
   useEnsResolver: Function;
+  localProvider: ethers.providers.Provider;
 }
 
 export type GivenProviderAllowance = "alchemy";
 
 export const UserWeb3Context = createContext({
+  localProvider: null,
   walletAddress: "",
   shortWalletAddress: "",
   userProvider: null,
@@ -65,6 +67,8 @@ const AlchemyAPI = alchemyAPI(APIKeys.alchemy);
 export const web3API = AlchemyAPI;
 
 const UserWeb3Provider = ({ children }) => {
+  const [localProvider, setLocalProvider] =
+    useState<ethers.providers.Provider>();
   const [userProvider, setUserProvider] = useState(null);
   const [userSigner, setUserSigner] = useState(null);
   const [walletAddress, setWalletAddress] = useState("");
@@ -86,7 +90,7 @@ const UserWeb3Provider = ({ children }) => {
   const connectToGivenProvider = async (
     provider: GivenProviderAllowance,
     network
-  ) => {
+  ): Promise<ethers.providers.Provider> => {
     let connection;
     if (provider === "alchemy") {
       connection = connectToAlchemyProvider(network);
@@ -214,6 +218,11 @@ const UserWeb3Provider = ({ children }) => {
   useEffect(() => {
     if (({ auxStorage }) => auxStorage?.web3ModalInstance.cachedProvider)
       ({ auxStorage }) => connectWeb3Modal(auxStorage.web3ModalInstance);
+    if (!localProvider) {
+      connectToGivenProvider("alchemy", "mainnet").then((provider) =>
+        setLocalProvider(provider)
+      );
+    }
   });
 
   return (
@@ -228,6 +237,7 @@ const UserWeb3Provider = ({ children }) => {
         connectToUsersProvider,
         userSignMessage,
         web3API,
+        localProvider,
         disconnectProvider,
         connectToGivenProvider,
         useEnsResolver,

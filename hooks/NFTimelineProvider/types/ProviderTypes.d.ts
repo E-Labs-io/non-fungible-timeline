@@ -1,18 +1,20 @@
 /** @format */
 
+import { ethers } from "ethers";
+import Address from "hooks/web3/helpers/Address";
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { type } from "os";
 import { VerifiedContractData } from "./verifiedContractsTypes";
-import { Ballot } from "./VotingTypes";
+import { Ballot, Votes } from "./VotingTypes";
 
 export interface NFTimelineProviderContextType {
-  //postVote: postVoteType;
-  //getBallots: getBallotsType;
-  //getBallotData: getBallotDataType;
+  submitVote: submitVote;
+  getAllRankings: () => Promise<AllBallotRankingData> | AllBallotRankingData;
+  getBallotRankings: (ballotId: string) => Ranks;
   getTokenMetadata: getTokenMetadataType;
   getTimelineData: getTimelineData;
   setActiveTimelineData: setActiveTimelineDataType;
-  setActiveAddress: (address: string) => void;
+  setActiveAddress: (address: Address) => void;
   addNewTimelineData: addNewTimelineData;
   addTimelineFilter: addTimelineFilter;
   removeTimelineFilter: removeTimelineFilter;
@@ -21,7 +23,8 @@ export interface NFTimelineProviderContextType {
   timelineFilters: timelineFilterStore[];
   activeTimeline: addressSplitHistory;
   verifiedContractList: VerifiedContractData[];
-  activeAddress: string;
+  activeAddress: Address;
+  allBallotRankings: AllBallotRankingData;
 }
 
 export type addTimelineFilter = (filterOptions: timelineFilterStore) => void;
@@ -57,10 +60,11 @@ export type setActiveTimelineDataType = (
 export type getTimelineData = (address: string) => addressSplitHistory | false;
 
 export type postVoteType = (
-  category: string,
-  voter: string,
-  proposed: string
-) => Promise<boolean>;
+  ballotId: string,
+  voteDate: Votes
+) => Promise<number>;
+
+export type submitVote = (ballotId: string, voteDate: Votes) => Promise<number>;
 
 export type getTokenMetadataType = (
   network: string,
@@ -77,3 +81,7 @@ export type StoredMetadataType = {
     [contractAddress: string]: { [tokenId: string]: SingleNFTDataType };
   };
 };
+
+export type getAllRankingData = () =>
+  | Promise<AllBallotRankingData>
+  | AllBallotRankingData;

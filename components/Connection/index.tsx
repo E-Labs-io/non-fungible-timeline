@@ -11,6 +11,7 @@ import {
   addressSplitHistory,
   getTImelineDataReturn,
 } from "hooks/NFTimelineProvider/types/ProviderTypes";
+import Address from "hooks/web3/helpers/Address";
 
 const ConnectionContainer = styled.div`
   height: 50%;
@@ -19,11 +20,16 @@ const ConnectionContainer = styled.div`
 `;
 
 function Connection({}) {
-  const { getTimelineData, setActiveTimelineData, setActiveAddress } =
-    useNFTimelineProvider();
-  const { walletAddress, userProvider, useEnsResolver } = useWeb3Provider();
-  const [EnsResolver, setEnsResolver] = useState<any>();
+  const {
+    getTimelineData,
+    setActiveTimelineData,
+    setActiveAddress,
+    addNewTimelineData,
+  } = useNFTimelineProvider();
+  const { walletAddress, userProvider, localProvider } = useWeb3Provider();
+
   const [usersAddress, setUsersAddress] = useState<string>();
+  const [searchInoput, setSearchInoput] = useState<string>();
   const [ensError, setEnsError] = useState<boolean>(false);
   const [badAddressError, setBadAddressError] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
@@ -34,13 +40,10 @@ function Connection({}) {
   const router = useRouter();
 
   useEffect(() => {
-    //  Get ENS Resolver
-    if (!EnsResolver) {
-      useEnsResolver("mainnet").then((resolver) => setEnsResolver(resolver));
-    }
     //  Check if connected to user provider
     //  Set search address to attached address
     if (!connected && userProvider) {
+      setSearchInoput(walletAddress);
       setUsersAddress(walletAddress);
       setEnsError(false);
       setBadAddressError(false);
@@ -53,36 +56,42 @@ function Connection({}) {
   });
 
   const handleInputChange = (input) => {
-    setUsersAddress(input.target.value);
+    setSearchInoput(input.target.value);
     setEnsError(false);
     setBadAddressError(false);
   };
 
   const handelSearchUsersHistory = async () => {
     setLoadingState(1);
-    const isLocal: addressSplitHistory | false = getTimelineData(usersAddress);
-    if (!isLocal) {
-      const usersTimeline = await searchUsersHistory({
-        addressOrEns: usersAddress,
-        loadingStateCallback: setLoadingState,
-        hasErrorCallback: setEnsError,
-        ensResolver: EnsResolver,
-      });
+    const searchedAddress = new Address(searchInoput, localProvider);
+    searchedAddress.on("ready", async () => {
+      const isLocal: addressSplitHistory | false = getTimelineData(
+        searchedAddress.getAddress()
+      );
+      console.log(isLocal);
+      if (!isLocal) {
+        const usersTimeline = await searchUsersHistory({
+          address: searchedAddress,
+          loadingStateCallback: setLoadingState,
+          hasErrorCallback: setEnsError,
+        });
 
-      if (usersTimeline) {
-        setActiveTimelineData(usersTimeline);
-        setActiveAddress(usersTimeline.searchAddress);
-        router.push("/timeline");
+        if (usersTimeline) {
+          setActiveTimelineData(usersTimeline);
+          setActiveAddress(searchedAddress);
+          addNewTimelineData(searchedAddress.getAddress(), usersTimeline);
+          router.push("/timeline");
+        } else {
+          setBadAddressError(true);
+          setLoadingState(0);
+        }
       } else {
-        setBadAddressError(true);
-        setLoadingState(0);
+        setLoadingState(5);
+        setActiveTimelineData(isLocal);
+        setActiveAddress(searchedAddress);
+        router.push("/timeline");
       }
-    } else {
-      setLoadingState(5);
-      setActiveTimelineData(isLocal);
-      setActiveAddress(usersAddress);
-      router.push("/timeline");
-    }
+    });
   };
 
   const handleIsDisabled = (input: string): boolean => {
@@ -109,7 +118,7 @@ function Connection({}) {
         handleIsDisabled={handleIsDisabled}
         handleInputChange={handleInputChange}
         loadingState={loadingState}
-        usersAddress={usersAddress}
+        searchAddress={searchInoput}
         ensError={ensError}
       />
     </ConnectionContainer>

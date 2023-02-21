@@ -1,14 +1,18 @@
 /** @format */
 
 import { ethers } from "ethers";
+import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { getAllRankingData } from "hooks/NFTimelineProvider/api/getRankingData";
+import searchUsersHistory from "hooks/NFTimelineProvider/helpers/searchAddressHistory";
 import {
   AllBallotRankingData,
   Ranks,
   VoteRankData,
 } from "hooks/NFTimelineProvider/types/RankingTypes";
 import { useWeb3Provider } from "hooks/web3";
+import Address from "hooks/web3/helpers/Address";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import getSortedBallotRankings from "./helpers/sortRankings";
@@ -19,7 +23,15 @@ interface BallotRankingProps {
 }
 
 function BallotRanking({ maxRankings }: BallotRankingProps) {
-  const { connectToGivenProvider } = useWeb3Provider();
+  const { connectToGivenProvider, userProvider } = useWeb3Provider();
+  const {
+    getAllRankings,
+    allBallotRankings,
+    getTimelineData,
+    setActiveTimelineData,
+    setActiveAddress,
+    addNewTimelineData,
+  } = useNFTimelineProvider();
   const [ranking, setRanking] = useState<AllBallotRankingData>();
   const [provider, setProvider] = useState<ethers.providers.Provider>();
   const [ballotIds, setBallotIds] = useState<string[]>([]);
@@ -27,32 +39,105 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
     [ballotId: string]: VoteRankData[];
   }>();
 
+  const router = useRouter();
+
   const [ready, setReady] = useState(false);
   useEffect(() => {
     if (!ready) {
       if (!ranking) {
-        getAllRankingData().then((data: AllBallotRankingData) => {
-          console.log("got ranking data: Ballot Ranking");
-          setRanking(data);
-          const ids = Object.keys(data);
+        if (!!allBallotRankings) {
+          setRanking(allBallotRankings);
+          const ids = Object.keys(allBallotRankings);
           const ranks = {};
-          const sorted = getSortedBallotRankings(data);
+          const sorted = getSortedBallotRankings(allBallotRankings);
           ids.forEach((id) => {
             ranks[id] = sorted[id].rankings;
           });
           setBallotIds(ids);
           setBallotRankings(ranks);
-          if (!!!provider)
+          if (!!!provider) {
             console.log("connecting to provider: Ballot Ranking");
-          connectToGivenProvider("alchemy", "mainnet").then((prov) => {
-            console.log("connected to provider: Ballot Ranking");
-            setProvider(prov);
-            setReady(true);
-          });
-        });
+            if (userProvider) {
+              console.log("connected to user provider: Ballot Ranking");
+              setProvider(userProvider);
+              setReady(true);
+            } else {
+              connectToGivenProvider("alchemy", "mainnet").then((prov) => {
+                console.log("connected to provider: Ballot Ranking");
+                setProvider(prov);
+                setReady(true);
+              });
+            }
+          } else
+            getAllRankings().then((data: AllBallotRankingData) => {
+              console.log("got ranking data: Ballot Ranking");
+              setRanking(data);
+              const ids = Object.keys(data);
+              const ranks = {};
+              const sorted = getSortedBallotRankings(data);
+              ids.forEach((id) => {
+                ranks[id] = sorted[id].rankings;
+              });
+              setBallotIds(ids);
+              setBallotRankings(ranks);
+              if (!!!provider) {
+                console.log("connecting to provider: Ballot Ranking");
+                if (userProvider) {
+                  console.log("connected to user provider: Ballot Ranking");
+                  setProvider(userProvider);
+                  setReady(true);
+                } else {
+                  connectToGivenProvider("alchemy", "mainnet").then((prov) => {
+                    console.log("connected to provider: Ballot Ranking");
+                    setProvider(prov);
+                    setReady(true);
+                  });
+                }
+              }
+            });
+        }
       }
     }
-  });
+    if (ready && allBallotRankings !== ranking) {
+      setRanking(allBallotRankings);
+      const ids = Object.keys(allBallotRankings);
+      const ranks = {};
+      const sorted = getSortedBallotRankings(allBallotRankings);
+      ids.forEach((id) => {
+        ranks[id] = sorted[id].rankings;
+      });
+      setBallotIds(ids);
+      setBallotRankings(ranks);
+    }
+  }, [ready, allBallotRankings, provider, userProvider]);
+
+  const handelAddressSelect = async (address: Address) => {
+    console.log(address);
+    const check = getTimelineData(address.getAddress());
+    console.log(check);
+    if (!check) {
+      console.log("Getting Timeline data from API");
+      //addNewTimelineData(searchedAddress.getAddress(), usersTimeline);
+      // Logic to search for the data though API
+      const usersTimeline = await searchUsersHistory({
+        address: address,
+        loadingStateCallback: () => {},
+        hasErrorCallback: () => {},
+      });
+
+      if (usersTimeline) {
+        setActiveTimelineData(usersTimeline);
+        setActiveAddress(address);
+        addNewTimelineData(address.getAddress(), usersTimeline);
+        router.push("/timeline");
+      }
+    } else {
+      // Logic to display the stored data
+      setActiveTimelineData(check);
+      setActiveAddress(address);
+      router.push("/timeline");
+    }
+  };
 
   return (
     <Wrapper>
@@ -72,6 +157,7 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
                       percentOfVotes={rank.shareOfVotes}
                       totalVotes={ranking[id].totalVotes}
                       provider={provider}
+                      handelAddressSelect={handelAddressSelect}
                     />
                   ))}
             </Ballot>
@@ -103,6 +189,7 @@ const Container = styled.div`
   padding: 20px;
   width: 70%;
   border: 1px solid #ddd;
+  background-color: #ffffff38;
   border-radius: 10px;
   display: flex;
 

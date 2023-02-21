@@ -1,27 +1,26 @@
 /** @format */
 
+import Address from "hooks/web3/helpers/Address";
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useEffect, useState, createContext } from "react";
 import { ApiError } from "types/genericTypes";
 import { getAllRankingData } from "../api/getRankingData";
+import postVote from "../api/postVote";
 import getTokenMetadata from "../hooks/getTokenMetadata";
 import getVerifiedContractList from "../hooks/getVerifiedContracts";
-import { NFTimelineProviderContextType } from "../types";
+import { NFTimelineProviderContextType, Votes } from "../types";
 import { timelineFilterStore, timelineFilterTypes } from "../types/FilterTypes";
 import {
   addressCollection,
   addressSplitHistory,
   StoredMetadataType,
 } from "../types/ProviderTypes";
-import { AllBallotRankingData } from "../types/RankingTypes";
+import { AllBallotRankingData, Ranks } from "../types/RankingTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
 
-export const NFTimelineProviderContext = createContext({
-  //postVote: postVote,
-  //getBallots: getBallots,
-  //getBallotData: getBallotData,
-  verifiedContractList: [],
-} as NFTimelineProviderContextType);
+export const NFTimelineProviderContext = createContext(
+  {} as NFTimelineProviderContextType
+);
 
 //let storedMetadata: StoredMetadataType = { ethereum: {} };
 
@@ -33,7 +32,7 @@ const NFTimelineProvider = ({ children }) => {
   });
   const [timelineData, setTimelineData] = useState<addressCollection>({});
   const [activeTimeline, setActiveTimeline] = useState<addressSplitHistory>();
-  const [activeAddress, setActiveAddress] = useState<string>();
+  const [activeAddress, setActiveAddress] = useState<Address>();
   const [timelineFilters, setTimelineFilters] = useState<timelineFilterStore[]>(
     []
   );
@@ -50,21 +49,12 @@ const NFTimelineProvider = ({ children }) => {
 
     if (!!!allBallotRankings && !initalRankingLoad) {
       setInitalRankingLoad(true);
-      getAllRankingData().then((result: AllBallotRankingData | ApiError) => {
-        console.log(result);
-        if (typeof result === typeof ApiError) {
-          console.log("Error getting Ranking Data: ", result.message);
-          setInitalRankingLoad(false);
-        } else {
-          setAllBallotRankings(result as AllBallotRankingData);
-          setInitalRankingLoad(false);
-        }
-      });
+      updateRankingData();
     }
   });
 
   /**
-   *  Timeline Management
+   *  Metadata Management
    */
 
   const getMetadata = async (
@@ -95,6 +85,9 @@ const NFTimelineProvider = ({ children }) => {
     }
     return metadata;
   };
+  /**
+   * Timeline Management
+   */
 
   const setActiveTimelineData = (timelineData: addressSplitHistory) =>
     setActiveTimeline(timelineData);
@@ -105,6 +98,9 @@ const NFTimelineProvider = ({ children }) => {
   const addNewTimelineData = (address: string, timeline: addressSplitHistory) =>
     setTimelineData({ ...timelineData, [address]: timeline });
 
+  /**
+   * Timeline Filter Management
+   */
   const addTimelineFilter = (filterOptions: timelineFilterStore) => {
     let i = null;
     if (!!timelineFilters) {
@@ -136,6 +132,9 @@ const NFTimelineProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Verified Contract Management
+   */
   const checkIfValidContract = (
     contractAddress: string
   ): false | VerifiedContractData => {
@@ -150,6 +149,38 @@ const NFTimelineProvider = ({ children }) => {
     }
     return isVerified;
   };
+  /**
+   * Ranking Management
+   */
+  const updateRankingData = async () => {
+    getAllRankingData().then((result: AllBallotRankingData | ApiError) => {
+      console.log(result);
+      if (typeof result === typeof ApiError) {
+        console.log("Error getting Ranking Data: ", result.message);
+        setInitalRankingLoad(false);
+      } else {
+        setAllBallotRankings(result as AllBallotRankingData);
+        setInitalRankingLoad(false);
+      }
+    });
+  };
+  const getAllRankings = async (): Promise<AllBallotRankingData> => {
+    if (!!allBallotRankings) return allBallotRankings;
+    else return updateRankingData().then(() => allBallotRankings);
+  };
+  const getBallotRankings = (ballotId: string): Ranks =>
+    allBallotRankings[ballotId];
+
+  const submitVote = async (
+    ballotId: string,
+    voteDate: Votes
+  ): Promise<number> =>
+    postVote(ballotId, voteDate).then(async (result: number) => {
+      if (result === 5) {
+        await updateRankingData();
+        return 5;
+      } else return result;
+    });
 
   return (
     <NFTimelineProviderContext.Provider
@@ -163,10 +194,14 @@ const NFTimelineProvider = ({ children }) => {
         removeAllTimelineFilters,
         removeTimelineFilter,
         checkIfValidContract,
+        submitVote,
+        getAllRankings,
+        getBallotRankings,
         timelineFilters,
         activeTimeline,
         verifiedContractList,
         activeAddress,
+        allBallotRankings,
       }}
     >
       {children}

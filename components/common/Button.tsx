@@ -78,7 +78,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   width?: string;
   height?: string;
-  onClick?: () => void;
+  onClick?: Function;
   leftInfo?: string | number;
   rightInfo?: string | number;
   withFlashyBackground?: boolean;

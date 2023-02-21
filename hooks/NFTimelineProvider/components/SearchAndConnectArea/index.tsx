@@ -68,7 +68,7 @@ interface ConnectionAreaProps {
   searchUsersHistory: () => void;
   handleIsDisabled: Function;
   loadingState: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  usersAddress: string;
+  searchAddress: string;
   ensError: boolean;
   badAddressError: boolean;
 }
@@ -77,12 +77,13 @@ function SearchAndConnectArea({
   searchUsersHistory,
   handleIsDisabled,
   loadingState,
-  usersAddress,
+  searchAddress,
   ensError,
   badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     loadingState = 1;
     searchUsersHistory();
   };
@@ -109,7 +110,7 @@ function SearchAndConnectArea({
             )}
             <Button
               onClick={handleSubmit}
-              disabled={handleIsDisabled(usersAddress)}
+              disabled={handleIsDisabled(searchAddress)}
             >
               Search
             </Button>

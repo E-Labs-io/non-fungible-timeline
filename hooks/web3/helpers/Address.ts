@@ -51,6 +51,7 @@ export default class Address extends EventEmitter {
             this.hasENS = true;
             this.ens = addressOrEns;
             this.ready = true;
+            this.emit("ready");
           } else {
             throw new Error("Address or ENS is not valid");
           }
