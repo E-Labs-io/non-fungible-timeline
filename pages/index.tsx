@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Connection from "components/Connection";
 import Introduction from "components/Connection/Introduction";
 import BallotRanking from "components/Connection/components/BallotRanking";
+import { device } from "constants/media";
 
 const HomeContainer = styled.div`
   position: absolute;
@@ -14,7 +15,7 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   margin: auto;
   row-gap: 15px;
 `;
@@ -22,7 +23,7 @@ const HomeContainer = styled.div`
 const TitleContainer = styled.div`
   width: 100%;
   height: 100px;
-  margin-top: 100px;
+  margin-top: auto;
   justify-content: center;
   display: flex;
 `;
@@ -32,6 +33,13 @@ const ConnectionContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin: auto;
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+  columns: 2;
+  @media ${device.tablet} {
+    flex-direction: column;
+  }
 `;
 const PageTitle = styled.div`
   justify-content: center;
@@ -42,7 +50,7 @@ const PageTitle = styled.div`
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #000000;
   font-family: ${({ theme }) => theme.fontFamily.titleFont};
-  font-size: 5rem;
+  font-size: 4rem;
   font-size-adjust: auto;
   text-align: center;
 `;
@@ -53,10 +61,8 @@ const Home = () => {
       <TitleContainer>
         <PageTitle>Non-Fungible Timeline</PageTitle>
       </TitleContainer>
-
       <ConnectionContainer>
         <Introduction />
-        <br />
         <Connection />
       </ConnectionContainer>
       <BallotRanking maxRankings={3} />

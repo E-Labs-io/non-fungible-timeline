@@ -15,7 +15,7 @@ const PreLoadLayout = styled.div`
   display: flex;
   flex-direction: column;
   display: flex;
-  column-gap: 30px;
+  column-gap: 10px;
 `;
 
 const ConnectionArea = styled.div`
@@ -27,11 +27,11 @@ const ConnectionArea = styled.div`
   display: flex;
   flex-direction: column;
   width: 50vw;
-  min-height: 20vh;
+  min-height: 200px;
   align-items: center;
   justify-content: center;
   padding: 5px;
-  row-gap: 20px;
+  row-gap: 5px;
   box-shadow: ${({ theme }) => theme.shadow.innerShadow};
 `;
 

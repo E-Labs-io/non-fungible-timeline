@@ -23,7 +23,7 @@ export const theme: themeInterface = {
     colorLight: "#ffffff",
     colorDark: "#000000",
     borderColor: "#EFFFFA",
-    gradient: "linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#ffffff 100%)",
+    gradient: "linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#cfcfcfad 100%)",
     accentColor: "",
     shadowColor: "rgba(207, 207, 207, 0.682)",
     primaryHover: "",

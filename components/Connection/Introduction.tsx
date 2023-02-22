@@ -1,4 +1,5 @@
 /** @format */
+import { device } from "constants/media";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -7,14 +8,14 @@ const Wrapper = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: auto;
-  width: 100%;
+  height: 100%;
+  width: 80%;
+  padding-left: 5px;
 `;
 
 const Container = styled.div`
-  width: 60vw;
+  width: 100%;
   min-height: 200px;
-  //background-color: #86848436;
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
@@ -23,29 +24,29 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  //box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.329);
-  padding: 5px;
-  padding-bottom: 20px;
-  padding-left: 25px;
-  padding-right: 20px;
-  text-align: center;
 `;
 const Title = styled.h2`
-  text-align: left;
+  text-align: right;
   width: 100%;
   font-weight: 300;
-  font-size: 2rem;
+  font-size: 4rem;
   background: #70ffde;
   background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 0.2px;
+  -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #000000;
+  @media ${device.tablet} {
+    text-align: center;
+  }
 `;
 const Content = styled.div`
-  text-align: center;
+  text-align: right;
   width: 100%;
   font-size: 1.3rem;
+  @media ${device.tablet} {
+    text-align: center;
+  }
 `;
 
 interface IntroductionProps {}
@@ -53,7 +54,7 @@ const Introduction = ({}: IntroductionProps) => {
   return (
     <Wrapper>
       <Container>
-        <Title>Welcome to NFTimeline!</Title>
+        <Title>Welcome</Title>
         <Content>
           Where the past and present of your favourite Ethereum wallets come to
           life. With our sleek, vertical timeline, scroll and vote on your
