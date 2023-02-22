@@ -2,6 +2,7 @@
 
 import { ethers } from "ethers";
 import { EventEmitter } from "events";
+import createIcon, { renderIcon } from "./generateAddressIcon";
 
 export default class Address extends EventEmitter {
   private walletLabel: string;
@@ -11,6 +12,7 @@ export default class Address extends EventEmitter {
   public readonly zeroAddress: string =
     "0x0000000000000000000000000000000000000000";
   private provider: ethers.providers.Provider;
+  private walletIcon;
 
   private ready: boolean = false;
 
@@ -42,6 +44,11 @@ export default class Address extends EventEmitter {
             this.hasENS = false;
           }
           this.ready = true;
+          this.walletIcon = createIcon({
+            seed: this.address,
+            size: 15,
+            scale: 1,
+          });
           this.emit("ready");
         });
       } else if (this.isENS(addressOrEns)) {
@@ -51,6 +58,11 @@ export default class Address extends EventEmitter {
             this.hasENS = true;
             this.ens = addressOrEns;
             this.ready = true;
+            this.walletIcon = createIcon({
+              seed: this.address,
+              size: 15,
+              scale: 1,
+            });
             this.emit("ready");
           } else {
             throw new Error("Address or ENS is not valid");
@@ -60,6 +72,7 @@ export default class Address extends EventEmitter {
     } else {
       this.address = addressOrEns;
       this.ready = true;
+      this.walletIcon = createIcon({ seed: this.address, size: 15, scale: 1 });
       this.emit("ready");
     }
   }
@@ -95,4 +108,13 @@ export default class Address extends EventEmitter {
   public getWalletOpenSeaUrl = () => `https://opensea.io/${this.address}`;
 
   public isReady = () => this.ready;
+
+  getWalletIcon = () =>
+    this.walletIcon ?? createIcon({ seed: this.address, size: 15, scale: 1 });
+
+  renderWalletIcon = (iconsize: number, iconRef?) =>
+    renderIcon(
+      { seed: this.getAddress(), size: iconsize, scale: 1 },
+      iconRef ?? this.walletIcon
+    );
 }

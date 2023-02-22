@@ -1,6 +1,6 @@
 /** @format */
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import  useNFTimelineProvider  from "hooks/NFTimelineProvider";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";

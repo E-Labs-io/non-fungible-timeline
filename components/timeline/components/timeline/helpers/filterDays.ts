@@ -1,7 +1,6 @@
 /** @format */
 
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
 import { timelineFilterStore } from "hooks/NFTimelineProvider/types/FilterTypes";
 import { checkIfValidContract } from "hooks/NFTimelineProvider/types/ProviderTypes";
 import { combinedHistory } from "../TimeLine";

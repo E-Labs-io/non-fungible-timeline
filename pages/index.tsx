@@ -1,10 +1,12 @@
 /** @format */
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Connection from "components/Connection";
 import Introduction from "components/Connection/Introduction";
-import BallotRanking from "components/Connection/components/BallotRanking";
+import BallotRanking from "components/rankings/components/BallotRanking";
+import { device } from "constants/media";
+import { LoadingStates } from "types/stateTypes";
 
 const HomeContainer = styled.div`
   position: absolute;
@@ -14,17 +16,8 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  margin: auto;
-  row-gap: 15px;
-`;
-
-const TitleContainer = styled.div`
-  width: 100%;
-  height: 100px;
-  margin-top: 100px;
   justify-content: center;
-  display: flex;
+  row-gap: 15px;
 `;
 
 const ConnectionContainer = styled.div`
@@ -32,6 +25,20 @@ const ConnectionContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin: auto;
+  display: flex;
+  padding: 20px;
+  flex-direction: row;
+  columns: 2;
+  @media ${device.tablet} {
+    flex-direction: column;
+  }
+`;
+const TitleContainer = styled.div`
+  width: 100%;
+  height: auto;
+  margin-top: auto;
+  justify-content: center;
+  display: flex;
 `;
 const PageTitle = styled.div`
   justify-content: center;
@@ -42,25 +49,36 @@ const PageTitle = styled.div`
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #000000;
   font-family: ${({ theme }) => theme.fontFamily.titleFont};
-  font-size: 5rem;
+  font-size: 4rem;
   font-size-adjust: auto;
   text-align: center;
+
+  @media ${device.tablet} {
+    font-size: 3rem;
+    font-size-adjust: auto;
+  }
 `;
 
 const Home = () => {
+  const [loadingState, setLoadingState] = useState<LoadingStates>();
+  const handelStateChange = (state) => setLoadingState(state);
   return (
     <HomeContainer>
       <TitleContainer>
         <PageTitle>Non-Fungible Timeline</PageTitle>
       </TitleContainer>
-
       <ConnectionContainer>
         <Introduction />
-        <br />
-        <Connection />
+        <Connection
+          handleStateChange={handelStateChange}
+          state={loadingState}
+        />
       </ConnectionContainer>
-      <BallotRanking maxRankings={3} />
-      <br />
+      <BallotRanking
+        maxRankings={3}
+        handelStateChange={handelStateChange}
+        loadingState={loadingState}
+      />
     </HomeContainer>
   );
 };

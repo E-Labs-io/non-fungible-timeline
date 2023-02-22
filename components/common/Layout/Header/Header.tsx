@@ -118,6 +118,7 @@ const PageTitle = styled.text`
 
 const menuItems = [
   { label: "Home", link: "/" },
+  { label: "Rankings", link: "/ranking" },
   { label: "F.A.Q.", link: "/faq" },
 ];
 

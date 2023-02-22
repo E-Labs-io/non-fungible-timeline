@@ -1,20 +1,16 @@
 /** @format */
+import { device } from "constants/media";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  justify-content: center;
-  align-items: center;
   display: flex;
   flex-direction: column;
-  height: auto;
-  width: 100%;
 `;
 
 const Container = styled.div`
-  width: 60vw;
-  min-height: 200px;
-  //background-color: #86848436;
+  width: 100%;
+
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
@@ -22,30 +18,32 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  //box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.329);
-  padding: 5px;
-  padding-bottom: 20px;
-  padding-left: 25px;
-  padding-right: 20px;
-  text-align: center;
+  justify-content: right;
 `;
-const Title = styled.h2`
-  text-align: left;
-  width: 100%;
+const Title = styled.div`
+  text-align: right;
+  width: 80%;
   font-weight: 300;
-  font-size: 2rem;
+  font-size: 4rem;
   background: #70ffde;
   background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 0.2px;
+  -webkit-text-stroke-width: 0.75px;
   -webkit-text-stroke-color: #000000;
+
+  @media ${device.tablet} {
+    text-align: center;
+    font-size: 2rem;
+  }
 `;
 const Content = styled.div`
-  text-align: center;
-  width: 100%;
+  text-align: right;
+  width: 80%;
   font-size: 1.3rem;
+  @media ${device.tablet} {
+    text-align: center;
+  }
 `;
 
 interface IntroductionProps {}
@@ -53,13 +51,14 @@ const Introduction = ({}: IntroductionProps) => {
   return (
     <Wrapper>
       <Container>
-        <Title>Welcome to NFTimeline!</Title>
+        <Title>Welcome</Title>
         <Content>
           Where the past and present of your favourite Ethereum wallets come to
           life. With our sleek, vertical timeline, scroll and vote on your
           favourite wallets. Discover the ultimate way to track and engage with
           a wallets NFTs.
         </Content>
+        <br />
       </Container>
     </Wrapper>
   );

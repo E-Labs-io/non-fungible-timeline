@@ -2,28 +2,34 @@
 
 import { Loader } from "components/common";
 import { ethers } from "ethers";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import { getAllRankingData } from "hooks/NFTimelineProvider/api/getRankingData";
-import searchUsersHistory from "hooks/NFTimelineProvider/helpers/searchAddressHistory";
-import {
+import useNFTimelineProvider, {
+  getAllRankingData,
+  searchUsersHistory,
   AllBallotRankingData,
   Ranks,
   VoteRankData,
-} from "hooks/NFTimelineProvider/types/RankingTypes";
-import { useWeb3Provider } from "hooks/web3";
-import Address from "hooks/web3/helpers/Address";
-import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
+} from "hooks/NFTimelineProvider";
+import LoadingNotice from "hooks/NFTimelineProvider/components/SearchAndConnectArea/loadingNotice";
+import { useWeb3Provider, Address } from "hooks/web3";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { LoadingStates } from "types/stateTypes";
 import getSortedBallotRankings from "./helpers/sortRankings";
 import RankCard from "./RankCard";
+import RankingTable from "./RankingTable";
 
 interface BallotRankingProps {
   maxRankings?: number;
+  handelStateChange: (state) => void;
+  loadingState?: LoadingStates;
 }
 
-function BallotRanking({ maxRankings }: BallotRankingProps) {
+function BallotRanking({
+  maxRankings,
+  handelStateChange,
+  loadingState,
+}: BallotRankingProps) {
   const { connectToGivenProvider, userProvider } = useWeb3Provider();
   const {
     getAllRankings,
@@ -33,7 +39,7 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
     setActiveAddress,
     addNewTimelineData,
   } = useNFTimelineProvider();
-  const [loadingTimeline, setLoadingTimeline] = useState(false);
+
   const [ranking, setRanking] = useState<AllBallotRankingData>();
   const [provider, setProvider] = useState<ethers.providers.Provider>();
   const [ballotIds, setBallotIds] = useState<string[]>([]);
@@ -58,21 +64,17 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
           setBallotIds(ids);
           setBallotRankings(ranks);
           if (!!!provider) {
-            console.log("connecting to provider: Ballot Ranking");
             if (userProvider) {
-              console.log("connected to user provider: Ballot Ranking");
               setProvider(userProvider);
               setReady(true);
             } else {
               connectToGivenProvider("alchemy", "mainnet").then((prov) => {
-                console.log("connected to provider: Ballot Ranking");
                 setProvider(prov);
                 setReady(true);
               });
             }
           } else
             getAllRankings().then((data: AllBallotRankingData) => {
-              console.log("got ranking data: Ballot Ranking");
               setRanking(data);
               const ids = Object.keys(data);
               const ranks = {};
@@ -83,14 +85,11 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
               setBallotIds(ids);
               setBallotRankings(ranks);
               if (!!!provider) {
-                console.log("connecting to provider: Ballot Ranking");
                 if (userProvider) {
-                  console.log("connected to user provider: Ballot Ranking");
                   setProvider(userProvider);
                   setReady(true);
                 } else {
                   connectToGivenProvider("alchemy", "mainnet").then((prov) => {
-                    console.log("connected to provider: Ballot Ranking");
                     setProvider(prov);
                     setReady(true);
                   });
@@ -113,21 +112,21 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
     }
   }, [ready, allBallotRankings, provider, userProvider]);
 
+  const stateChangeHandler = (state: LoadingStates) => {
+    handelStateChange(state);
+  };
+
   const handelAddressSelect = async (address: Address) => {
-    console.log(address);
-    setLoadingTimeline(true);
+    stateChangeHandler(1);
+
     const check = getTimelineData(address.getAddress());
     setActiveTimelineData(null);
     setActiveAddress(null);
-    console.log(check);
     if (!check) {
-      console.log("Getting Timeline data from API");
-      //addNewTimelineData(searchedAddress.getAddress(), usersTimeline);
       // Logic to search for the data though API
-
       const usersTimeline = await searchUsersHistory({
         address: address,
-        loadingStateCallback: () => {},
+        loadingStateCallback: stateChangeHandler,
         hasErrorCallback: () => {},
       });
 
@@ -137,7 +136,6 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
         addNewTimelineData(address.getAddress(), usersTimeline);
         router.push("/timeline");
       }
-      setLoadingTimeline(false);
     } else {
       // Logic to display the stored data
       setActiveTimelineData(check);
@@ -146,36 +144,24 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
     }
   };
 
+  const handelGoToRankingPage = () => router.push("/ranking");
   return (
     <Wrapper>
-      <Title>Rankings</Title>
-
+      <Title onClick={handelGoToRankingPage}>Rankings</Title>
       <Container>
-        {loadingTimeline && (
+        {loadingState > 0 && (
           <LoadingOver>
-            <Loader />
+            <LoadingNotice loadingState={loadingState} />
           </LoadingOver>
         )}
-        {ready &&
-          !loadingTimeline &&
-          ballotIds.map((id, keyA) => (
-            <Ballot key={keyA} count={ballotIds.length}>
-              <BallotId>{id}</BallotId>
-              {ready &&
-                ballotRankings[id]
-                  .slice(0, maxRankings)
-                  .map((rank, index) => (
-                    <RankCard
-                      key={rank.walletAddress}
-                      rank={{ ...rank, rank: index + 1 }}
-                      percentOfVotes={rank.shareOfVotes}
-                      totalVotes={ranking[id].totalVotes}
-                      provider={provider}
-                      handelAddressSelect={handelAddressSelect}
-                    />
-                  ))}
-            </Ballot>
-          ))}
+        {ready && loadingState === 0 && (
+          <RankingTable
+            handelAddressSelect={handelAddressSelect}
+            ballotIds={ballotIds}
+            ballotRankings={ballotRankings}
+            maxRankings={maxRankings}
+          />
+        )}
       </Container>
     </Wrapper>
   );
@@ -183,7 +169,7 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
 
 const Wrapper = styled.div`
   display: flex;
-  min-width: 80vw;
+  min-width: 70vw;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -194,38 +180,34 @@ const Title = styled.div`
   display: flex;
   justify-content: left;
   text-align: left;
-  width: 70%;
+  width: 100%;
+  :hover {
+    cursor: pointer;
+    color: #00dbde;
+  }
 `;
 
 const Container = styled.div`
   justify-content: center;
   align-items: top;
   padding: 20px;
-  width: 70%;
-  border: 1px solid #ddd;
-  background-color: #ffffff38;
+  width: 100%;
+  border: 1px none #ddd;
   border-radius: 10px;
   display: flex;
-
-  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 
-const Ballot = styled.div`
-  text-align: center;
-  padding: 3px;
-  width: ${({ count }) => 100 / count + "%"};
-`;
-
-const BallotId = styled.h2`
-  font-size: 1.5rem;
-`;
 const LoadingOver = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #f0f8ff9c;
-  position: absolute;
-  overflow: clip;
-  display: contents;
+  width: 70vw;
+  min-height: 200px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+  background-color: #a3a3a352;
+  position: relative;
 `;
 
 export default BallotRanking;

@@ -1,7 +1,7 @@
 /** @format */
 
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import { useWeb3Provider } from "hooks/web3";
 import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import React, { useState, useEffect } from "react";
@@ -16,12 +16,10 @@ import StateSkeleton from "components/common/SkeletonLoader";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
 import { votingCategoriesType, votingCategoryList } from "types/votingTypes";
 import WalletsVotingArea from "./components/voting/UsersVotingArea";
-import { Votes } from "hooks/NFTimelineProvider/types";
 import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";
 import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 import { Modal } from "components/common";
 import VotingModal from "./components/voting/VotingModal";
-import Address from "hooks/web3/helpers/Address";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -203,18 +201,15 @@ function UserInformation({
   useEffect(() => {
     //  Check ENS
     if (!addressCheck.started && activeAddress) {
-      console.log("Address Check: ", activeAddress);
       setAddressCheck({ started: true, finished: false });
       if (activeAddress.isReady()) {
         if (activeAddress.hasEns()) {
-          console.log("is ens");
           setHasENS(true);
           setEnsAddress(activeAddress.getEns());
           setWalletAddress(activeAddress.getAddress());
           setAddressCheck({ started: true, finished: true });
           setReady(true);
         } else {
-          console.log("is not ens");
           setWalletAddress(activeAddress.getAddress());
           setHasENS(false);
           setAddressCheck({ started: true, finished: true });
@@ -223,14 +218,12 @@ function UserInformation({
       } else
         activeAddress.on("ready", () => {
           if (activeAddress.hasEns()) {
-            console.log("is ens");
             setHasENS(true);
             setEnsAddress(activeAddress.getEns());
             setWalletAddress(activeAddress.getAddress());
             setAddressCheck({ started: true, finished: true });
             setReady(true);
           } else {
-            console.log("is not ens");
             setWalletAddress(activeAddress.getAddress());
             setHasENS(false);
             setAddressCheck({ started: true, finished: true });
