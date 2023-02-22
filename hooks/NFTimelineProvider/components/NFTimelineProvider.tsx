@@ -46,12 +46,12 @@ const NFTimelineProvider = ({ children }) => {
       //  Get verified contract data from API
       getVerifiedContractList().then((list) => setVerifiedContractList(list));
     }
-  });
+  }, [verifiedContractList]);
 
   useEffect(() => {
     if (!!!allBallotRankings && !initalRankingLoad) {
       setInitalRankingLoad(true);
-      updateRankingData();
+      updateRankingData().then(() => setInitalRankingLoad(false));
     }
   }, [allBallotRankings, initalRankingLoad]);
 
@@ -156,12 +156,11 @@ const NFTimelineProvider = ({ children }) => {
    */
   const updateRankingData = async () => {
     getAllRankingData().then((result: AllBallotRankingData | ApiError) => {
-      if (typeof result === typeof ApiError) {
+      if (result?.status) {
         console.log("Get ranking data error: ", result);
-        setInitalRankingLoad(false);
       } else {
+        console.log("Got ranking data: ", result);
         setAllBallotRankings(result as AllBallotRankingData);
-        setInitalRankingLoad(false);
       }
     });
   };
