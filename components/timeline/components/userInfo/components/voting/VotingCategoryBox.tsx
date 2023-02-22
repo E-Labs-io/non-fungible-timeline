@@ -10,17 +10,19 @@ import initialVotingState from "constants/votingInit";
 import { Votes } from "hooks/NFTimelineProvider/types";
 
 const CategoryContainer = styled.div`
-  min-width: 50px;
+  min-width: 75px;
   border-radius: 10px;
   border-color: #ffffff;
   border-width: 1px;
   border-style: solid;
   // box-shadow: 0px 0px 15px 2px #cfcfcfad;
   padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   cursor: pointer;
   :hover {
     color: #49c2ff;

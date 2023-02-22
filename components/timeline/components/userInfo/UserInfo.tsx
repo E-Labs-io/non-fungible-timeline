@@ -293,19 +293,10 @@ function UserInformation({
       </AddressContainer>
       {
         <VotingArea>
-          <VoteLabel
-            onClick={() => setVotingOpen(isVotingOpen ? false : true)}
-            isOpen={isVotingOpen}
-          >
-            <FontAwesomeIcon icon={isVotingOpen ? faAngleDown : faAngleRight} />
-            VOTE
-          </VoteLabel>
-          {isVotingOpen && (
-            <WalletsVotingArea
-              handleOpenModalVoting={handleOpenModalFromVote}
-              walletVotingStats={walletsVotingStats && walletsVotingStats}
-            />
-          )}
+          <WalletsVotingArea
+            handleOpenModalVoting={handleOpenModalFromVote}
+            walletVotingStats={walletsVotingStats && walletsVotingStats}
+          />
         </VotingArea>
       }
       <WalletInfo>
