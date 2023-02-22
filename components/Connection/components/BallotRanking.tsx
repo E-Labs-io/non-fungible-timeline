@@ -149,7 +149,6 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
   return (
     <Wrapper>
       <Title>Rankings</Title>
-
       <Container>
         {loadingTimeline && (
           <LoadingOver>
@@ -183,7 +182,7 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
 
 const Wrapper = styled.div`
   display: flex;
-  min-width: 80vw;
+  min-width: 70vw;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -194,19 +193,20 @@ const Title = styled.div`
   display: flex;
   justify-content: left;
   text-align: left;
-  width: 70%;
+  width: 100%;
 `;
+
+
 
 const Container = styled.div`
   justify-content: center;
   align-items: top;
   padding: 20px;
-  width: 70%;
+  width: 100%;
   border: 1px solid #ddd;
   background-color: #ffffff38;
   border-radius: 10px;
   display: flex;
-
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
 `;
 
@@ -218,6 +218,10 @@ const Ballot = styled.div`
 
 const BallotId = styled.h2`
   font-size: 1.5rem;
+  :hover {
+    color: #00dbde;
+    cursor: pointer;
+  }
 `;
 const LoadingOver = styled.div`
   width: 100%;
