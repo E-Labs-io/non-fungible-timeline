@@ -13,10 +13,12 @@ import useNFTimelineProvider, {
 import BallotRanking from "components/rankings/components/BallotRanking";
 
 const Wrapper = styled.div`
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   display: flex;
   flex-direction: column;
+  column-gap: 50px;
+  height: 100%;
 `;
 
 interface RankingProps {}
@@ -34,7 +36,6 @@ export default function Ranking(props: RankingProps) {
   return (
     <Layout>
       <Wrapper>
-        {" "}
         <BallotRanking />
       </Wrapper>
     </Layout>
