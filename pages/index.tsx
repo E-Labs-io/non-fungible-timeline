@@ -20,26 +20,25 @@ const HomeContainer = styled.div`
   row-gap: 15px;
 `;
 
-const TitleContainer = styled.div`
-  width: 100%;
-  height: 100px;
-  margin-top: auto;
-  justify-content: center;
-  display: flex;
-`;
-
 const ConnectionContainer = styled.div`
   height: auto;
   align-items: center;
   justify-content: center;
   margin: auto;
   display: flex;
-  padding: 10px;
+  padding: 20px;
   flex-direction: row;
   columns: 2;
   @media ${device.tablet} {
     flex-direction: column;
   }
+`;
+const TitleContainer = styled.div`
+  width: 100%;
+  height: auto;
+  margin-top: auto;
+  justify-content: center;
+  display: flex;
 `;
 const PageTitle = styled.div`
   justify-content: center;
@@ -53,6 +52,11 @@ const PageTitle = styled.div`
   font-size: 4rem;
   font-size-adjust: auto;
   text-align: center;
+
+  @media ${device.tablet} {
+    font-size: 3rem;
+    font-size-adjust: auto;
+  }
 `;
 
 const Home = () => {

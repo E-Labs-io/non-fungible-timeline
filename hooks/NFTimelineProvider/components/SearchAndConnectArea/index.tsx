@@ -9,13 +9,11 @@ import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import LoadingNotice from "./loadingNotice";
 import FilterOptions from "components/timeline/components/userInfo/components/FilterOptions";
 
-const PreLoadLayout = styled.div`
+const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
-  display: flex;
-  column-gap: 10px;
 `;
 
 const ConnectionArea = styled.div`
@@ -88,7 +86,7 @@ function SearchAndConnectArea({
     searchUsersHistory();
   };
   return (
-    <PreLoadLayout>
+    <Wrapper>
       <ConnectionArea>
         {loadingState === 0 && (
           <>
@@ -129,7 +127,7 @@ function SearchAndConnectArea({
         )}
         <LoadingNotice loadingState={loadingState} />
       </ConnectionArea>
-    </PreLoadLayout>
+    </Wrapper>
   );
 }
 
