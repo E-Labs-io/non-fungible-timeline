@@ -2,7 +2,7 @@
 
 import { Button } from "components/common";
 import ToggleSwitch from "components/common/ToggleSwitch";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import React, { useState, useEffect, useReducer } from "react";
 import styled from "styled-components";
 import { DateRangeInput } from "@datepicker-react/styled";

@@ -8,7 +8,7 @@ import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import  useNFTimelineProvider  from "hooks/NFTimelineProvider";
 import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
 
 import NFTMedia from "hooks/web3/components/NFTMedia";

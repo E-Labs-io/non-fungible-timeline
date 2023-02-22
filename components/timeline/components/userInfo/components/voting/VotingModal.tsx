@@ -1,7 +1,7 @@
 /** @format */
 
 import { Button, Loader } from "components/common";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import postVote from "hooks/NFTimelineProvider/api/postVote";
 import { useWeb3Provider } from "hooks/web3";
 import WalletEtherscanLink from "hooks/web3/components/WalletEtherlink";
