@@ -1,0 +1,90 @@
+/** @format */
+
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { VoteRankData } from "hooks/NFTimelineProvider";
+import { Address } from "hooks/web3";
+import RankCard from "./RankCard";
+
+interface RankingTableProps {
+  maxRankings?: number;
+  ballotIds: string[];
+  ballotRankings: {
+    [ballotId: string]: VoteRankData[];
+  };
+  handelAddressSelect: (address: Address) => void;
+}
+
+function RankingTable({
+  maxRankings,
+  handelAddressSelect,
+  ballotIds,
+  ballotRankings,
+}: RankingTableProps) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (!ready && ballotIds.length > 0 && !!!ballotRankings) {
+      setReady(true);
+    }
+  }, []);
+
+  return (
+    <Wrapper>
+      <Container>
+        {ready &&
+          ballotIds.map((id, keyA) => (
+            <Ballot key={keyA} count={ballotIds.length}>
+              <BallotId>{id}</BallotId>
+              {ready &&
+                ballotRankings[id]
+                  .slice(0, maxRankings)
+                  .map((rank, index) => (
+                    <RankCard
+                      key={rank.walletAddress}
+                      rank={{ ...rank, rank: index + 1 }}
+                      percentOfVotes={rank.shareOfVotes}
+                      handelAddressSelect={handelAddressSelect}
+                    />
+                  ))}
+            </Ballot>
+          ))}
+      </Container>
+    </Wrapper>
+  );
+}
+
+const Wrapper = styled.div`
+  display: flex;
+  min-width: 70vw;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Container = styled.div`
+  justify-content: center;
+  align-items: top;
+  padding: 20px;
+  width: 100%;
+  border: 1px solid #ddd;
+  background-color: #ffffff38;
+  border-radius: 10px;
+  display: flex;
+  box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+`;
+
+const Ballot = styled.div`
+  text-align: center;
+  padding: 3px;
+  width: ${({ count }) => 100 / count + "%"};
+`;
+
+const BallotId = styled.h2`
+  font-size: 1.5rem;
+  :hover {
+    color: #00dbde;
+    cursor: pointer;
+  }
+`;
+
+export default RankingTable;

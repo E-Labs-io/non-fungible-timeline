@@ -12,7 +12,7 @@ import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { dailyHistory } from "./TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import NFTMedia from "hooks/web3/components/NFTMedia";
 
 const Wrapper = styled.div`

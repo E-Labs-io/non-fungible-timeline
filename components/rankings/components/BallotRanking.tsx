@@ -2,17 +2,14 @@
 
 import { Loader } from "components/common";
 import { ethers } from "ethers";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import { getAllRankingData } from "hooks/NFTimelineProvider/api/getRankingData";
-import searchUsersHistory from "hooks/NFTimelineProvider/helpers/searchAddressHistory";
-import {
+import useNFTimelineProvider, {
+  getAllRankingData,
+  searchUsersHistory,
   AllBallotRankingData,
   Ranks,
   VoteRankData,
-} from "hooks/NFTimelineProvider/types/RankingTypes";
-import { useWeb3Provider } from "hooks/web3";
-import Address from "hooks/web3/helpers/Address";
-import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
+} from "hooks/NFTimelineProvider";
+import { useWeb3Provider, Address } from "hooks/web3";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -146,9 +143,10 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
     }
   };
 
+  const handelGoToRankingPage = () => router.push("/ranking");
   return (
     <Wrapper>
-      <Title>Rankings</Title>
+      <Title onClick={handelGoToRankingPage}>Rankings</Title>
       <Container>
         {loadingTimeline && (
           <LoadingOver>
@@ -168,8 +166,6 @@ function BallotRanking({ maxRankings }: BallotRankingProps) {
                       key={rank.walletAddress}
                       rank={{ ...rank, rank: index + 1 }}
                       percentOfVotes={rank.shareOfVotes}
-                      totalVotes={ranking[id].totalVotes}
-                      provider={provider}
                       handelAddressSelect={handelAddressSelect}
                     />
                   ))}
@@ -194,9 +190,11 @@ const Title = styled.div`
   justify-content: left;
   text-align: left;
   width: 100%;
+  :hover {
+    cursor: pointer;
+    color: #00dbde;
+  }
 `;
-
-
 
 const Container = styled.div`
   justify-content: center;

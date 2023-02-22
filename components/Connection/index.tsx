@@ -1,17 +1,16 @@
 /** @format */
-import { useWeb3Provider } from "../../hooks/web3";
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import SearchAndConnectArea from "hooks/NFTimelineProvider/components/SearchAndConnectArea";
 import { isAddress } from "ethers/lib/utils";
-import searchUsersHistory from "hooks/NFTimelineProvider/helpers/searchAddressHistory";
-import { useNFTimelineProvider } from "hooks/NFTimelineProvider";
-import { useRouter } from "next/router";
-import {
+import { useWeb3Provider, Address } from "../../hooks/web3";
+import useNFTimelineProvider, {
+  searchUsersHistory,
+  SearchAndConnectArea,
   addressSplitHistory,
   getTImelineDataReturn,
-} from "hooks/NFTimelineProvider/types/ProviderTypes";
-import Address from "hooks/web3/helpers/Address";
+} from "hooks/NFTimelineProvider";
+import { useRouter } from "next/router";
 
 const ConnectionContainer = styled.div`
   height: 50%;

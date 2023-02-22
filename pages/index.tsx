@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import Connection from "components/Connection";
 import Introduction from "components/Connection/Introduction";
-import BallotRanking from "components/Connection/components/BallotRanking";
+import BallotRanking from "components/rankings/components/BallotRanking";
 import { device } from "constants/media";
 
 const HomeContainer = styled.div`

@@ -1,19 +1,13 @@
 /** @format */
 
-import { getAllRankingData } from "hooks/NFTimelineProvider/api/getRankingData";
-import {
-  AllBallotRankingData,
-  Ranks,
-  VoteRankData,
-} from "hooks/NFTimelineProvider/types/RankingTypes";
-import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
+import { VoteRankData } from "hooks/NFTimelineProvider/types/RankingTypes";
 import Address from "hooks/web3/helpers/Address";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useWeb3Provider } from "hooks/web3";
+
 import StateSkeleton from "components/common/SkeletonLoader";
 import { ethers } from "ethers";
-import { renderIcon } from "hooks/web3/helpers/generateAddressIcon";
+import { useWeb3Provider } from "hooks/web3";
 
 const Card = styled.div`
   padding: 5px;
@@ -23,28 +17,10 @@ const Card = styled.div`
   border-radius: 5px;
   color: #ffffff;
   background-color: #a3a3a352;
-  justify-content: space-between;
-  align-items: center;
   display: flex;
   column-gap: 5px;
-`;
-
-const TopLine = styled.div`
-  flex-direction: row;
-  display: flex;
-  column-gap: 5px;
-  padding: 2px;
-  width: 40%;
-`;
-
-const Rank = styled.div`
-  font-size: 1.2rem;
-  font-weight: bold;
-`;
-
-const WalletAddress = styled.div`
-  font-size: 1.1rem;
   :hover {
+    border-color: #00dbde;
     color: #00dbde;
     cursor: pointer;
   }
@@ -56,36 +32,65 @@ const AddressIcon = styled.canvas`
   border-style: solid;
 `;
 
+const Information = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const TopLine = styled.div`
+  flex-direction: row;
+  display: flex;
+  column-gap: 5px;
+  padding: 2px;
+  align-items: center;
+  justify-content: left;
+`;
+
+const WalletAddress = styled.div`
+  font-size: 1.1rem;
+  text-align: left;
+  align-items: center;
+  justify-content: left;
+`;
+
 const Votes = styled.div`
+  width: 50%;
   font-size: 0.8rem;
   align-items: center;
   display: flex;
   flex-direction: row;
-  column-gap: 5px;
+  column-gap: 25px;
 `;
+const Rank = styled.div`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+const VoteText = styled.div``;
 
 type RankCardProps = {
   rank: VoteRankData;
   percentOfVotes: number;
-  totalVotes: number;
-  provider: ethers.providers.Provider;
+
   handelAddressSelect: (address: Address) => void;
 };
 
 export default function RankCard({
   rank,
   percentOfVotes,
-  totalVotes,
-  provider,
+
   handelAddressSelect,
 }: RankCardProps) {
+  const { localProvider } = useWeb3Provider();
   const [walletAddress, setWalletAddress] = useState<Address>();
   const [displayAddress, setDisplayAddress] = useState<string>();
   const addressIconRef = useRef(null);
 
   useEffect(() => {
     if (!walletAddress) {
-      setWalletAddress(new Address(rank.walletAddress, provider));
+      setWalletAddress(new Address(rank.walletAddress, localProvider));
     }
 
     if (!displayAddress && walletAddress) {
@@ -107,24 +112,28 @@ export default function RankCard({
     }
   });
   return (
-    <Card>
+    <Card onClick={() => handelAddressSelect(walletAddress)}>
       <AddressIcon ref={addressIconRef} width="50px" height="50px" />
-      <TopLine>
-        <WalletAddress onClick={() => handelAddressSelect(walletAddress)}>
-          {displayAddress ?? (
-            <StateSkeleton
-              height="15px"
-              width="100px"
-              colorA={"#00dbde"}
-              colorB={"#fc00ff"}
-            />
-          )}
-        </WalletAddress>
-      </TopLine>
-      <Votes>
-        <Rank>{rank.votes}</Rank>
-        vote{rank.votes > 1 && "s"} ({percentOfVotes.toFixed(2)}%)
-      </Votes>
+      <Information>
+        <TopLine>
+          <WalletAddress>
+            {displayAddress ?? (
+              <StateSkeleton
+                height="15px"
+                width="100px"
+                colorA={"#00dbde"}
+                colorB={"#fc00ff"}
+              />
+            )}
+          </WalletAddress>
+        </TopLine>
+        <Votes>
+          <Rank>{rank.votes}</Rank>
+          <VoteText>
+            vote{rank.votes > 1 && "s"} ({percentOfVotes.toFixed(2)}%)
+          </VoteText>
+        </Votes>
+      </Information>
     </Card>
   );
 }
