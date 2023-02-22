@@ -21,7 +21,6 @@ const searchUsersHistory = async ({
   var searchAddress = address.getAddress();
 
   if (searchAddress === null) {
-    console.log("ENS isn't real: ");
     hasErrorCallback(true);
     loadingStateCallback(0);
     return false;
@@ -35,14 +34,7 @@ const searchUsersHistory = async ({
 
   const outBound = await getUsersHistory({ from: searchAddress });
   loadingStateCallback(4);
-  console.log(
-    "No token check - IN: ",
-    inBoundTransfers.length,
-    " OUT: ",
-    outBound.length
-  );
   if (outBound.length === 0 && inBoundTransfers.length === 0) {
-    console.log("No tokens");
     return false;
   }
   const sortedDataIn = sortUsersHistory(inBoundTransfers);

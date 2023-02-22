@@ -21,7 +21,6 @@ import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 import { Modal } from "components/common";
 import VotingModal from "./components/voting/VotingModal";
 
-
 const Container = styled.div`
   background-color: #86848447;
   margin: auto;
@@ -202,18 +201,15 @@ function UserInformation({
   useEffect(() => {
     //  Check ENS
     if (!addressCheck.started && activeAddress) {
-      console.log("Address Check: ", activeAddress);
       setAddressCheck({ started: true, finished: false });
       if (activeAddress.isReady()) {
         if (activeAddress.hasEns()) {
-          console.log("is ens");
           setHasENS(true);
           setEnsAddress(activeAddress.getEns());
           setWalletAddress(activeAddress.getAddress());
           setAddressCheck({ started: true, finished: true });
           setReady(true);
         } else {
-          console.log("is not ens");
           setWalletAddress(activeAddress.getAddress());
           setHasENS(false);
           setAddressCheck({ started: true, finished: true });
@@ -222,14 +218,12 @@ function UserInformation({
       } else
         activeAddress.on("ready", () => {
           if (activeAddress.hasEns()) {
-            console.log("is ens");
             setHasENS(true);
             setEnsAddress(activeAddress.getEns());
             setWalletAddress(activeAddress.getAddress());
             setAddressCheck({ started: true, finished: true });
             setReady(true);
           } else {
-            console.log("is not ens");
             setWalletAddress(activeAddress.getAddress());
             setHasENS(false);
             setAddressCheck({ started: true, finished: true });

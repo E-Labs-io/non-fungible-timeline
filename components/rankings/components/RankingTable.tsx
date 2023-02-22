@@ -82,10 +82,10 @@ const Ballot = styled.div`
 
 const BallotId = styled.h2`
   font-size: 1.5rem;
-  :hover {
+  /*  :hover {
     color: #00dbde;
     cursor: pointer;
-  }
+  } */
 `;
 
 export default RankingTable;

@@ -154,9 +154,7 @@ const NFTimelineProvider = ({ children }) => {
    */
   const updateRankingData = async () => {
     getAllRankingData().then((result: AllBallotRankingData | ApiError) => {
-      console.log(result);
       if (typeof result === typeof ApiError) {
-        console.log("Error getting Ranking Data: ", result.message);
         setInitalRankingLoad(false);
       } else {
         setAllBallotRankings(result as AllBallotRankingData);

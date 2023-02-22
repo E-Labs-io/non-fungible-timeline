@@ -1,15 +1,9 @@
 /** @format */
 
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Layout } from "components/common";
-import { Address } from "hooks/web3";
-import useNFTimelineProvider, {
-  getAllRankingData,
-  AllBallotRankingData,
-  Ranks,
-  VoteRankData,
-} from "hooks/NFTimelineProvider";
+
 import BallotRanking from "components/rankings/components/BallotRanking";
 import { LoadingStates } from "types/stateTypes";
 

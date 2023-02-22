@@ -93,7 +93,6 @@ export default function RankCard({
     }
 
     if (!displayAddress && walletAddress) {
-      console.log("Waiting for wallet to be ready");
       walletAddress.on("ready", () => {
         setDisplayAddress(
           walletAddress.hasEns()

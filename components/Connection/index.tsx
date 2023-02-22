@@ -75,8 +75,7 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
       const isLocal: addressSplitHistory | false = getTimelineData(
         searchedAddress.getAddress()
       );
-      console.log(isLocal);
-      if (!isLocal) {
+     if (!isLocal) {
         const usersTimeline = await searchUsersHistory({
           address: searchedAddress,
           loadingStateCallback: stateChangeHandler,

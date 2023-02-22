@@ -49,7 +49,6 @@ function BallotRanking({
 
   const router = useRouter();
 
-
   const [ready, setReady] = useState(false);
   useEffect(() => {
     if (!ready) {
@@ -65,21 +64,17 @@ function BallotRanking({
           setBallotIds(ids);
           setBallotRankings(ranks);
           if (!!!provider) {
-            console.log("connecting to provider: Ballot Ranking");
             if (userProvider) {
-              console.log("connected to user provider: Ballot Ranking");
               setProvider(userProvider);
               setReady(true);
             } else {
               connectToGivenProvider("alchemy", "mainnet").then((prov) => {
-                console.log("connected to provider: Ballot Ranking");
                 setProvider(prov);
                 setReady(true);
               });
             }
           } else
             getAllRankings().then((data: AllBallotRankingData) => {
-              console.log("got ranking data: Ballot Ranking");
               setRanking(data);
               const ids = Object.keys(data);
               const ranks = {};
@@ -90,14 +85,11 @@ function BallotRanking({
               setBallotIds(ids);
               setBallotRankings(ranks);
               if (!!!provider) {
-                console.log("connecting to provider: Ballot Ranking");
                 if (userProvider) {
-                  console.log("connected to user provider: Ballot Ranking");
                   setProvider(userProvider);
                   setReady(true);
                 } else {
                   connectToGivenProvider("alchemy", "mainnet").then((prov) => {
-                    console.log("connected to provider: Ballot Ranking");
                     setProvider(prov);
                     setReady(true);
                   });
@@ -130,10 +122,7 @@ function BallotRanking({
     const check = getTimelineData(address.getAddress());
     setActiveTimelineData(null);
     setActiveAddress(null);
-    console.log(check);
     if (!check) {
-      console.log("Getting Timeline data from API");
-      //addNewTimelineData(searchedAddress.getAddress(), usersTimeline);
       // Logic to search for the data though API
       const usersTimeline = await searchUsersHistory({
         address: address,
