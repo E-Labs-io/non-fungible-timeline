@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {  useState } from "react";
 import styled from "styled-components";
 import { Layout } from "components/common";
 import { Address } from "hooks/web3";
@@ -27,11 +27,11 @@ interface RankingProps {}
 export default function Ranking(props: RankingProps) {
   const [loadingState, setLoadingState] = useState<LoadingStates>(0);
   const handelStateChange = (state) => setLoadingState(state);
-
   return (
     <Layout>
       <Wrapper>
         <BallotRanking
+          maxRankings={15}
           loadingState={loadingState}
           handelStateChange={handelStateChange}
         />

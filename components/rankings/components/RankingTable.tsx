@@ -77,6 +77,7 @@ const Ballot = styled.div`
   text-align: center;
   padding: 3px;
   width: ${({ count }) => 100 / count + "%"};
+  overflow: scroll;
 `;
 
 const BallotId = styled.h2`
