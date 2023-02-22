@@ -80,6 +80,8 @@ function SearchAndConnectArea({
   badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     loadingState = 1;

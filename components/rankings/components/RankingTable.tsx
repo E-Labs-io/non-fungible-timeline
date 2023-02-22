@@ -26,16 +26,16 @@ function RankingTable({
     if (!ready && ballotIds.length > 0 && !!!ballotRankings) {
       setReady(true);
     }
-  }, []);
+  });
 
   return (
     <Wrapper>
       <Container>
-        {ready &&
+        {ballotIds &&
           ballotIds.map((id, keyA) => (
             <Ballot key={keyA} count={ballotIds.length}>
               <BallotId>{id}</BallotId>
-              {ready &&
+              {ballotRankings &&
                 ballotRankings[id]
                   .slice(0, maxRankings)
                   .map((rank, index) => (

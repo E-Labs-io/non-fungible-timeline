@@ -11,6 +11,7 @@ import useNFTimelineProvider, {
   getTImelineDataReturn,
 } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
+import { LoadingStates } from "types/stateTypes";
 
 const ConnectionContainer = styled.div`
   height: 50%;
@@ -18,7 +19,12 @@ const ConnectionContainer = styled.div`
   margin: auto;
 `;
 
-function Connection({}) {
+interface ConnectionProps {
+  state: LoadingStates;
+  handleStateChange: (state: LoadingStates) => void;
+}
+
+function Connection({ state, handleStateChange }: ConnectionProps) {
   const {
     getTimelineData,
     setActiveTimelineData,
@@ -32,11 +38,9 @@ function Connection({}) {
   const [ensError, setEnsError] = useState<boolean>(false);
   const [badAddressError, setBadAddressError] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
-  const [loadingState, setLoadingState] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6>(
-    0
-  );
 
   const router = useRouter();
+
 
   useEffect(() => {
     //  Check if connected to user provider
@@ -50,9 +54,13 @@ function Connection({}) {
     }
     //  If no connection or given, reset
     if (!connected && !usersAddress) {
-      setLoadingState(0);
+      stateChangeHandler(0);
     }
-  });
+  }, [connected, userProvider, walletAddress]);
+
+  const stateChangeHandler = (state: LoadingStates) => {
+    handleStateChange(state);
+  };
 
   const handleInputChange = (input) => {
     setSearchInoput(input.target.value);
@@ -61,7 +69,7 @@ function Connection({}) {
   };
 
   const handelSearchUsersHistory = async () => {
-    setLoadingState(1);
+    stateChangeHandler(1);
     const searchedAddress = new Address(searchInoput, localProvider);
     searchedAddress.on("ready", async () => {
       const isLocal: addressSplitHistory | false = getTimelineData(
@@ -71,7 +79,7 @@ function Connection({}) {
       if (!isLocal) {
         const usersTimeline = await searchUsersHistory({
           address: searchedAddress,
-          loadingStateCallback: setLoadingState,
+          loadingStateCallback: stateChangeHandler,
           hasErrorCallback: setEnsError,
         });
 
@@ -82,10 +90,10 @@ function Connection({}) {
           router.push("/timeline");
         } else {
           setBadAddressError(true);
-          setLoadingState(0);
+          stateChangeHandler(0);
         }
       } else {
-        setLoadingState(5);
+        stateChangeHandler(5);
         setActiveTimelineData(isLocal);
         setActiveAddress(searchedAddress);
         router.push("/timeline");
@@ -116,7 +124,7 @@ function Connection({}) {
         searchUsersHistory={handelSearchUsersHistory}
         handleIsDisabled={handleIsDisabled}
         handleInputChange={handleInputChange}
-        loadingState={loadingState}
+        loadingState={state}
         searchAddress={searchInoput}
         ensError={ensError}
       />

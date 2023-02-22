@@ -1,11 +1,12 @@
 /** @format */
 
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Connection from "components/Connection";
 import Introduction from "components/Connection/Introduction";
 import BallotRanking from "components/rankings/components/BallotRanking";
 import { device } from "constants/media";
+import { LoadingStates } from "types/stateTypes";
 
 const HomeContainer = styled.div`
   position: absolute;
@@ -60,6 +61,8 @@ const PageTitle = styled.div`
 `;
 
 const Home = () => {
+  const [loadingState, setLoadingState] = useState<LoadingStates>();
+  const handelStateChange = (state) => setLoadingState(state);
   return (
     <HomeContainer>
       <TitleContainer>
@@ -67,10 +70,16 @@ const Home = () => {
       </TitleContainer>
       <ConnectionContainer>
         <Introduction />
-        <Connection />
+        <Connection
+          handleStateChange={handelStateChange}
+          state={loadingState}
+        />
       </ConnectionContainer>
-      <BallotRanking maxRankings={3} />
-      <br />
+      <BallotRanking
+        maxRankings={3}
+        handelStateChange={handelStateChange}
+        loadingState={loadingState}
+      />
     </HomeContainer>
   );
 };

@@ -80,7 +80,6 @@ type RankCardProps = {
 export default function RankCard({
   rank,
   percentOfVotes,
-
   handelAddressSelect,
 }: RankCardProps) {
   const { localProvider } = useWeb3Provider();

@@ -11,6 +11,7 @@ import useNFTimelineProvider, {
   VoteRankData,
 } from "hooks/NFTimelineProvider";
 import BallotRanking from "components/rankings/components/BallotRanking";
+import { LoadingStates } from "types/stateTypes";
 
 const Wrapper = styled.div`
   justify-content: space-between;
@@ -24,19 +25,16 @@ const Wrapper = styled.div`
 interface RankingProps {}
 
 export default function Ranking(props: RankingProps) {
-  const {
-    getAllRankings,
-    allBallotRankings,
-    getTimelineData,
-    setActiveTimelineData,
-    setActiveAddress,
-    addNewTimelineData,
-  } = useNFTimelineProvider();
+  const [loadingState, setLoadingState] = useState<LoadingStates>(0);
+  const handelStateChange = (state) => setLoadingState(state);
 
   return (
     <Layout>
       <Wrapper>
-        <BallotRanking />
+        <BallotRanking
+          loadingState={loadingState}
+          handelStateChange={handelStateChange}
+        />
       </Wrapper>
     </Layout>
   );
