@@ -8,21 +8,25 @@ import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import  useNFTimelineProvider  from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
 
 import NFTMedia from "hooks/web3/components/NFTMedia";
 import SingleNFTViewIcons from "./Icons";
 import SingleDayViewBadges from "./Badges";
 import getMediaFormat from "helpers/media/getMediaFormat";
+import { device } from "constants/media";
 
 const Container = styled.div`
-  width: 100%;
+  width: 60%;
   height: 100%;
 
   display: block;
   background-color: white;
   padding: 10px;
+  @media ${device.laptop} {
+    width: 100%;
+  }
 `;
 
 const CloseView = styled.div`
@@ -36,6 +40,12 @@ const ViewArea = styled.div`
   display: flex;
   flex-direction: row;
   column-gap: 10px;
+  @media ${device.laptop} {
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const InformationContainer = styled.div`
@@ -54,10 +64,11 @@ const InformationTextMedium = styled.div`
 `;
 const InformationDescription = styled.div`
   padding: 5px;
-  width: 500px;
+  width: 100%;
   min-height: 50px;
   max-height: 125px;
   overflow-y: scroll;
+  overflow-x: scroll;
   overflow-wrap: break-word;
   border-color: black;
   border-style: none;

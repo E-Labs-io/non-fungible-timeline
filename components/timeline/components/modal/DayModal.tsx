@@ -1,6 +1,6 @@
 /** @format */
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import  useNFTimelineProvider  from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   padding: 10px;
   color: black;
   transition: all 0.3s linear;
+  overflow-wrap: break-word;
 `;
 
 const TxArea = styled.div`
