@@ -1,4 +1,5 @@
 /** @format */
+import { device } from "constants/media";
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
@@ -15,6 +16,9 @@ const Wrapper = styled.div`
   color: black;
   transition: all 0.3s linear;
   overflow-wrap: break-word;
+  @media ${device.laptop} {
+    width: 90vw;
+  }
 `;
 
 const TxArea = styled.div`

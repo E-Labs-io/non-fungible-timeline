@@ -17,6 +17,7 @@ const IconContainer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
+  column-gap: 5px;
 `;
 
 const IconFrame = styled.div`
@@ -31,7 +32,7 @@ const IconFrame = styled.div`
   border-color: black;
   border-width: 1px;
   border-style: solid;
-  box-shadow: 0px 0px 42px 2px rgba(112, 110, 110, 0.396);
+  box-shadow: 0px 0px 10px 2px rgba(112, 110, 110, 0.22);
   :hover {
     cursor: pointer;
     scale: 1.1;
