@@ -56,6 +56,7 @@ function RankingTable({
 
 const Wrapper = styled.div`
   min-width: 70%;
+  height: 100%;
   justify-content: center;
   align-items: center;
 `;
@@ -63,6 +64,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   justify-content: center;
   align-items: top;
+  overflow: hidden;
+  height: 100%;
   padding: 20px;
   width: 100%;
   border: 1px solid #ddd;
@@ -84,13 +87,9 @@ const Container = styled.div`
 const Ballot = styled.div`
   text-align: center;
   padding: 3px;
-  width: ${({ count }) => 100 / count + "%"};
   width: 100%;
-  /*   @media ${device.mobileL} {
-    width: 100%;
-  } */
-
-  overflow: scroll;
+  overflow: hidden;
+  scroll-behavior: none;
 `;
 
 const BallotId = styled.h2`

@@ -32,7 +32,12 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
     z-index 0.3s ease-in-out;
   column-gap: 200px;
   @media ${device.laptop} {
-    height: 100vh;
+    transform: ${({ open }) => (open ? "translateY(50px)" : "translateY(0px)")};
+    height: ${({ open }) => (open ? "100vh" : "0px")};
+    position: absolute;
+    top: 55;
+    left: 0;
+    overflow: hidden;
     flex-direction: column;
   }
   a {
