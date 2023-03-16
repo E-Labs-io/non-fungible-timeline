@@ -5,6 +5,7 @@ import Link from "next/link";
 import styled from "styled-components";
 
 import { ExtraStyleProps } from "types/genericTypes";
+import { device } from "constants/media";
 
 /**
  *   transform: ${({ open }) => (open ? "translateY(55px)" : "translateY(0)")};
@@ -30,8 +31,9 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
   transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out,
     z-index 0.3s ease-in-out;
   column-gap: 200px;
-  @media (max-width: ${({ theme }) => theme.mobile}) {
-    width: 100%;
+  @media ${device.laptop} {
+    height: 100vh;
+    flex-direction: column;
   }
   a {
     font-size: 2rem;
@@ -42,7 +44,7 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
     color: ${({ theme }) => theme.primaryDark};
     text-decoration: none;
     transition: color 0.3s linear;
-    @media (max-width: ${({ theme }) => theme.mobile}) {
+    @media ${device.mobileL} {
       font-size: 1.5rem;
       text-align: center;
     }

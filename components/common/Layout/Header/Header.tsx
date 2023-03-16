@@ -114,6 +114,13 @@ const PageTitle = styled.text`
   font-size: 40px;
   text-align: center;
   font-family: "Kanit", sans-serif;
+
+  @media ${device.tablet} {
+    font-size: 30px;
+  }
+  @media ${device.mobileL} {
+    font-size: 20px;
+  }
 `;
 
 const menuItems = [

@@ -8,6 +8,7 @@ import styled from "styled-components";
 import StateSkeleton from "components/common/SkeletonLoader";
 import { ethers } from "ethers";
 import { useWeb3Provider } from "hooks/web3";
+import { device } from "constants/media";
 
 const Card = styled.div`
   padding: 5px;

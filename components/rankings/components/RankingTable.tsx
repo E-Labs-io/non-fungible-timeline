@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { VoteRankData } from "hooks/NFTimelineProvider";
 import { Address } from "hooks/web3";
 import RankCard from "./RankCard";
+import { device } from "constants/media";
 
 interface RankingTableProps {
   maxRankings?: number;
@@ -54,11 +55,10 @@ function RankingTable({
 }
 
 const Wrapper = styled.div`
-  display: flex;
-  min-width: 70vw;
-  flex-direction: column;
+  min-width: 70%;
   justify-content: center;
   align-items: center;
+  display: flex;
 `;
 
 const Container = styled.div`
@@ -70,13 +70,26 @@ const Container = styled.div`
   background-color: #ffffff38;
   border-radius: 10px;
   display: flex;
+  flex-direction: row;
+  columns: 3;
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
+  @media ${device.tablet} {
+    columns: 2;
+  }
+  @media ${device.mobileL} {
+    columns: 1;
+  }
 `;
 
 const Ballot = styled.div`
   text-align: center;
   padding: 3px;
   width: ${({ count }) => 100 / count + "%"};
+  width: 100%;
+  /*   @media ${device.mobileL} {
+    width: 100%;
+  } */
+
   overflow: scroll;
 `;
 
