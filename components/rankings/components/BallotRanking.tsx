@@ -170,6 +170,7 @@ function BallotRanking({
 const Wrapper = styled.div`
   display: flex;
   min-width: 70vw;
+  height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;

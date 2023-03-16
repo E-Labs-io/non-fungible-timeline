@@ -58,7 +58,6 @@ const Wrapper = styled.div`
   min-width: 70%;
   justify-content: center;
   align-items: center;
-  display: flex;
 `;
 
 const Container = styled.div`
@@ -69,15 +68,16 @@ const Container = styled.div`
   border: 1px solid #ddd;
   background-color: #ffffff38;
   border-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  columns: 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: auto;
+  grid-column-gap: 10px;
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
   @media ${device.tablet} {
-    columns: 2;
+    grid-template-columns: 1fr 1fr;
   }
   @media ${device.mobileL} {
-    columns: 1;
+    grid-template-columns: 1fr;
   }
 `;
 

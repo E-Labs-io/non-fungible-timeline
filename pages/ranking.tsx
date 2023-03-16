@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   column-gap: 50px;
   height: 100%;
+  width: 100%;
 `;
 
 interface RankingProps {}
