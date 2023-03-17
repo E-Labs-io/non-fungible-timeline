@@ -1,5 +1,6 @@
 /** @format */
 
+import { device } from "constants/media";
 import React from "react";
 import styled from "styled-components";
 
@@ -8,11 +9,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+
+  @media ${device.laptop} {
+    margin-top: 0;
+  }
+  @media ${device.tablet} {
+    margin-top: 15%;
+  }
+  @media ${device.mobileL} {
+    margin-top: 25%;
+  }
 `;
 
 const AboutContainer = styled.div`
   width: 85%;
-  height: auto;
+
   background-color: ${({ theme }) => theme.coloredTheme.transparentBG};
   border-radius: 20px;
   border-width: 1px;
@@ -26,7 +38,6 @@ const AboutContainer = styled.div`
   padding: 5px;
   padding-left: 25px;
   padding-bottom: 10px;
-  margin: auto;
   text-align: center;
   overflow: scroll;
 `;

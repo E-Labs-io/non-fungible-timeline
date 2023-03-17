@@ -11,7 +11,7 @@ import { Layout } from "components/common";
 const HomeContainer = styled.div`
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 55px);
 `;
 
 const TimelinePage = () => {

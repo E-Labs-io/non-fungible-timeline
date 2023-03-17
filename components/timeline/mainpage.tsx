@@ -12,11 +12,9 @@ import VotingModal from "./components/userInfo/components/voting/VotingModal";
 import { votingCategoriesType, votingCategoryList } from "types/votingTypes";
 
 const PageContainer = styled.div`
-  background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
   width: 100vw;
   height: 100%;
   overflow: hidden;
-
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -34,15 +32,6 @@ const BodyArea = styled.div`
   padding: 5px;
   display: flex;
   flex-direction: column;
-`;
-const PreLoad = styled.div`
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  display: flex;
-  flex-direction: column;
-  padding-top: 10%;
 `;
 
 type TModalType = "nft" | "vote";
