@@ -14,9 +14,16 @@ import { dailyHistory } from "./TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import NFTMedia from "hooks/web3/components/NFTMedia";
+import { device, mobileL, mobileM, mobileS } from "constants/media";
 
 const Wrapper = styled.div`
   width: 205px;
+  @media ${device.mobileL} {
+    width: 160px;
+  }
+  @media ${device.mobileS} {
+    width: 105px;
+  }
   background-color: #86848447;
   border-radius: 20px;
   border-width: 1px;
@@ -37,7 +44,13 @@ const Wrapper = styled.div`
 //////  CARD BUILD
 const SingleCard = styled.div`
   width: 200px;
-  padding: 5px;
+  @media ${device.mobileL} {
+    width: 150px;
+  }
+  @media ${device.mobileS} {
+    width: 100px;
+  }
+
   background-color: #86848447;
 
   align-items: center;
@@ -64,8 +77,16 @@ const InfoBox = styled.div`
   background-color: #dcd7d795;
   padding: 5px;
 
-  width: 191px;
+  width: 200px;
   height: 50px;
+  @media ${device.mobileL} {
+    width: 150px;
+    height: 45px;
+  }
+  @media ${device.mobileS} {
+    width: 100px;
+    height: 40px;
+  }
 
   display: flex;
   flex-direction: column;
@@ -123,6 +144,7 @@ const FrontCard = ({
   const [ready, setReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
+  const { width, height } = useWindowSize();
 
   const [txData, setTxData] = useState<any>();
 
@@ -175,14 +197,27 @@ const FrontCard = ({
     return method;
   };
 
+  const getImageSizing = (width: number, option: "width" | "height") => {
+    if (width > mobileL) {
+      if (option === "width") return "190px";
+      else if (option === "height") return "200px";
+    } else if (width < mobileM) {
+      if (option === "width") return "100px";
+      else if (option === "height") return "100px";
+    } else {
+      if (option === "width") return "150px";
+      else if (option === "height") return "150px";
+    }
+  };
+
   return ready ? (
     <Wrapper>
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
           <NFTMedia
             mediaUrl={imageUrl}
-            width="190px"
-            height="189px"
+            width={getImageSizing(width, "width")}
+            height={getImageSizing(width, "height")}
             colorA="#41bdff"
             colorB="#f448ee"
             color="white"
@@ -192,14 +227,16 @@ const FrontCard = ({
         </TopImageContainer>
         <InfoBox>
           <DateLine>{getTXDate(txData)}</DateLine>
-          <TXData>
-            {txData && getTXType(txData)} #
-            {shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
-            <MoreText>
-              {(txData && txData.groupedTokenIds.length > 1) ||
-                (txHashes.length > 1 && ` + others`)}
-            </MoreText>
-          </TXData>
+          {width > mobileS && (
+            <TXData>
+              {txData && getTXType(txData)} #
+              {shortenTokenId(BigInt(parseInt(showToken.hex, 16)).toString())}
+              <MoreText>
+                {(txData && txData.groupedTokenIds.length > 1) ||
+                  (txHashes.length > 1 && ` + others`)}
+              </MoreText>
+            </TXData>
+          )}
         </InfoBox>
       </SingleCard>
     </Wrapper>
