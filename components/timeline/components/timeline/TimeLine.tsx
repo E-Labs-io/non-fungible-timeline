@@ -134,7 +134,7 @@ function TimeLine({
     };
     if (isSmallScreen) {
       style.justifyContent = "left";
-      if (side === "right") style.marginLeft = "125px";
+   
     } else style.justifyContent = side === "left" ? "right" : "left";
     return style;
   };
@@ -162,6 +162,7 @@ function TimeLine({
                 contentArrowStyle={{
                   borderRight: "7px solid  rgb(2, 2, 2)",
                   backgroundColor: "transparent",
+                  margin: "0px 0px 0px 0px",
                 }}
                 icon={timelineIcon(day[0])}
               >

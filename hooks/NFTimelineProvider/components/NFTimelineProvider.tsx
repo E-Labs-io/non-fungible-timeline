@@ -49,11 +49,11 @@ const NFTimelineProvider = ({ children }) => {
   }, [verifiedContractList]);
 
   useEffect(() => {
-    if (!!!allBallotRankings && !initalRankingLoad) {
+    if (!allBallotRankings && !initalRankingLoad) {
       setInitalRankingLoad(true);
       updateRankingData().then(() => setInitalRankingLoad(false));
     }
-  }, [allBallotRankings, initalRankingLoad]);
+  }, [allBallotRankings]);
 
   /**
    *  Metadata Management
