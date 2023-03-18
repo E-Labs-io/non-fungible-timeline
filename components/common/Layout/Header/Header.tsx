@@ -31,14 +31,6 @@ const StyledHeader = styled.header`
   box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.282);
 `;
 
-const HeaderLogoContainer = styled.div`
-  display: block;
-
-  @media ${device.mobileL} {
-    display: none;
-  }
-`;
-
 const Logo = styled(Image)``;
 
 const LogoContainer = styled.a`
@@ -92,7 +84,6 @@ const BackButton = styled.div`
   align-items: left;
   padding-left: 20px;
   color: #f7f7f7;
-  width: 100%;
   :hover {
     transform: scale(1.05);
     color: #d80e9f;
@@ -100,9 +91,10 @@ const BackButton = styled.div`
   }
 `;
 const PageTitle = styled.div`
+  position: static;
+
   justify-content: center;
   align-items: center;
-  display: flex;
 
   background: #70ffde;
   background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
@@ -151,16 +143,14 @@ const Header = ({ onBack }) => {
 
   return (
     <StyledHeader ref={headerRef}>
-      <HeaderLogoContainer>
-        <BackButton>
-          <FontAwesomeIcon
-            onClick={onBack ? onBack : null}
-            size="2xl"
-            icon={faAnglesLeft}
-          />
-        </BackButton>
-      </HeaderLogoContainer>
-      <div></div>
+      <BackButton>
+        <FontAwesomeIcon
+          onClick={onBack ? onBack : null}
+          size="2xl"
+          icon={faAnglesLeft}
+        />
+      </BackButton>
+
       <PageTitle onClick={goHome}>NON-FUNGIBLE TIMELINE</PageTitle>
       {showSmallMenu ? (
         <FocusLock disabled={!open}>
