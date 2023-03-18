@@ -10,42 +10,52 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-
-  @media ${device.laptop} {
-    margin-top: 0;
-  }
-  @media ${device.tablet} {
-    margin-top: 15%;
-  }
-  @media ${device.mobileL} {
-    margin-top: 25%;
-  }
+  margin-top: 10px;
+  overflow: hidden;
+  padding: 10px;
 `;
 
 const AboutContainer = styled.div`
   width: 85%;
+  max-height: 400px;
 
   background-color: ${({ theme }) => theme.coloredTheme.transparentBG};
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
   border-color: ${({ theme }) => theme.coloredTheme.borderColor};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+
   justify-content: center;
   box-shadow: ${({ theme }) => theme.shadow.innerShadow};
-  padding: 5px;
-  padding-left: 25px;
+  padding: 10px;
+  padding-left: 20px;
   padding-bottom: 10px;
   text-align: center;
   overflow: scroll;
+  overflow-wrap: break-word;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 const AboutTitle = styled.h2`
-  text-align: left;
+  text-align: center;
   width: 100%;
-  font-weight: 300;
+
   font-size: 2rem;
+
+  font-size: 40px;
+  font-weight: 500;
+  text-align: center;
+  color: ${({ theme }) => theme.primaryLight};
+  margin: auto;
+
+  @media ${device.tablet} {
+    font-size: 32px;
+  }
+
+  @media ${device.mobileL} {
+    font-size: 24px;
+  }
 `;
 const AboutContent = styled.div`
   text-align: left;
@@ -57,14 +67,14 @@ const AboutContent = styled.div`
 const AboutParagraph = styled.div`
   padding: 5px;
   padding-left: 20px;
-  padding-right: 50px;
+  padding-right: 20px;
 `;
 
 function About() {
   return (
     <Container>
+      <AboutTitle>WTF is Non-Fungible Timeline?</AboutTitle>
       <AboutContainer>
-        <AboutTitle>WTF is Non-Fungible Timeline?</AboutTitle>
         <AboutContent>
           <AboutParagraph>
             At NFTimeline, we're passionate about making the world of NFTs more

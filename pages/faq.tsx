@@ -8,19 +8,6 @@ import { Layout, TextExpandList } from "components/common";
 import faqQuestions from "constants/faqQuestions";
 import About from "components/faq/About";
 
-const Page = styled.div`
-  width: 100%;
-  height: 100vh;
-
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
-  padding: 10px;
-  margin: auto;
-`;
-
 const Wrapper = styled.div`
   width: 100%;
   height: auto;
@@ -43,21 +30,19 @@ const Title = styled.h2`
   }
 
   @media ${device.mobileL} {
-    font-size: 8vw;
+    font-size: 24px;
   }
 `;
 
 function FAQ() {
   return (
     <Layout>
-      <Page>
-        <About />
-        <Wrapper>
-          <Title>F.A.Q.</Title>
+      <About />
+      <Wrapper>
+        <Title>F.A.Q.</Title>
 
-          <TextExpandList data={faqQuestions} />
-        </Wrapper>
-      </Page>
+        <TextExpandList data={faqQuestions} />
+      </Wrapper>
     </Layout>
   );
 }
