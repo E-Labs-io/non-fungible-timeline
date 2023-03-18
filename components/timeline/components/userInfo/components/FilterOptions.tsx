@@ -14,7 +14,7 @@ const Container = styled.div`
   border-radius: 10px;
   width: 100%;
   height: auto;
-  align-items: left;
+  align-items: center;
   justify-content: center;
   padding: 10px;
   margin: auto;
@@ -34,9 +34,18 @@ const FilterInsert = styled.div`
   padding: 10px;
   column-gap: 30px;
   border-radius: 10px;
+  width: 40vw;
   box-shadow: inset 0px 0px 15px 2px #cfcfcfad;
   @media ${device.mobileL} {
     flex-direction: column;
+  }
+  @media ${device.tablet} {
+    flex-direction: column;
+    max-width: 40vw;
+  }
+  @media ${device.laptop} {
+    flex-direction: column;
+    max-width: 40vw;
   }
 `;
 

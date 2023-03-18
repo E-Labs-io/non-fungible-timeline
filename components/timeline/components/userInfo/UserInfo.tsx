@@ -84,15 +84,14 @@ const FilterArea = styled.div`
   width: 100%;
   height: 100%;
   border-right: 2px, solid, white;
-
   display: flex;
   padding-right: 30px;
   flex-direction: column;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
   text-align: center;
   @media ${device.tablet} {
-    justify-content: space-evenly;
+    justify-content: center;
     padding-right: 0px;
   }
 `;
@@ -311,9 +310,10 @@ function UserInformation({
             />
             FILTERS
           </FilterLabel>
+          {isFiltersOpen && <FilterOptions />}
         </FilterArea>
       </InteractionArea>
-      {isFiltersOpen && <FilterOptions />}
+
       <Modal
         title={"user modal"}
         isOpen={votingModalOpen}

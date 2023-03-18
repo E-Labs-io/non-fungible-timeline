@@ -182,6 +182,7 @@ const Title = styled.div`
   justify-content: left;
   text-align: left;
   width: 100%;
+  padding-left: 10%;
   :hover {
     cursor: pointer;
     color: #00dbde;
