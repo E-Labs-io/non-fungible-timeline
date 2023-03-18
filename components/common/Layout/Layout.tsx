@@ -10,8 +10,9 @@ import Header from "./Header/Header";
 const LayoutContainer = styled.div`
   position: absolute;
   width: 100vw;
-
+  height: 100vh;
   background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
+  overflow: hidden;
 `;
 
 const Main = styled.main`

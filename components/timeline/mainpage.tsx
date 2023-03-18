@@ -17,9 +17,9 @@ const PageContainer = styled.div`
   overflow: hidden;
   align-items: center;
   justify-content: center;
-  position: absolute;
+
   left: 0;
-  top: 0;
+  top: -55px;
 `;
 
 const BodyArea = styled.div`

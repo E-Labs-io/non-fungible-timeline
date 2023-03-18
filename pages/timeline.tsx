@@ -9,9 +9,12 @@ import { useWeb3Provider } from "hooks/web3";
 import { Layout } from "components/common";
 
 const HomeContainer = styled.div`
-  position: absolute;
   width: 100vw;
-  height: calc(100vh - 55px);
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const TimelinePage = () => {
