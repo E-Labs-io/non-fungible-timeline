@@ -134,7 +134,6 @@ function TimeLine({
     };
     if (isSmallScreen) {
       style.justifyContent = "left";
-   
     } else style.justifyContent = side === "left" ? "right" : "left";
     return style;
   };
@@ -177,7 +176,7 @@ function TimeLine({
                 />
               </VerticalTimelineElement>
             ))}
-          {!!sortedInHistory && (
+          {!!sortedInHistory && lastItemNumber < sortedData.length && (
             <VerticalTimelineElement
               iconOnClick={loadMore}
               icon={addButton()}
