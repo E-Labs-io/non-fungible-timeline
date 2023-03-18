@@ -41,6 +41,12 @@ const Content = styled.div`
   text-align: right;
   width: 80%;
   font-size: 1.3rem;
+  a {
+    text-decoration: nonde;
+    :hover {
+      color: #70ffde;
+    }
+  }
   @media ${device.tablet} {
     text-align: center;
   }
@@ -51,12 +57,14 @@ const Introduction = ({}: IntroductionProps) => {
   return (
     <Wrapper>
       <Container>
-        <Title>Welcome</Title>
+        {/* <Title>Welcome</Title> */}
         <Content>
           Where the past and present of your favourite Ethereum wallets come to
           life. With our sleek, vertical timeline, scroll and vote on your
           favourite wallets. Discover the ultimate way to track and engage with
           a wallets NFTs.
+          <br />
+          <a href="/faq">Read more...</a>
         </Content>
         <br />
       </Container>

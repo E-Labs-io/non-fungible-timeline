@@ -19,16 +19,11 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-around;
   padding: 5px;
-
   columns: 5;
-
-  @media ${device.tablet} {
-    flex-direction: column;
-    row-gap: 5px;
-  }
 `;
 
 const DropdownLabel = styled.div`
@@ -45,6 +40,31 @@ const DropdownLabel = styled.div`
   :hover {
     color: #ff47e6;
     cursor: pointer;
+  }
+`;
+
+const StatsLayout = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  column-gap: 10px;
+  row-gap: 5px;
+  @media ${device.laptop} {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: auto;
+    justify-content: space-between;
+  }
+  @media ${device.tablet} {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    justify-content: space-around;
+  }
+  @media ${device.mobileM} {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    justify-content: space-around;
   }
 `;
 
@@ -109,7 +129,7 @@ function UserStats({
   }, [sortedInHistory, sortedOutHistory]);
 
   const StatBoxs = () => (
-    <>
+    <StatsLayout>
       <UserStatsBox
         active
         onClick={() => handleOpenModalForFirstAndLast("first")}
@@ -133,7 +153,7 @@ function UserStats({
       <UserStatsBox title="Tokens In" stat={totals && totals.totalIn} />
       <UserStatsBox title="Tokens Out" stat={totals && totals.totalOut} />
       <UserStatsBox title="Total Transactions" stat={totalTX && totalTX} />
-    </>
+    </StatsLayout>
   );
 
   return reduceSize ? (

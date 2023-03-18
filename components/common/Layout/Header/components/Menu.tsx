@@ -5,7 +5,10 @@ import Link from "next/link";
 import styled from "styled-components";
 
 import { ExtraStyleProps } from "types/genericTypes";
-import { device } from "constants/media";
+import { device, laptop, tablet } from "constants/media";
+import useWindowSize from "hooks/window/useWindowSize";
+
+import { ConnectButton } from "hooks/web3";
 
 /**
  *   transform: ${({ open }) => (open ? "translateY(55px)" : "translateY(0)")};
@@ -69,7 +72,7 @@ const MadeByContainer = styled.div`
 
   a {
     margin-left: 3px;
-    font-size: small;
+    font-size: medium;
     text-transform: uppercase;
     padding: 0 0;
     font-weight: bold;
@@ -87,6 +90,14 @@ const MadeByContainer = styled.div`
   }
 `;
 
+const ConnectContainer = styled.div`
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+`;
+
 interface MenuProps {
   showSmallMenu?: boolean;
   menuItems?: { label?: string; link?: string }[];
@@ -97,6 +108,7 @@ interface MenuProps {
 function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
   const isHidden = open ? true : false;
   const tabIndex = isHidden ? 0 : -1;
+  const { width } = useWindowSize();
 
   const renderMenuItems = () =>
     menuItems?.map(({ label, link }) => (
@@ -108,6 +120,18 @@ function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
   return (
     <StyledMenu open={open} aria-hidden={!isHidden} {...props}>
       {renderMenuItems()}
+      {width < tablet && (
+        <ConnectContainer>
+          <ConnectButton />
+        </ConnectContainer>
+      )}
+      {width < laptop && (
+        <ConnectContainer>
+          <MadeByContainer>
+            made by <a href="https://twitter.com/e_labs_io">E_LABS</a>
+          </MadeByContainer>
+        </ConnectContainer>
+      )}
     </StyledMenu>
   );
 }

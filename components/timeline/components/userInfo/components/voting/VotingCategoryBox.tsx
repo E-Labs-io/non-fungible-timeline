@@ -8,6 +8,7 @@ import {
 } from "types/votingTypes";
 import initialVotingState from "constants/votingInit";
 import { Votes } from "hooks/NFTimelineProvider/types";
+import { device } from "constants/media";
 
 const CategoryContainer = styled.div`
   min-width: 75px;
@@ -27,6 +28,17 @@ const CategoryContainer = styled.div`
   :hover {
     color: #49c2ff;
     border-color: #49c2ff;
+  }
+  @media ${device.tablet} {
+    min-width: 70px;
+  }
+  @media ${device.mobileL} {
+    min-width: 60px;
+  }
+  @media ${device.mobileS} {
+    min-width: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 `;
 

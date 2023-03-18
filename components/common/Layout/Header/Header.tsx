@@ -16,6 +16,7 @@ import useWindowSize from "hooks/window/useWindowSize";
 import FlatMenu from "./components/FlatMenu";
 import { UserWeb3Context } from "hooks/web3/userWeb3Provider";
 import { ExtraStyleProps } from "types/genericTypes";
+import { useRouter } from "next/router";
 
 const StyledHeader = styled.header`
   position: relative;
@@ -98,7 +99,7 @@ const BackButton = styled.div`
     cursor: pointer;
   }
 `;
-const PageTitle = styled.text`
+const PageTitle = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
@@ -113,6 +114,9 @@ const PageTitle = styled.text`
   font-size: 40px;
   text-align: center;
   font-family: "Kanit", sans-serif;
+  :hover {
+    cursor: pointer;
+  }
 
   @media ${device.tablet} {
     font-size: 30px;
@@ -131,10 +135,13 @@ const menuItems = [
 const Header = ({ onBack }) => {
   const [open, setOpen] = useState(false);
   const { width } = useWindowSize();
+  const router = useRouter();
   const headerRef = useRef();
   const menuId = "main-menu";
 
   useOnClickOutside(headerRef, () => setOpen(false));
+
+  const goHome = () => router.push("/");
 
   const { shortWalletAddress } = useContext(UserWeb3Context);
 
@@ -154,7 +161,7 @@ const Header = ({ onBack }) => {
         </BackButton>
       </HeaderLogoContainer>
       <div></div>
-      <PageTitle>NON-FUNGIBLE TIMELINE</PageTitle>
+      <PageTitle onClick={goHome}>NON-FUNGIBLE TIMELINE</PageTitle>
       {showSmallMenu ? (
         <FocusLock disabled={!open}>
           <div>
