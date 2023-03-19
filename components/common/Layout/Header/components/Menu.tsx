@@ -18,8 +18,10 @@ import { ConnectButton } from "hooks/web3";
 
 const StyledMenu = styled.nav<ExtraStyleProps>`
   display: flex;
+  position: absolute;
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
   background: white;
   z-index: -1;
   transform: ${({ open }) => (open ? "translateY(50px)" : "translateY(0px)")};
@@ -27,18 +29,17 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
   width: 100vw;
   text-align: center;
   padding: 10px;
-  position: fixed;
-
+  padding-right: 10%;
+  padding-left: 10%;
   right: 0;
   opacity: ${({ open }) => (open ? "100%" : "0%")};
   transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out,
     z-index 0.3s ease-in-out;
   column-gap: 200px;
   @media ${device.laptop} {
-    transform: ${({ open }) => (open ? "translateY(50px)" : "translateY(0px)")};
+    position: fixed;
     height: ${({ open, height }) =>
       open ? (height ? height : "100vh") : "0px"};
-    top: 55;
     left: 0;
     overflow: hidden;
     flex-direction: column;
@@ -153,7 +154,7 @@ function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
         {renderMenuItems()}
         {width < tablet && (
           <ConnectContainer>
-            <ConnectButton onClick={() => (open = false)} />
+            <ConnectButton onClick={() => props.setOpen(false)} />
           </ConnectContainer>
         )}
         {width < laptop && (

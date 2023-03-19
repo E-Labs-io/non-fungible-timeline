@@ -124,14 +124,19 @@ const menuItems = [
   { label: "F.A.Q.", link: "/faq" },
 ];
 
-const Header = ({ onBack }) => {
+const Header = ({ onBack, onMenu }) => {
   const [open, setOpen] = useState(false);
   const { width } = useWindowSize();
   const router = useRouter();
   const headerRef = useRef();
   const menuId = "main-menu";
 
-  useOnClickOutside(headerRef, () => setOpen(false));
+  const handleMenu = (flag: boolean) => {
+    onMenu(flag);
+    setOpen(flag);
+  };
+
+  useOnClickOutside(headerRef, () => handleMenu(false));
 
   const goHome = () => router.push("/");
 
@@ -158,26 +163,26 @@ const Header = ({ onBack }) => {
             <Menu
               showSmallMenu={showSmallMenu}
               open={open}
-              setOpen={setOpen}
+              setOpen={handleMenu}
               id={menuId}
               menuItems={menuItems}
               walletConnectCallback={() => {}}
             />
           </div>
-          <Burger open={open} setOpen={setOpen} aria-controls={menuId} />
+          <Burger open={open} setOpen={handleMenu} aria-controls={menuId} />
         </FocusLock>
       ) : (
         <FocusLock disabled={!open}>
           <div>
             <Menu
               open={open}
-              setOpen={setOpen}
+              setOpen={handleMenu}
               id={menuId}
               menuItems={menuItems}
               walletConnectCallback={() => {}}
             />
           </div>
-          <FlatMenu open={open} setOpen={setOpen} ariaControls={menuId} />
+          <FlatMenu open={open} setOpen={handleMenu} ariaControls={menuId} />
         </FocusLock>
       )}
     </StyledHeader>

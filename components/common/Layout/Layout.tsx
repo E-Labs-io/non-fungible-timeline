@@ -2,7 +2,7 @@
 
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Header from "./Header/Header";
@@ -12,13 +12,12 @@ const LayoutContainer = styled.div`
   width: 100vw;
   height: 100vh;
   background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
-  overflow: scroll;
+  overflow: ${({ open }) => (open ? "hidden" : "scroll")};
 `;
 
 const Main = styled.div`
   font-family: "Ubuntu", sans-serif;
   position: relative;
-
 
   width: 100vw;
   height: 100vh - 55px;
@@ -27,11 +26,12 @@ const Main = styled.div`
 
 const Layout: NextPage = ({ children }) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const onBack = () => router.push("/");
   return (
-    <LayoutContainer>
-      <Header onBack={onBack} />
+    <LayoutContainer open={open}>
+      <Header onBack={onBack} onMenu={setOpen} />
       <Main>{children}</Main>
     </LayoutContainer>
   );
