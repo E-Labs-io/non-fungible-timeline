@@ -12,12 +12,17 @@ const LayoutContainer = styled.div`
   width: 100vw;
   height: 100vh;
   background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
-  overflow: hidden;
+  overflow: scroll;
 `;
 
-const Main = styled.main`
+const Main = styled.div`
   font-family: "Ubuntu", sans-serif;
-  box-sizing: border-box;
+  position: relative;
+
+
+  width: 100vw;
+  height: 100vh - 55px;
+  overflow: scroll;
 `;
 
 const Layout: NextPage = ({ children }) => {

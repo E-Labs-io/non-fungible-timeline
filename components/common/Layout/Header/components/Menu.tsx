@@ -27,7 +27,7 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
   width: 100vw;
   text-align: center;
   padding: 10px;
-  position: absolute;
+  position: fixed;
 
   right: 0;
   opacity: ${({ open }) => (open ? "100%" : "0%")};
@@ -36,12 +36,13 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
   column-gap: 200px;
   @media ${device.laptop} {
     transform: ${({ open }) => (open ? "translateY(50px)" : "translateY(0px)")};
-    height: ${({ open }) => (open ? "100vh" : "0px")};
-    position: absolute;
+    height: ${({ open, height }) =>
+      open ? (height ? height : "100vh") : "0px"};
     top: 55;
     left: 0;
     overflow: hidden;
     flex-direction: column;
+    z-index: 5;
   }
   a {
     font-size: 2rem;
@@ -63,7 +64,36 @@ const StyledMenu = styled.nav<ExtraStyleProps>`
   }
 `;
 
+const MenuContentContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  padding: 10px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+
+  @media ${device.laptop} {
+    display: flex;
+    height: 80vh;
+    flex-direction: column;
+
+    row-gap: 10px;
+    align-items: center;
+  }
+`;
 const MadeByContainer = styled.div`
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 5%;
+`;
+
+const MadeByText = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.medium};
   position: absolute;
 
@@ -108,7 +138,7 @@ interface MenuProps {
 function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
   const isHidden = open ? true : false;
   const tabIndex = isHidden ? 0 : -1;
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
 
   const renderMenuItems = () =>
     menuItems?.map(({ label, link }) => (
@@ -118,20 +148,25 @@ function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
     ));
 
   return (
-    <StyledMenu open={open} aria-hidden={!isHidden} {...props}>
-      {renderMenuItems()}
-      {width < tablet && (
-        <ConnectContainer>
-          <ConnectButton />
-        </ConnectContainer>
-      )}
-      {width < laptop && (
-        <ConnectContainer>
+    <StyledMenu open={open} aria-hidden={!isHidden} {...props} height={null}>
+      <MenuContentContainer>
+        {renderMenuItems()}
+        {width < tablet && (
+          <ConnectContainer>
+            <ConnectButton onClick={() => (open = false)} />
+          </ConnectContainer>
+        )}
+        {width < laptop && (
           <MadeByContainer>
-            made by <a href="https://twitter.com/e_labs_io">E_LABS</a>
+            <MadeByText>
+              made by{" "}
+              <a href="https://twitter.com/e_labs_io" target={"blank"}>
+                E_LABS
+              </a>
+            </MadeByText>
           </MadeByContainer>
-        </ConnectContainer>
-      )}
+        )}
+      </MenuContentContainer>
     </StyledMenu>
   );
 }

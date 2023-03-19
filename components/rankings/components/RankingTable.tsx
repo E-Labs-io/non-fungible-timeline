@@ -64,7 +64,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   justify-content: center;
   align-items: top;
-  overflow: hidden;
+  overflow: scroll;
   height: 100%;
   padding: 20px;
   width: 100%;

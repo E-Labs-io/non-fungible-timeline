@@ -8,7 +8,8 @@ import styled from "styled-components";
 import StateSkeleton from "components/common/SkeletonLoader";
 import { ethers } from "ethers";
 import { useWeb3Provider } from "hooks/web3";
-import { device } from "constants/media";
+import { device, mobileM } from "constants/media";
+import useWindowSize from "hooks/window/useWindowSize";
 
 const Card = styled.div`
   padding: 5px;
@@ -64,6 +65,11 @@ const Votes = styled.div`
   display: flex;
   flex-direction: row;
   column-gap: 25px;
+  @media ${device.mobileM} {
+    align-items: right;
+    justify-content: right;
+    text-align: right;
+  }
 `;
 const Rank = styled.div`
   font-size: 1.2rem;
@@ -84,6 +90,7 @@ export default function RankCard({
   handelAddressSelect,
 }: RankCardProps) {
   const { localProvider } = useWeb3Provider();
+  const { width } = useWindowSize();
   const [walletAddress, setWalletAddress] = useState<Address>();
   const [displayAddress, setDisplayAddress] = useState<string>();
   const addressIconRef = useRef(null);
@@ -128,9 +135,11 @@ export default function RankCard({
         </TopLine>
         <Votes>
           <Rank>{rank.votes}</Rank>
-          <VoteText>
-            vote{rank.votes > 1 && "s"} ({percentOfVotes.toFixed(2)}%)
-          </VoteText>
+          {width > mobileM && (
+            <VoteText>
+              vote{rank.votes > 1 && "s"} ({percentOfVotes.toFixed(2)}%)
+            </VoteText>
+          )}
         </Votes>
       </Information>
     </Card>
