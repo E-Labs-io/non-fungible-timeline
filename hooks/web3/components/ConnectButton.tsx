@@ -172,7 +172,7 @@ function Web3ConnectButton({
           })
         )
       : handleConnectWallet();
-    onClick();
+    onClick && onClick();
   };
 
   const handleConnectWallet = () => {
