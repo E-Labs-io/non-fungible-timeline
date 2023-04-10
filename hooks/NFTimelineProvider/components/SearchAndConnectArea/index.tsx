@@ -7,7 +7,7 @@ import { ConnectButton, useWeb3Provider } from "../../../web3";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import LoadingNotice from "./loadingNotice";
-import FilterOptions from "components/faq/timeline/components/userInfo/components/FilterOptions";
+import FilterOptions from "components/timeline/components/userInfo/components/FilterOptions";
 
 const Wrapper = styled.div`
   justify-content: center;

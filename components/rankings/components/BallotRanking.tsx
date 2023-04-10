@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { LoadingStates } from "types/stateTypes";
-import getSortedBallotRankings from "./helpers/sortRankings";
+import getSortedBallotRankings from "../helpers/sortRankings";
 import RankCard from "./RankCard";
 import RankingTable from "./RankingTable";
 

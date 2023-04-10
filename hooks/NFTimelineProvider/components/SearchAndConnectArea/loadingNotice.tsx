@@ -18,7 +18,7 @@ const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
   return (
     <NoticeContainer>
       {loadingState > 1 && <Loader />}
-      {loadingState === 1 && <h3>Stalking your NFT history</h3>}
+      {loadingState === 1 && <h3>Stalking the wallet</h3>}
       {loadingState === 2 && <h3>Tracking all your rugs</h3>}
       {loadingState === 3 && <h3>Finding all your mistakes</h3>}
       {loadingState === 4 && <h3>Counting all your wins (on one hand)</h3>}
