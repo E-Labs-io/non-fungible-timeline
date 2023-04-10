@@ -14,7 +14,7 @@ import ToastTransaction from "components/common/Toast/components/ChainTransactio
 const StyledFlatMenu = styled.nav`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   column-gap: 20px;
 `;

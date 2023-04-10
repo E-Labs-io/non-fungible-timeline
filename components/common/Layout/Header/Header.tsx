@@ -22,8 +22,7 @@ const StyledHeader = styled.header`
   position: relative;
   height: 55px;
   display: flex;
-  justify-content: space-between;
-  display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
   z-index: 5;
@@ -31,11 +30,29 @@ const StyledHeader = styled.header`
   box-shadow: 0px 0px 42px 5px rgba(112, 110, 110, 0.282);
 `;
 
-const Logo = styled(Image)``;
+const HeaderRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
 
-const LogoContainer = styled.a`
+const LogoImageContainer = styled.div`
+  width: auto;
+  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+const Logo = styled.img`
+  width: auto;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding: 5px;
   &:hover {
@@ -43,41 +60,11 @@ const LogoContainer = styled.a`
   }
 `;
 
-const TwitterLogoContainer = styled.a`
-  display: flex;
+const FlatMenuContainer = styled.div`
+  width: auto;
+  height: 100%;
   align-items: center;
-  cursor: pointer;
-  padding: 5px;
-  margin: 2px 0 0;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-const RightIconsContainer = styled.div`
-  display: inline-grid;
-  grid-auto-flow: column;
-  column-gap: 30px;
-  align-items: center;
-
-  @media ${device.mobileS} {
-    column-gap: 5vw;
-  }
-`;
-
-const LinksContainer = styled.div<ExtraStyleProps>`
-  position: absolute;
-  top: 6px;
-  ${({ showSmallMenu }) =>
-    showSmallMenu
-      ? css`
-          right: 82px;
-        `
-      : css`
-          left: 82px;
-        `}
-
-  z-index: 4;
+  justify-content: center;
 `;
 
 const BackButton = styled.div`
@@ -88,33 +75,6 @@ const BackButton = styled.div`
     transform: scale(1.05);
     color: #d80e9f;
     cursor: pointer;
-  }
-`;
-const PageTitle = styled.div`
-  position: static;
-
-  justify-content: center;
-  align-items: center;
-
-  background: #70ffde;
-  background: linear-gradient(to bottom right, #70ffde 26%, #fc00ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #0b0b0b;
-
-  font-size: 40px;
-  text-align: center;
-  font-family: "Kanit", sans-serif;
-  :hover {
-    cursor: pointer;
-  }
-
-  @media ${device.tablet} {
-    font-size: 30px;
-  }
-  @media ${device.mobileL} {
-    font-size: 20px;
   }
 `;
 
@@ -140,51 +100,58 @@ const Header = ({ onBack, onMenu }) => {
 
   const goHome = () => router.push("/");
 
-  const { shortWalletAddress } = useContext(UserWeb3Context);
-
   const showSmallMenu = width < 780;
 
   const showDarkLogo = true;
 
   return (
     <StyledHeader ref={headerRef}>
-      <BackButton>
-        <FontAwesomeIcon
-          onClick={onBack ? onBack : null}
-          size="2xl"
-          icon={faAnglesLeft}
-        />
-      </BackButton>
-
-      <PageTitle onClick={goHome}>NON-FUNGIBLE TIMELINE</PageTitle>
-      {showSmallMenu ? (
-        <FocusLock disabled={!open}>
-          <div>
-            <Menu
-              showSmallMenu={showSmallMenu}
-              open={open}
-              setOpen={handleMenu}
-              id={menuId}
-              menuItems={menuItems}
-              walletConnectCallback={() => {}}
-            />
-          </div>
-          <Burger open={open} setOpen={handleMenu} aria-controls={menuId} />
-        </FocusLock>
-      ) : (
-        <FocusLock disabled={!open}>
-          <div>
-            <Menu
-              open={open}
-              setOpen={handleMenu}
-              id={menuId}
-              menuItems={menuItems}
-              walletConnectCallback={() => {}}
-            />
-          </div>
-          <FlatMenu open={open} setOpen={handleMenu} ariaControls={menuId} />
-        </FocusLock>
-      )}
+      <HeaderRow>
+        <BackButton>
+          <FontAwesomeIcon
+            onClick={onBack ? onBack : null}
+            size="2xl"
+            icon={faAnglesLeft}
+          />
+        </BackButton>
+        <LogoImageContainer>
+          <Logo onClick={goHome} src="/images/logo-short_gradient-01.png" />
+        </LogoImageContainer>
+        <FlatMenuContainer>
+          {showSmallMenu ? (
+            <FocusLock disabled={!open}>
+              <div>
+                <Menu
+                  showSmallMenu={showSmallMenu}
+                  open={open}
+                  setOpen={handleMenu}
+                  id={menuId}
+                  menuItems={menuItems}
+                  walletConnectCallback={() => {}}
+                />
+              </div>
+              <Burger open={open} setOpen={handleMenu} aria-controls={menuId} />
+            </FocusLock>
+          ) : (
+            <FocusLock disabled={!open}>
+              <div>
+                <Menu
+                  open={open}
+                  setOpen={handleMenu}
+                  id={menuId}
+                  menuItems={menuItems}
+                  walletConnectCallback={() => {}}
+                />
+              </div>
+              <FlatMenu
+                open={open}
+                setOpen={handleMenu}
+                ariaControls={menuId}
+              />
+            </FocusLock>
+          )}
+        </FlatMenuContainer>
+      </HeaderRow>
     </StyledHeader>
   );
 };

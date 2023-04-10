@@ -59,14 +59,32 @@ const PageTitle = styled.div`
   }
 `;
 
+const LogoImageContainer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  padding-top: 50px;
+`;
+
+const Logo = styled.img`
+  width: 60%;
+  height: 100%;
+  @media ${device.tablet} {
+    width: 100%;
+  }
+`;
+
 const Home = () => {
   const [loadingState, setLoadingState] = useState<LoadingStates>();
   const handelStateChange = (state) => setLoadingState(state);
   return (
     <HomeContainer>
-      <TitleContainer>
-        <PageTitle>Non-Fungible Timeline</PageTitle>
-      </TitleContainer>
+      <LogoImageContainer>
+        <Logo src="/images/logo-long_gradient-01.png" />
+      </LogoImageContainer>
       <ConnectionContainer>
         <Introduction />
         <Connection

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {
   sortedHistoryData,
   TokenIds,
-} from "../../../../helpers/dataSorting/sortUsersHistory";
+} from "../../../../../helpers/dataSorting/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
 import zeroAddress from "hooks/web3/utils/zeroAddress";
 import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";

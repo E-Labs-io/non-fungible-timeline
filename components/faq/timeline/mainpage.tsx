@@ -1,5 +1,5 @@
 /** @format */
-import { Loader, Modal } from "../common";
+import { Loader, Modal } from "../../common";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";

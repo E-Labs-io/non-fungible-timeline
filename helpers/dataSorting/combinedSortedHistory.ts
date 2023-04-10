@@ -3,7 +3,7 @@
 import {
   combinedHistory,
   dailyHistory,
-} from "components/timeline/components/timeline/TimeLine";
+} from "components/faq/timeline/components/timeline/TimeLine";
 import { compileHistoryIntoDaysReturn } from "./compileHistoryIntoDays";
 
 const combineHistory = (
