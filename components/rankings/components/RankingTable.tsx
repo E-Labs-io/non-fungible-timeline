@@ -55,7 +55,7 @@ function RankingTable({
 }
 
 const Wrapper = styled.div`
-  min-width: 70%;
+  min-width: 100%;
   height: 100%;
   justify-content: center;
   align-items: center;
@@ -66,7 +66,7 @@ const Container = styled.div`
   align-items: top;
   overflow: scroll;
   height: 100%;
-  padding: 20px;
+  padding: 10px;
   width: 100%;
   border: 1px solid #ddd;
   background-color: #ffffff38;
