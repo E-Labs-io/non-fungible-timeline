@@ -19,11 +19,11 @@ const LoadingNotice = ({ loadingState }: LoadingNoticeProps) => {
     <NoticeContainer>
       {loadingState > 1 && <Loader />}
       {loadingState === 1 && <h3>Stalking the wallet</h3>}
-      {loadingState === 2 && <h3>Tracking all your rugs</h3>}
-      {loadingState === 3 && <h3>Finding all your mistakes</h3>}
-      {loadingState === 4 && <h3>Counting all your wins (on one hand)</h3>}
+      {loadingState === 2 && <h3>Tracking all of it's rugs</h3>}
+      {loadingState === 3 && <h3>Finding all of it's mistakes</h3>}
+      {loadingState === 4 && <h3>Counting all the wins (on one hand)</h3>}
       {loadingState === 5 && (
-        <h3>Found, sorted and laughed over your timeline...</h3>
+        <h3>Found, sorted and laughed over, here's the timeline...</h3>
       )}
       {loadingState === 6 && null}
     </NoticeContainer>
