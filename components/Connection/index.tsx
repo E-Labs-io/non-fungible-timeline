@@ -34,7 +34,7 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
   const { walletAddress, userProvider, localProvider } = useWeb3Provider();
 
   const [usersAddress, setUsersAddress] = useState<string>();
-  const [searchInoput, setSearchInoput] = useState<string>();
+  const [searchInput, setSearchInput] = useState<string>();
   const [ensError, setEnsError] = useState<boolean>(false);
   const [badAddressError, setBadAddressError] = useState<boolean>(false);
   const [connected, setConnected] = useState<boolean>(false);
@@ -46,7 +46,7 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
     //  Check if connected to user provider
     //  Set search address to attached address
     if (!connected && userProvider) {
-      setSearchInoput(walletAddress);
+      setSearchInput(walletAddress);
       setUsersAddress(walletAddress);
       setEnsError(false);
       setBadAddressError(false);
@@ -63,14 +63,14 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
   };
 
   const handleInputChange = (input) => {
-    setSearchInoput(input.target.value);
+    setSearchInput(input.target.value);
     setEnsError(false);
     setBadAddressError(false);
   };
 
   const handelSearchUsersHistory = async () => {
     stateChangeHandler(1);
-    const searchedAddress = new Address(searchInoput, localProvider);
+    const searchedAddress = new Address(searchInput, localProvider);
     searchedAddress.on("ready", async () => {
       const isLocal: addressSplitHistory | false = getTimelineData(
         searchedAddress.getAddress()
@@ -124,7 +124,7 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
         handleIsDisabled={handleIsDisabled}
         handleInputChange={handleInputChange}
         loadingState={state}
-        searchAddress={searchInoput}
+        searchAddress={searchInput}
         ensError={ensError}
       />
     </ConnectionContainer>

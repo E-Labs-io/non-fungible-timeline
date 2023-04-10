@@ -35,6 +35,7 @@ const searchUsersHistory = async ({
   const outBound = await getUsersHistory({ from: searchAddress });
   loadingStateCallback(4);
   if (outBound.length === 0 && inBoundTransfers.length === 0) {
+    loadingStateCallback(0);
     return false;
   }
   const sortedDataIn = sortUsersHistory(inBoundTransfers);
