@@ -58,6 +58,10 @@ const Logo = styled.img`
   &:hover {
     transform: scale(1.1);
   }
+
+  @media ${device.tabletS} {
+    height: 60%;
+  }
 `;
 
 const FlatMenuContainer = styled.div`
