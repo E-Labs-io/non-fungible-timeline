@@ -56,6 +56,8 @@ export const theme: themeInterface = {
   reactDatepicker: reactDatepicker,
 };
 
+// "linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#cfcfcfad 100%)"
+
 // linear-gradient(204deg,#00dbde 0%,#fc00ff 77%,#ffffff 100%)
 // linear-gradient(204deg,#00dbde 0%,#658864 77%,#B7B78A 100%)
 

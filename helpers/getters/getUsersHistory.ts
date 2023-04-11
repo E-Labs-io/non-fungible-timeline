@@ -39,6 +39,7 @@ const getUsersHistory = async ({
 
   //  Get the first run of data
   const batchedTXData = await search(options);
+  console.log("batchedTXData : ", batchedTXData);
   batchedTXData.transfers.forEach((tx) => transfers.push(tx));
 
   //  Check if there is an other page of data

@@ -161,6 +161,8 @@ const SingleNFTView = ({
           {shortenWalletAddress(
             method === "Minted" || method === "Burned"
               ? transactionData.contractAddress
+              : direction === "left"
+              ? transactionData.from
               : transactionData.to
           )}
         </InlineLine>
