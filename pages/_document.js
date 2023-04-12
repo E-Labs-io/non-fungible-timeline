@@ -64,11 +64,11 @@ export default class MyDocument extends Document {
           gtag('config', '${process.env.GOOGLE_ANALYTICS_TAG}');
         `}
           </Script>
-
+          <title>{siteTitle}</title>
           <meta name="description" content={description} />
           <meta
             name="keywords"
-            content="NFT timeline non-fungible NFTimeline crypto opensea blur bayc"
+            content="NFT timeline non-fungible NFTimeline crypto opensea blur bayc vote wallets wallet ethereum past present history track etherscan"
           />
           <meta name="author" content="e-labs" />
           <html lang="en" />
