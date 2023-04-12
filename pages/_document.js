@@ -68,7 +68,7 @@ export default class MyDocument extends Document {
           <meta name="description" content={description} />
           <meta
             name="keywords"
-            content="NFT timeline non-fungible NFTimeline crypto"
+            content="NFT timeline non-fungible NFTimeline crypto opensea blur bayc"
           />
           <meta name="author" content="e-labs" />
           <html lang="en" />
