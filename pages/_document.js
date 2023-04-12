@@ -1,5 +1,13 @@
 /** @format */
 
+import {
+  description,
+  siteCardImage,
+  siteName,
+  siteTitle,
+  siteUrl,
+  twitterHandle,
+} from "constants/websiteMeta";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import Script from "next/script";
 import { ServerStyleSheet } from "styled-components";
@@ -57,14 +65,23 @@ export default class MyDocument extends Document {
         `}
           </Script>
 
-          <meta name="description" content="Your Non-Fungible Timeline" />
+          <meta name="description" content={description} />
           <meta
             name="keywords"
             content="NFT timeline non-fungible NFTimeline crypto"
           />
           <meta name="author" content="e-labs" />
-
           <html lang="en" />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary" key="twcard" />
+          <meta name="twitter:creator" content={twitterHandle} key="twhandle" />
+          {/* Open Graph */}
+          <meta property="og:url" content={siteUrl} key="ogurl" />
+          <meta property="og:image" content={siteCardImage} key="ogimage" />
+          <meta property="og:site_name" content={siteName} key="ogsitename" />
+          <meta property="og:title" content={siteTitle} key="ogtitle" />
+          <meta property="og:description" content={description} key="ogdesc" />
         </Head>
 
         <body>
