@@ -68,13 +68,17 @@ export default class MyDocument extends Document {
           <meta name="description" content={description} />
           <meta
             name="keywords"
-            content="NFT timeline non-fungible NFTimeline crypto opensea blur bayc vote wallets wallet ethereum past present history track etherscan"
+            content="NFT timeline non-fungible NFTimeline crypto opensea blur bayc vote wallets wallet ethereum past present history track etherscan degen whale diamond hands ape doodle mfer"
           />
           <meta name="author" content="e-labs" />
           <html lang="en" />
 
           {/* Twitter */}
-          <meta name="twitter:card" content="summary" key="twcard" />
+          <meta
+            name="twitter:card"
+            content="summary_large_image"
+            key="twcard"
+          />
           <meta name="twitter:creator" content={twitterHandle} key="twhandle" />
           {/* Open Graph */}
           <meta property="og:url" content={siteUrl} key="ogurl" />
