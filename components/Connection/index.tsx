@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { LoadingStates } from "types/stateTypes";
 
 const ConnectionContainer = styled.div`
-  height: 50%;
+  height: fit-content;
   width: 100%;
   margin: auto;
 `;
@@ -40,7 +40,6 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
   const [connected, setConnected] = useState<boolean>(false);
 
   const router = useRouter();
-
 
   useEffect(() => {
     //  Check if connected to user provider
@@ -75,7 +74,7 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
       const isLocal: addressSplitHistory | false = getTimelineData(
         searchedAddress.getAddress()
       );
-     if (!isLocal) {
+      if (!isLocal) {
         const usersTimeline = await searchUsersHistory({
           address: searchedAddress,
           loadingStateCallback: stateChangeHandler,

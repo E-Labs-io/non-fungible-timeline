@@ -25,7 +25,7 @@ const ConnectionArea = styled.div`
   display: flex;
   flex-direction: column;
   width: 50vw;
-  min-height: 200px;
+  min-height: fit-content;
   align-items: center;
   justify-content: center;
   padding: 5px;
