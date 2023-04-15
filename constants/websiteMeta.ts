@@ -7,5 +7,6 @@ export const siteUrl = "https://nftimeline.fyi";
 export const twitterHandle = "@nf_timeline";
 export const siteTitle = "Your Non-Fungible Timeline";
 export const siteCardImage =
-  "https://www.nftimeline.fyi/images/twitter-banner-04.jpg";
-export const socialDesc = "Twitter Description for NFTimeline";
+  "https://www.nftimeline.fyi/images/twitter-banner-scaled.jpg";
+export const socialDesc =
+  "Discover the past and present of Ethereum wallets in a sleek and social way";

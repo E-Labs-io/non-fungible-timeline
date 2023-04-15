@@ -83,14 +83,14 @@ export default class MyDocument extends Document {
           <meta name="twitter:creator" content={twitterHandle} key="twhandle" />
           <meta name="twitter:image" content={siteCardImage} />
           <meta name="twitter:site" content={twitterHandle} />
-          <meta name="twitter:title" content={"test title"} />
+          <meta name="twitter:title" content={siteTitle} />
           <meta name="twitter:description" content={socialDesc} />
 
           {/* Open Graph */}
           <meta property="og:url" content={siteUrl} key="ogurl" />
           <meta property="og:image" content={siteCardImage} key="ogimage" />
           <meta property="og:site_name" content={siteName} key="ogsitename" />
-          <meta property="og:title" content={"test title"} key="ogtitle" />
+          <meta property="og:title" content={siteTitle} key="ogtitle" />
           <meta property="og:description" content={socialDesc} key="ogdesc" />
         </Head>
 
