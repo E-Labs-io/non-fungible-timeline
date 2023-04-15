@@ -80,6 +80,9 @@ export default class MyDocument extends Document {
             key="twcard"
           />
           <meta name="twitter:creator" content={twitterHandle} key="twhandle" />
+          <meta name="twitter:image" content={siteCardImage} />
+          <meta name="twitter:site" content={twitterHandle} />
+          <meta name="twitter:title" content={siteTitle} />
           {/* Open Graph */}
           <meta property="og:url" content={siteUrl} key="ogurl" />
           <meta property="og:image" content={siteCardImage} key="ogimage" />
