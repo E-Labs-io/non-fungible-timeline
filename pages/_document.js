@@ -6,6 +6,7 @@ import {
   siteName,
   siteTitle,
   siteUrl,
+  socialDesc,
   twitterHandle,
 } from "constants/websiteMeta";
 import Document, { Html, Head, Main, NextScript } from "next/document";
@@ -83,12 +84,14 @@ export default class MyDocument extends Document {
           <meta name="twitter:image" content={siteCardImage} />
           <meta name="twitter:site" content={twitterHandle} />
           <meta name="twitter:title" content={siteTitle} />
+          <meta name="twitter:description" content={socialDesc} />
+
           {/* Open Graph */}
           <meta property="og:url" content={siteUrl} key="ogurl" />
           <meta property="og:image" content={siteCardImage} key="ogimage" />
           <meta property="og:site_name" content={siteName} key="ogsitename" />
           <meta property="og:title" content={siteTitle} key="ogtitle" />
-          <meta property="og:description" content={description} key="ogdesc" />
+          <meta property="og:description" content={socialDesc} key="ogdesc" />
         </Head>
 
         <body>

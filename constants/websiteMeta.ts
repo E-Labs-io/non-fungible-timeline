@@ -7,3 +7,4 @@ export const siteUrl = "https://nftimeline.fyi";
 export const twitterHandle = "@nf_timeline";
 export const siteTitle = "Your Non-Fungible Timeline";
 export const siteCardImage = "www.nftimeline.fyi/images/twitter-banner-04.png";
+export const socialDesc = "Twitter Description for NFTimeline";
