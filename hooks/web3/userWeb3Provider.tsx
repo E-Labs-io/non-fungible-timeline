@@ -16,9 +16,11 @@ import config from "config/config";
 import { shortenWalletAddress } from "./helpers/textHelpers";
 import { Network } from "alchemy-sdk";
 import ensResolver from "./helpers/ensResolver";
+import AddressBook from "./helpers/AddressManager";
 
 export interface UserWeb3ProviderContextType {
   walletAddress: string;
+  addressBook: AddressBook;
   shortWalletAddress: string;
   userProvider: ethers.providers.Provider;
   userSigner: ethers.Signer;
@@ -37,6 +39,7 @@ export type GivenProviderAllowance = "alchemy";
 
 export const UserWeb3Context = createContext({
   localProvider: null,
+  addressBook: null,
   walletAddress: "",
   shortWalletAddress: "",
   userProvider: null,
@@ -75,6 +78,8 @@ const UserWeb3Provider = ({ children }) => {
   const [shortWalletAddress, setShortWalletAddress] = useState("");
   const [auxStorage, setAuxStorage] = useState({});
   const [providerInterface, setProviderInterface] = useState(null);
+
+  const [addressBook, setAddressBook] = useState<AddressBook>();
 
   //  External Functions
   /**
@@ -176,6 +181,7 @@ const UserWeb3Provider = ({ children }) => {
 
       if (walletDetails) {
         //    If the connection was successful save up
+        addressBook.addAddress(walletDetails.address[0]);
         setUserProviderData(walletDetails);
         ListenToProvider(
           walletDetails.providerInterface,
@@ -223,12 +229,15 @@ const UserWeb3Provider = ({ children }) => {
         setLocalProvider(provider)
       );
     }
+    if (!addressBook && localProvider)
+      setAddressBook(new AddressBook(localProvider));
   });
 
   return (
     <UserWeb3Context.Provider
       value={{
         walletAddress,
+        addressBook,
         shortWalletAddress,
         userProvider,
         userSigner,
