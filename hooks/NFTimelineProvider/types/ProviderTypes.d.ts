@@ -6,6 +6,7 @@ import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import { type } from "os";
 import { VerifiedContractData } from "./verifiedContractsTypes";
 import { Ballot, Votes } from "./VotingTypes";
+import AddressBook from "hooks/web3/helpers/AddressManager";
 
 export interface NFTimelineProviderContextType {
   submitVote: submitVote;
@@ -20,11 +21,18 @@ export interface NFTimelineProviderContextType {
   removeTimelineFilter: removeTimelineFilter;
   removeAllTimelineFilters: removeAllTimelineFilters;
   checkIfValidContract: checkIfValidContract;
+  getSpyList: (usersAddress: string) => Promise<AddressBook>;
+  addToSpyList: (usersAddress: string, spyAddress: string) => Promise<boolean>;
+  removeFromSpyList: (
+    usersAddress: string,
+    spyAddress: string
+  ) => Promise<boolean>;
   timelineFilters: timelineFilterStore[];
   activeTimeline: addressSplitHistory;
   verifiedContractList: VerifiedContractData[];
   activeAddress: Address;
   allBallotRankings: AllBallotRankingData;
+  spyList: AddressBook;
 }
 
 export type addTimelineFilter = (filterOptions: timelineFilterStore) => void;

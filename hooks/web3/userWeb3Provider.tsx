@@ -17,6 +17,7 @@ import { shortenWalletAddress } from "./helpers/textHelpers";
 import { Network } from "alchemy-sdk";
 import ensResolver from "./helpers/ensResolver";
 import AddressBook from "./helpers/AddressManager";
+import Address from "./helpers/Address";
 
 export interface UserWeb3ProviderContextType {
   walletAddress: string;
@@ -181,7 +182,10 @@ const UserWeb3Provider = ({ children }) => {
 
       if (walletDetails) {
         //    If the connection was successful save up
-        addressBook.addAddress(walletDetails.address[0]);
+        const book = new AddressBook(userProvider, {
+          addressOrEns: walletDetails.address[0],
+        });
+        setAddressBook(book);
         setUserProviderData(walletDetails);
         ListenToProvider(
           walletDetails.providerInterface,

@@ -13,6 +13,3 @@ export const getAllRankingData = async (): Promise<
         return res.text().then((message) => new ApiError(res.status, message));
     }
   );
-
-
-  

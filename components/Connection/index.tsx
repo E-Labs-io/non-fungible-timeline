@@ -61,15 +61,17 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
     handleStateChange(state);
   };
 
-  const handleInputChange = (input) => {
-    setSearchInput(input.target.value);
+  const handleInputChange = (input: string) => {
+    console.log(input);
+    setSearchInput(input);
     setEnsError(false);
     setBadAddressError(false);
   };
 
-  const handelSearchUsersHistory = async () => {
+  const handelSearchUsersHistory = async (address?: string) => {
     stateChangeHandler(1);
-    const searchedAddress = new Address(searchInput, localProvider);
+    console.log("search for address: ", address ?? searchInput);
+    const searchedAddress = new Address(address ?? searchInput, localProvider);
     searchedAddress.on("ready", async () => {
       const isLocal: addressSplitHistory | false = getTimelineData(
         searchedAddress.getAddress()

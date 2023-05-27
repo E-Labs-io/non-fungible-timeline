@@ -5,7 +5,7 @@ import Address from "./Address";
 import { ethers } from "ethers";
 
 export default class AddressBook extends EventEmitter {
-  private addressBook: Address[];
+  private addressBook: Address[] = [];
   private usersAddress: Address;
   private readonly provider: ethers.providers.Provider;
 
@@ -26,15 +26,18 @@ export default class AddressBook extends EventEmitter {
 
   /**
    *
-   *  Session Users is there is one
+   *  Session Users if there is one
    */
   public getUsersAddress = () => this.usersAddress;
-  public changeUsersAddress = (addressOrEns: string, lable: string) =>
-    (this.usersAddress = new Address(addressOrEns, this.provider, lable));
+  public changeUsersAddress = (addressOrEns: string, label: string) =>
+    (this.usersAddress = new Address(addressOrEns, this.provider, label));
 
-  public addAddress(addressOrEns: string, walletLabel?: string) {
-    const exists = this.addressExists(addressOrEns);
-    if (!exists) {
+  public addAddress(addressOrEns: string | Address, walletLabel?: string) {
+    if (addressOrEns instanceof Address) {
+      if (!this.addressExists(addressOrEns)) {
+        this.addressBook.push(addressOrEns);
+      }
+    } else if (!this.addressExists(addressOrEns)) {
       const newAddress = new Address(addressOrEns, this.provider, walletLabel);
       this.addressBook.push(newAddress);
       newAddress.on("ready", () => newAddress);
@@ -43,13 +46,18 @@ export default class AddressBook extends EventEmitter {
 
   /**
    *
-   * Address handeling
+   * Address handling
    */
   private isEthereumAddress = (address: string): boolean =>
     ethers.utils.isAddress(address);
-    
-  public addressExists(addressOrEns: string) {
-    if (this.isEthereumAddress(addressOrEns))
+
+  public addressExists(addressOrEns: string | Address): boolean {
+    let address;
+    if (addressOrEns instanceof Address) {
+      address = addressOrEns.getAddress();
+    } else address = addressOrEns;
+
+    if (this.isEthereumAddress(address) && this.addressBook.length > 0)
       return this.addressBook.some(
         (address) => address.getAddress() === addressOrEns
       );
@@ -59,12 +67,15 @@ export default class AddressBook extends EventEmitter {
       );
   }
 
-  public searchForAddress(addressOrEns: string) {
-    if (this.isEthereumAddress(addressOrEns))
+  public searchForAddress(addressOrEns: string | Address) {
+    if (addressOrEns instanceof Address) {
+      if (!this.addressExists(addressOrEns.getAddress()))
+        this.addAddress(addressOrEns);
+    } else if (this.isEthereumAddress(addressOrEns)) {
       return this.addressBook.find(
         (address) => address.getAddress() === addressOrEns
       );
-    else
+    } else
       return this.addressBook.find(
         (address) => address.getEns() === addressOrEns
       );
@@ -75,4 +86,11 @@ export default class AddressBook extends EventEmitter {
       (address) => address.getWalletLabel() === walletLabel
     );
   }
+
+  public removeFromAddressBook = (address: string) => {
+    
+  };
+
+  public addressCount = () => this.addressBook.length;
+  public getAddressBook = () => this.addressBook;
 }

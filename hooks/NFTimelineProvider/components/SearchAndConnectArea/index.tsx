@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Button } from "../../../../components/common";
+import { Button, Modal } from "../../../../components/common";
 import { ConnectButton, useWeb3Provider } from "../../../web3";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import LoadingNotice from "./loadingNotice";
 import FilterOptions from "components/timeline/components/userInfo/components/FilterOptions";
+import useNFTimelineProvider from "hooks/NFTimelineProvider/hooks/useNFTimelineProvider";
+import OpenSpyListButton from "components/spyList/OpenSpyListButton";
+import SpyListModal from "components/spyList/spyListModal";
 
 const Wrapper = styled.div`
   justify-content: center;
@@ -86,6 +89,13 @@ function SearchAndConnectArea({
   badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
+  const { getSpyList, spyList } = useNFTimelineProvider();
+  const { userProvider, walletAddress } = useWeb3Provider();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (walletAddress && !spyList) getSpyList(walletAddress);
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,7 +111,7 @@ function SearchAndConnectArea({
             <ConnectButton />
             Or
             <Input
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Wallet Address or ENS"
             />
             {ensError && (
@@ -119,6 +129,7 @@ function SearchAndConnectArea({
             >
               Search
             </Button>
+            <OpenSpyListButton handleClick={() => setIsOpen(true)} />
             <FilterArea>
               <FilterLabel
                 onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
@@ -133,6 +144,17 @@ function SearchAndConnectArea({
           </>
         )}
         <LoadingNotice loadingState={loadingState} />
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={() => setIsOpen(false)}
+          title="Your Spy List"
+        >
+          <SpyListModal
+            handleInputChange={handleInputChange}
+            searchUsersHistory={searchUsersHistory}
+            handleCloseModal={setIsOpen}
+          />
+        </Modal>
       </ConnectionArea>
     </Wrapper>
   );

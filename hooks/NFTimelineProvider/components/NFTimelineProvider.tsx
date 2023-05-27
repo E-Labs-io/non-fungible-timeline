@@ -17,6 +17,8 @@ import {
 } from "../types/ProviderTypes";
 import { AllBallotRankingData, Ranks } from "../types/RankingTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
+import AddressBook from "hooks/web3/helpers/AddressManager";
+import { addNewSpy, getUsersSpyList } from "../api/spyList";
 
 export const NFTimelineProviderContext = createContext(
   {} as NFTimelineProviderContextType
@@ -182,6 +184,43 @@ const NFTimelineProvider = ({ children }) => {
       } else return result;
     });
 
+  /**
+   *  Spy List
+   */
+  const [spyList, setSpyList] = useState<AddressBook>();
+  const getSpyList = async (usersAddress: string): Promise<AddressBook> => {
+    console.log("getting spy list");
+    const spyAddressBook = new AddressBook(null, {
+      addressOrEns: usersAddress,
+    });
+    return await getUsersSpyList(usersAddress).then((spyList) => {
+      if (spyList) {
+        Object.keys(spyList).forEach((index) => {
+          spyAddressBook.addAddress(spyList[index]);
+        });
+      }
+      setSpyList(spyAddressBook);
+      console.log(spyAddressBook);
+      return spyAddressBook;
+    });
+  };
+
+  const addToSpyList = async (
+    usersAddress: string,
+    spyAddress: string
+  ): Promise<boolean> =>
+    addNewSpy(usersAddress, spyAddress).then((result) => {
+      if (result) {
+        spyList.addAddress(spyAddress);
+        return true;
+      } else return false;
+    });
+
+  const removeFromSpyList = async (
+    usersAddress: string,
+    spyAddress: string
+  ): Promise<boolean> => true;
+
   return (
     <NFTimelineProviderContext.Provider
       value={{
@@ -197,11 +236,15 @@ const NFTimelineProvider = ({ children }) => {
         submitVote,
         getAllRankings,
         getBallotRankings,
+        getSpyList,
+        addToSpyList,
+        removeFromSpyList,
         timelineFilters,
         activeTimeline,
         verifiedContractList,
         activeAddress,
         allBallotRankings,
+        spyList,
       }}
     >
       {children}

@@ -20,6 +20,7 @@ import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVot
 import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 import { Modal } from "components/common";
 import VotingModal from "./components/voting/VotingModal";
+import AddToSpyListButton from "components/spyList/addToSpyListButton";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -283,6 +284,7 @@ function UserInformation({
           </AddressLabel>
         )}
       </AddressContainer>
+      <AddToSpyListButton />
       {
         <VotingArea>
           <WalletsVotingArea
