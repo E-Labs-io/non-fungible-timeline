@@ -23,9 +23,16 @@ const category3: votingCategoryList = {
   active: true,
   totalVotes: 50,
 };
+const category4: votingCategoryList = {
+  name: "insider",
+  title: "Insider",
+  label: "🕵🏼‍♂️",
+  active: true,
+  totalVotes: 50,
+};
 
 const initialVotingState: initialVotingState = {
-  categories: [category1, category2, category3],
+  categories: [category1, category2, category3, category4],
   votingData: {},
 };
 

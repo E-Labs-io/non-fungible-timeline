@@ -18,7 +18,9 @@ import {
 import { AllBallotRankingData, Ranks } from "../types/RankingTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
 import AddressBook from "hooks/web3/helpers/AddressManager";
-import { addNewSpy, getUsersSpyList } from "../api/spyList";
+import { addNewSpy, deleteFromSpyList, getUsersSpyList } from "../api/spyList";
+import { useWeb3Provider } from "hooks/web3";
+import { deleteVote } from "../api/deleteVote";
 
 export const NFTimelineProviderContext = createContext(
   {} as NFTimelineProviderContextType
@@ -27,6 +29,7 @@ export const NFTimelineProviderContext = createContext(
 //let storedMetadata: StoredMetadataType = { ethereum: {} };
 
 const NFTimelineProvider = ({ children }) => {
+  const { userProvider, walletAddress } = useWeb3Provider();
   const [verifiedContractList, setVerifiedContractList] =
     useState<VerifiedContractData[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
@@ -188,9 +191,14 @@ const NFTimelineProvider = ({ children }) => {
    *  Spy List
    */
   const [spyList, setSpyList] = useState<AddressBook>();
+
+  useEffect(() => {
+    if (walletAddress && !spyList) getSpyList(walletAddress);
+  });
   const getSpyList = async (usersAddress: string): Promise<AddressBook> => {
     console.log("getting spy list");
-    const spyAddressBook = new AddressBook(null, {
+    setSpyList(null);
+    const spyAddressBook = new AddressBook(userProvider, {
       addressOrEns: usersAddress,
     });
     return await getUsersSpyList(usersAddress).then((spyList) => {
@@ -209,17 +217,39 @@ const NFTimelineProvider = ({ children }) => {
     usersAddress: string,
     spyAddress: string
   ): Promise<boolean> =>
-    addNewSpy(usersAddress, spyAddress).then((result) => {
-      if (result) {
-        spyList.addAddress(spyAddress);
-        return true;
-      } else return false;
-    });
+    spyList.addressExists(spyAddress)
+      ? false
+      : addNewSpy(usersAddress, spyAddress).then((result) => {
+          if (result) {
+            spyList.addAddress(spyAddress);
+            return postVote("insider", {
+              voter: usersAddress,
+              votedFor: spyAddress,
+              timestamp: new Date(),
+            }).then(() => {
+              return getSpyList(usersAddress).then((result) => {
+                updateRankingData();
+                return true;
+              });
+            });
+          } else return false;
+        });
 
   const removeFromSpyList = async (
     usersAddress: string,
     spyAddress: string
-  ): Promise<boolean> => true;
+  ): Promise<false | AddressBook> =>
+    spyList.addressExists(spyAddress)
+      ? await deleteFromSpyList(usersAddress, spyAddress).then((result) => {
+          if (result) {
+            deleteVote("insider", usersAddress, spyAddress).then(() =>
+              updateRankingData()
+            );
+            console.log("deleted address from list");
+            return getSpyList(usersAddress).then((newList) => newList);
+          } else return false;
+        })
+      : false;
 
   return (
     <NFTimelineProviderContext.Provider

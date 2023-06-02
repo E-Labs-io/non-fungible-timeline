@@ -55,30 +55,38 @@ export default class AddressBook extends EventEmitter {
     let address;
     if (addressOrEns instanceof Address) {
       address = addressOrEns.getAddress();
-    } else address = addressOrEns;
+    } else {
+      address = addressOrEns;
+    }
 
-    if (this.isEthereumAddress(address) && this.addressBook.length > 0)
+    if (this.isEthereumAddress(address) && this.addressBook.length > 0) {
       return this.addressBook.some(
-        (address) => address.getAddress() === addressOrEns
+        (addressObject) => addressObject.getAddress() === address
       );
-    else
+    } else {
       return this.addressBook.some(
-        (address) => address.getEns() === addressOrEns
+        (addressObject) => addressObject.getEns() === address
       );
+    }
   }
 
-  public searchForAddress(addressOrEns: string | Address) {
+  public searchForAddress(addressOrEns: string | Address): Address | undefined {
+    let address;
     if (addressOrEns instanceof Address) {
-      if (!this.addressExists(addressOrEns.getAddress()))
-        this.addAddress(addressOrEns);
-    } else if (this.isEthereumAddress(addressOrEns)) {
+      address = addressOrEns.getAddress();
+    } else {
+      address = addressOrEns;
+    }
+
+    if (this.isEthereumAddress(address)) {
       return this.addressBook.find(
-        (address) => address.getAddress() === addressOrEns
+        (addressObject) => addressObject.getAddress() === address
       );
-    } else
+    } else {
       return this.addressBook.find(
-        (address) => address.getEns() === addressOrEns
+        (addressObject) => addressObject.getEns() === address
       );
+    }
   }
 
   public searchByWalletLabel(walletLabel: string) {
@@ -88,7 +96,9 @@ export default class AddressBook extends EventEmitter {
   }
 
   public removeFromAddressBook = (address: string) => {
-    
+    this.addressBook = this.addressBook.filter(
+      (addressObject) => addressObject.getAddress() !== address
+    );
   };
 
   public addressCount = () => this.addressBook.length;

@@ -26,7 +26,7 @@ export interface NFTimelineProviderContextType {
   removeFromSpyList: (
     usersAddress: string,
     spyAddress: string
-  ) => Promise<boolean>;
+  ) => Promise<false | AddressBook>;
   timelineFilters: timelineFilterStore[];
   activeTimeline: addressSplitHistory;
   verifiedContractList: VerifiedContractData[];

@@ -46,9 +46,33 @@ export async function addNewSpy(
   return postResult;
 }
 
-export async function removeFromSpyList(
+export async function deleteFromSpyList(
   usersAddress: string,
   spyAddress: string
 ): Promise<boolean> {
-  return false;
+  const body = JSON.stringify({ usersAddress, spyAddress });
+  const postResult = await fetch(
+    `${process.env.NEXT_PUBLIC_NFT_SERVER}/deleteSpyAddress`,
+    {
+      method: "DELETE",
+      headers: {
+        Accept: "text/plain",
+        "Content-Type": "application/json",
+        apiKey: process.env.NEXT_PUBLIC_NFTIMELINE_API,
+      },
+      body: body,
+      cache: "default",
+    }
+  )
+    .then((res: Response) => {
+      console.log("got return data", res);
+      if (res.status === 200) return true;
+      else return false;
+    })
+    .catch((error) => {
+      console.log("error deleting SpyAddress", error);
+      return false;
+    });
+
+  return postResult;
 }

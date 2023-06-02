@@ -20,7 +20,7 @@ import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVot
 import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
 import { Modal } from "components/common";
 import VotingModal from "./components/voting/VotingModal";
-import AddToSpyListButton from "components/spyList/addToSpyListButton";
+import AddToSpyListButton from "components/spyList/AddToSpyListButton";
 
 const Container = styled.div`
   background-color: #86848447;
@@ -169,7 +169,7 @@ function UserInformation({
   handleOpenModalForFirstAndLast,
   handelOpenModalForActiveDate,
 }: UserInformationProps) {
-  const { localProvider } = useWeb3Provider();
+  const { walletAddress } = useWeb3Provider();
   const { activeTimeline, activeAddress } = useNFTimelineProvider();
 
   //  Checks
@@ -182,7 +182,7 @@ function UserInformation({
 
   const [hasENS, setHasENS] = useState<boolean | undefined>(undefined);
   const [ensAddress, setEnsAddress] = useState<string>();
-  const [walletAddress, setWalletAddress] = useState<string>();
+  const [usersWalletAddress, setusersWalletAddress] = useState<string>();
   //  History
   const [sortedInHistory, setSortedInHistory] =
     useState<compileHistoryIntoDaysReturn>();
@@ -206,11 +206,11 @@ function UserInformation({
         if (activeAddress.hasEns()) {
           setHasENS(true);
           setEnsAddress(activeAddress.getEns());
-          setWalletAddress(activeAddress.getAddress());
+          setusersWalletAddress(activeAddress.getAddress());
           setAddressCheck({ started: true, finished: true });
           setReady(true);
         } else {
-          setWalletAddress(activeAddress.getAddress());
+          setusersWalletAddress(activeAddress.getAddress());
           setHasENS(false);
           setAddressCheck({ started: true, finished: true });
           setReady(true);
@@ -220,11 +220,11 @@ function UserInformation({
           if (activeAddress.hasEns()) {
             setHasENS(true);
             setEnsAddress(activeAddress.getEns());
-            setWalletAddress(activeAddress.getAddress());
+            setusersWalletAddress(activeAddress.getAddress());
             setAddressCheck({ started: true, finished: true });
             setReady(true);
           } else {
-            setWalletAddress(activeAddress.getAddress());
+            setusersWalletAddress(activeAddress.getAddress());
             setHasENS(false);
             setAddressCheck({ started: true, finished: true });
             setReady(true);
@@ -276,15 +276,17 @@ function UserInformation({
           <AddressLabel
             href={buildNetworkScanLink({
               network: "eth",
-              address: walletAddress,
+              address: usersWalletAddress,
             })}
             target="blank"
           >
-            {hasENS ? ensAddress : shortenWalletAddress(walletAddress)}
+            {hasENS ? ensAddress : shortenWalletAddress(usersWalletAddress)}
           </AddressLabel>
         )}
       </AddressContainer>
-      <AddToSpyListButton />
+      {walletAddress && walletAddress !== usersWalletAddress && (
+        <AddToSpyListButton />
+      )}
       {
         <VotingArea>
           <WalletsVotingArea

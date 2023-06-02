@@ -34,29 +34,69 @@ const Icon = styled.div`
 `;
 export default function AddToSpyListButton() {
   const { walletAddress, userProvider } = useWeb3Provider();
-  const { spyList, addToSpyList, activeAddress } = useNFTimelineProvider();
+  const {
+    spyList,
+    addToSpyList,
+    activeAddress,
+    getSpyList,
+    removeFromSpyList,
+  } = useNFTimelineProvider();
   const [active, setActive] = useState<boolean>(false);
+  const [working, setWorking] = useState<boolean>(false);
 
   const [icon, setIcon] = useState(faPlus);
 
   useEffect(() => {
-    if (userProvider) {
+    if (userProvider && spyList) {
       setActive(true);
-      if (spyList.searchForAddress(activeAddress.getAddress())) {
-        console.log("address already in spy list");
-        setIcon(faTrashCan);
+      if (!working) {
+        if (spyList.searchForAddress(activeAddress.getAddress())) {
+          console.log("address in spy list");
+          setIcon(faTrashCan);
+        } else {
+          console.log("address is not in spy list");
+          setIcon(faPlus);
+        }
       }
+    } else if (userProvider && !spyList) {
+      getSpyList(walletAddress).then((result) => {
+        if (!working) {
+          if (result.searchForAddress(activeAddress.getAddress())) {
+            console.log("address in spy list");
+            setIcon(faTrashCan);
+          } else {
+            console.log("address is not in spy list");
+            setIcon(faPlus);
+          }
+        }
+        setActive(true);
+      });
     } else setActive(false);
   });
 
   const handleButtonClick = () => {
+    setWorking(true);
     console.log("trying to add address: ", activeAddress);
+    console.log(spyList.searchForAddress(activeAddress));
     if (!spyList.searchForAddress(activeAddress))
       addToSpyList(walletAddress, activeAddress.getAddress()).then((result) => {
         console.log("added to list: ", result);
         if (result) setIcon(faCheck);
+        setWorking(false);
       });
-    else console.log("Address already being spied on");
+    else {
+      removeFromSpyList(walletAddress, activeAddress.getAddress()).then(
+        (result) => {
+          console.log(
+            "remove address from spy list: ",
+            activeAddress.getAddress()
+          );
+
+          if (result) setIcon(faPlus);
+          setWorking(false);
+        }
+      );
+    }
   };
 
   return (

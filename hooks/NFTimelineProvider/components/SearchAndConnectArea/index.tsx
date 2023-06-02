@@ -110,6 +110,9 @@ function SearchAndConnectArea({
             <br />
             <ConnectButton />
             Or
+            {userProvider && (
+              <OpenSpyListButton handleClick={() => setIsOpen(true)} />
+            )}
             <Input
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Wallet Address or ENS"
@@ -129,7 +132,6 @@ function SearchAndConnectArea({
             >
               Search
             </Button>
-            <OpenSpyListButton handleClick={() => setIsOpen(true)} />
             <FilterArea>
               <FilterLabel
                 onClick={() => setFiltersOpen(isFiltersOpen ? false : true)}
