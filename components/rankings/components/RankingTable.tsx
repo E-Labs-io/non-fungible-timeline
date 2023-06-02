@@ -72,7 +72,7 @@ const Container = styled.div`
   background-color: #ffffff38;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-auto-rows: auto;
   grid-column-gap: 10px;
   box-shadow: inset 0px 0px 15px 2px rgba(207, 207, 207, 0.682);
