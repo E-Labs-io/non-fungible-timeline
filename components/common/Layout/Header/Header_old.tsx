@@ -41,7 +41,7 @@ const HeaderRow = styled.div`
 
 const LogoImageContainer = styled.div`
   width: auto;
-  height: auto;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,7 +49,8 @@ const LogoImageContainer = styled.div`
 `;
 
 const Logo = styled.img`
-  height: 60px; // adjust this value as needed
+  width: auto;
+  height: 100%;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -59,7 +60,7 @@ const Logo = styled.img`
   }
 
   @media ${device.tabletS} {
-    height: 40px; // adjust this value as needed
+    height: 60%;
   }
 `;
 
@@ -79,13 +80,6 @@ const BackButton = styled.div`
     color: #d80e9f;
     cursor: pointer;
   }
-`;
-
-const HeaderSection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
 `;
 
 const menuItems = [
@@ -117,60 +111,50 @@ const Header = ({ onBack, onMenu }) => {
   return (
     <StyledHeader ref={headerRef}>
       <HeaderRow>
-        <HeaderSection>
-          <BackButton>
-            <FontAwesomeIcon
-              onClick={onBack ? onBack : null}
-              size="2xl"
-              icon={faAnglesLeft}
-            />
-          </BackButton>
-        </HeaderSection>
-        <HeaderSection>
-          <LogoImageContainer>
-            <Logo onClick={goHome} src="/images/logo-short_gradient-01.png" />
-          </LogoImageContainer>
-        </HeaderSection>
-        <HeaderSection>
-          <FlatMenuContainer>
-            {showSmallMenu ? (
-              <FocusLock disabled={!open}>
-                <div>
-                  <Menu
-                    showSmallMenu={showSmallMenu}
-                    open={open}
-                    setOpen={handleMenu}
-                    id={menuId}
-                    menuItems={menuItems}
-                    walletConnectCallback={() => {}}
-                  />
-                </div>
-                <Burger
+        <BackButton>
+          <FontAwesomeIcon
+            onClick={onBack ? onBack : null}
+            size="2xl"
+            icon={faAnglesLeft}
+          />
+        </BackButton>
+        <LogoImageContainer>
+          <Logo onClick={goHome} src="/images/logo-short_gradient-01.png" />
+        </LogoImageContainer>
+        <FlatMenuContainer>
+          {showSmallMenu ? (
+            <FocusLock disabled={!open}>
+              <div>
+                <Menu
+                  showSmallMenu={showSmallMenu}
                   open={open}
                   setOpen={handleMenu}
-                  aria-controls={menuId}
+                  id={menuId}
+                  menuItems={menuItems}
+                  walletConnectCallback={() => {}}
                 />
-              </FocusLock>
-            ) : (
-              <FocusLock disabled={!open}>
-                <div>
-                  <Menu
-                    open={open}
-                    setOpen={handleMenu}
-                    id={menuId}
-                    menuItems={menuItems}
-                    walletConnectCallback={() => {}}
-                  />
-                </div>
-                <FlatMenu
+              </div>
+              <Burger open={open} setOpen={handleMenu} aria-controls={menuId} />
+            </FocusLock>
+          ) : (
+            <FocusLock disabled={!open}>
+              <div>
+                <Menu
                   open={open}
                   setOpen={handleMenu}
-                  ariaControls={menuId}
+                  id={menuId}
+                  menuItems={menuItems}
+                  walletConnectCallback={() => {}}
                 />
-              </FocusLock>
-            )}
-          </FlatMenuContainer>
-        </HeaderSection>
+              </div>
+              <FlatMenu
+                open={open}
+                setOpen={handleMenu}
+                ariaControls={menuId}
+              />
+            </FocusLock>
+          )}
+        </FlatMenuContainer>
       </HeaderRow>
     </StyledHeader>
   );
