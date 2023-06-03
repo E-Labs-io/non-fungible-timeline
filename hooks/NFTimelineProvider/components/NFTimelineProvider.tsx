@@ -21,6 +21,7 @@ import AddressBook from "hooks/web3/helpers/AddressManager";
 import { addNewSpy, deleteFromSpyList, getUsersSpyList } from "../api/spyList";
 import { useWeb3Provider } from "hooks/web3";
 import { deleteVote } from "../api/deleteVote";
+import { checkIfWalletVoted } from "../api/getWalletsVotingData";
 
 export const NFTimelineProviderContext = createContext(
   {} as NFTimelineProviderContextType
@@ -29,7 +30,8 @@ export const NFTimelineProviderContext = createContext(
 //let storedMetadata: StoredMetadataType = { ethereum: {} };
 
 const NFTimelineProvider = ({ children }) => {
-  const { userProvider, walletAddress } = useWeb3Provider();
+  const { userProvider, walletAddress, userSigner, userSignMessage } =
+    useWeb3Provider();
   const [verifiedContractList, setVerifiedContractList] =
     useState<VerifiedContractData[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
@@ -178,14 +180,48 @@ const NFTimelineProvider = ({ children }) => {
 
   const submitVote = async (
     ballotId: string,
-    voteDate: Votes
+    voteData: Votes
   ): Promise<number> =>
-    postVote(ballotId, voteDate).then(async (result: number) => {
-      if (result === 5) {
-        await updateRankingData();
-        return 5;
-      } else return result;
-    });
+    userSignMessage(
+      userSigner,
+      `NFTimeline: Giving ${activeAddress} a vote for ${ballotId}`
+    ).then((result) =>
+      result
+        ? postVote(ballotId, voteData).then(async (result: number) => {
+            if (result === 5) {
+              await updateRankingData();
+              return 5;
+            } else return result;
+          })
+        : false
+    );
+  const removeVote = async (
+    ballotId: string,
+    voterAddress: string,
+    votedForAddress: string
+  ): Promise<boolean> =>
+    checkIfAddressVoted(ballotId, voterAddress, votedForAddress).then(
+      (result) =>
+        result
+          ? deleteVote(ballotId, voterAddress, votedForAddress).then(
+              (result) => {
+                if (result) {
+                  updateRankingData();
+                  return result;
+                } else return result;
+              }
+            )
+          : false
+    );
+
+  const checkIfAddressVoted = async (
+    ballotId: string,
+    voterAddress: string,
+    votedForAddress: string
+  ): Promise<boolean> =>
+    checkIfWalletVoted(ballotId, voterAddress, votedForAddress).then(
+      (result) => result
+    );
 
   /**
    *  Spy List
@@ -263,12 +299,14 @@ const NFTimelineProvider = ({ children }) => {
         removeAllTimelineFilters,
         removeTimelineFilter,
         checkIfValidContract,
+        checkIfAddressVoted,
         submitVote,
         getAllRankings,
         getBallotRankings,
         getSpyList,
         addToSpyList,
         removeFromSpyList,
+        removeVote,
         timelineFilters,
         activeTimeline,
         verifiedContractList,

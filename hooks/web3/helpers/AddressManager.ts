@@ -95,10 +95,19 @@ export default class AddressBook extends EventEmitter {
     );
   }
 
-  public removeFromAddressBook = (address: string) => {
-    this.addressBook = this.addressBook.filter(
-      (addressObject) => addressObject.getAddress() !== address
-    );
+  public removeFromAddressBook = (addressOrEns: string | Address) => {
+    let address;
+    if (addressOrEns instanceof Address) {
+      address = addressOrEns.getAddress();
+    } else {
+      address = addressOrEns;
+    }
+
+    this.addressBook = this.addressBook.filter((addressObject) => {
+      const currentAddress = addressObject.getAddress();
+      const currentEns = addressObject.getEns();
+      return currentAddress !== address && currentEns !== address;
+    });
   };
 
   public addressCount = () => this.addressBook.length;

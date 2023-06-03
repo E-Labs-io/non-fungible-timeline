@@ -21,12 +21,14 @@ export interface NFTimelineProviderContextType {
   removeTimelineFilter: removeTimelineFilter;
   removeAllTimelineFilters: removeAllTimelineFilters;
   checkIfValidContract: checkIfValidContract;
+  checkIfAddressVoted: checkIfAddressVoted;
   getSpyList: (usersAddress: string) => Promise<AddressBook>;
   addToSpyList: (usersAddress: string, spyAddress: string) => Promise<boolean>;
   removeFromSpyList: (
     usersAddress: string,
     spyAddress: string
   ) => Promise<false | AddressBook>;
+  removeVote: removeVote;
   timelineFilters: timelineFilterStore[];
   activeTimeline: addressSplitHistory;
   verifiedContractList: VerifiedContractData[];
@@ -93,3 +95,15 @@ export type StoredMetadataType = {
 export type getAllRankingData = () =>
   | Promise<AllBallotRankingData>
   | AllBallotRankingData;
+
+export type checkIfAddressVoted = (
+  ballotId: string,
+  voterAddress: string,
+  votedForAddress: string
+) => Promise<boolean>;
+
+export type removeVote = (
+  ballotId: string,
+  voterAddress: string,
+  votedForAddress: string
+) => Promise<boolean>;

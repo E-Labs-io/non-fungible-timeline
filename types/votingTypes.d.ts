@@ -30,4 +30,8 @@ export type votingWalletsStatsReturn = {
   categories: { [categoryName: string]: {} };
 };
 
-export type votingCategoriesType = "degen" | "diamondhands";
+export type votingCategoriesType =
+  | "degen"
+  | "diamondhands"
+  | "insider"
+  | "whale";

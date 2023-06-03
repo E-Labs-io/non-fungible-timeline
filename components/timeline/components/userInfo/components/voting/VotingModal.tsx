@@ -44,14 +44,20 @@ interface VotingModalProps {
 }
 function VotingModal({ categoryType, category }: VotingModalProps) {
   //  Hooks
-  const { activeAddress } = useNFTimelineProvider();
+  const { activeAddress, checkIfAddressVoted, removeVote } =
+    useNFTimelineProvider();
   const { userSigner, userSignMessage, walletAddress } = useWeb3Provider();
   //    State
-  const [process, setProcess] = useState(0);
+  const [process, setProcess] = useState(6);
 
   useEffect(() => {
     //  Check if the singer has already voted for this wallet
-    //  If so, deactivate button and show message
+    if (userSigner && process === 6)
+      checkIfAddressVoted(
+        categoryType,
+        walletAddress,
+        activeAddress.getAddress()
+      ).then((result) => (result ? setProcess(4) : setProcess(0)));
   });
 
   const handleVoteClick = async () => {
@@ -77,6 +83,17 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
     } else {
     }
   };
+
+  const unVoteClick = async () => {
+    setProcess(6);
+    removeVote(categoryType, walletAddress, activeAddress.getAddress()).then(
+      (result) => {
+        if (result) setProcess(7);
+        else setProcess(6);
+      }
+    );
+  };
+
   if (!userSigner)
     return (
       <Container>
@@ -88,6 +105,23 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             You need to connect your wallet to vote!
           </SelectedWallet>
         </TitleBlock>
+      </Container>
+    );
+  else if (process === 6)
+    //    Checking Vote Status
+    return (
+      <Container>
+        <TitleBlock>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
+          <Loader />
+        </TitleBlock>
+        <ButtonContainer>
+          <Button disabled={!category.active} onClick={handleVoteClick}>
+            Vote
+          </Button>
+        </ButtonContainer>
       </Container>
     );
   else if (process === 0)
@@ -173,7 +207,7 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
       </Container>
     );
   else if (process === 4)
-    //    Saving to DB State
+    //    Already Voted
     return (
       <Container>
         <TitleBlock>
@@ -185,8 +219,13 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
             as a {category.title}!
           </SelectedWallet>
-          <VotingInfo>Trying exploring some new wallets</VotingInfo>
+          <VotingInfo>Would you like to un vote this wallet?</VotingInfo>
         </TitleBlock>
+        <ButtonContainer>
+          <Button disabled={false} onClick={unVoteClick}>
+            Un-Vote
+          </Button>
+        </ButtonContainer>
       </Container>
     );
   else if (process === 5)
@@ -203,6 +242,34 @@ function VotingModal({ categoryType, category }: VotingModalProps) {
             as a {category.title}!
           </SelectedWallet>
           <VotingInfo>How about exploring some new wallets</VotingInfo>
+        </TitleBlock>
+      </Container>
+    );
+  else if (process === 6)
+    //    Removing Vote
+    return (
+      <Container>
+        <TitleBlock>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
+          <SelectedWallet>Processing your un-vote</SelectedWallet>
+        </TitleBlock>
+      </Container>
+    );
+  else if (process === 7)
+    //    Removing Vote
+    return (
+      <Container>
+        <TitleBlock>
+          <CategoryName>
+            {category.label} - {category.title}
+          </CategoryName>
+          <SelectedWallet>
+            Done, you removed you vote for
+            <WalletEtherscanLink walletAddress={activeAddress.getAddress()} />
+            as a {category.title}!
+          </SelectedWallet>
         </TitleBlock>
       </Container>
     );
