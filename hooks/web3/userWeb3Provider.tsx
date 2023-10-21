@@ -18,6 +18,8 @@ import { Network } from "alchemy-sdk";
 import ensResolver from "./helpers/ensResolver";
 import AddressBook from "./helpers/AddressManager";
 import Address from "./helpers/Address";
+import { ActiveChainIndex, NetworkKeys } from "./types/Chains";
+import { availableChains } from "./constants/avalabuleChains";
 
 export interface UserWeb3ProviderContextType {
   walletAddress: string;
@@ -34,6 +36,8 @@ export interface UserWeb3ProviderContextType {
   connectToGivenProvider: Function;
   useEnsResolver: Function;
   localProvider: ethers.providers.Provider;
+  selectedChains: ActiveChainIndex;
+  onSelectedChainChange: (action: "add" | "remove", chain: NetworkKeys) => void;
 }
 
 export type GivenProviderAllowance = "alchemy";
@@ -46,6 +50,12 @@ export const UserWeb3Context = createContext({
   userProvider: null,
   auxStorage: {},
   userSigner: null,
+  selectedChains: {
+    ETH_MAINNET: true,
+    OPT_MAINNET: false,
+    ARB_MAINNET: false,
+    MATIC_MAINNET: false,
+  },
   useEnsResolver: (network: string) => Promise,
   updateAuxStorage: (param: string, value: any) => {},
   connectToUsersProvider: (userAction: boolean) => {},
@@ -56,6 +66,7 @@ export const UserWeb3Context = createContext({
     provider: GivenProviderAllowance,
     network: string
   ) => {},
+  onSelectedChainChange: (action: "add" | "remove", chain: NetworkKeys) => {},
 } as UserWeb3ProviderContextType);
 
 export const APIKeys = {
@@ -79,6 +90,21 @@ const UserWeb3Provider = ({ children }) => {
   const [shortWalletAddress, setShortWalletAddress] = useState("");
   const [auxStorage, setAuxStorage] = useState({});
   const [providerInterface, setProviderInterface] = useState(null);
+
+  const [selectedChains, setSelectedChains] =
+    useState<ActiveChainIndex>(availableChains);
+
+  const onSelectedChainChange = (
+    action: "add" | "remove",
+    chain: NetworkKeys
+  ) => {
+    console.log("Web3 Provider : chain selected : ", action, chain);
+    const preStorage = selectedChains;
+    setSelectedChains({
+      ...preStorage,
+      [chain]: action === "add" ? true : false,
+    });
+  };
 
   const [addressBook, setAddressBook] = useState<AddressBook>();
 
@@ -254,6 +280,8 @@ const UserWeb3Provider = ({ children }) => {
         disconnectProvider,
         connectToGivenProvider,
         useEnsResolver,
+        selectedChains,
+        onSelectedChainChange,
       }}
     >
       {children}

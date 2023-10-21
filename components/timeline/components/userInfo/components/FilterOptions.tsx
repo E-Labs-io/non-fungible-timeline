@@ -76,7 +76,12 @@ function FilterOptions({}: FilterOptionsProps) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [activeFilters, setActiveFilters] = useState<filtersInitalState>();
 
-  const initState = { date: false, verified: false, order: false };
+  const initState = {
+    date: false,
+    verified: false,
+    order: false,
+    chain: false,
+  };
 
   useEffect(() => {
     if (!!!activeFilters) {

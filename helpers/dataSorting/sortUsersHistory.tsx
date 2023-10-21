@@ -1,6 +1,11 @@
 /** @format */
 
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
+import { NetworkKeys } from "hooks/web3/types/Chains";
+
+export interface AssetTransferData extends AssetTransfersWithMetadataResult {
+  chain: NetworkKeys;
+}
 
 export type HashType = string;
 
@@ -17,6 +22,7 @@ export type sortedHistoryData = {
   tokenCount?: number;
   groupedTokenIds?: TokenIds[];
   value;
+  chain: NetworkKeys;
 };
 
 export type TokenIds = {
@@ -46,7 +52,7 @@ export type sortUsersHistoryReturn = {
 };
 
 const sortUsersHistory = (
-  history: AssetTransfersWithMetadataResult[]
+  history: AssetTransferData[]
 ): sortUsersHistoryReturn => {
   //  Counts block numbers & tx Hash within
 
@@ -103,7 +109,8 @@ const sortUsersHistory = (
               ticker: item.asset,
               tokenCount: 1,
               groupedTokenIds: [tId],
-              vaule: item.value,
+              value: item.value,
+              chain: item.chain,
             },
           };
           sorted[blkNum][hash] = arg[item.hash];
@@ -126,6 +133,7 @@ const sortUsersHistory = (
               tokenCount: 1,
               groupedTokenIds: [tId],
               value: item.value,
+              chain: item.chain,
             },
           },
         };
@@ -153,6 +161,7 @@ const sortUsersHistory = (
             ticker: item.asset,
             tokenCount: 1,
             groupedTokenIds: [tId],
+            chain: item.chain,
           },
         },
       };

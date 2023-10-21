@@ -5,16 +5,19 @@ import sortUsersHistory from "helpers/dataSorting/sortUsersHistory";
 import getUsersHistory from "helpers/getters/getUsersHistory";
 import Address from "hooks/web3/helpers/Address";
 import { getTImelineDataReturn } from "../types/ProviderTypes";
+import { NetworkKeys } from "hooks/web3/types/Chains";
 
 interface searchUsersHistoryProps {
   address: Address;
   loadingStateCallback: (state) => void;
   hasErrorCallback: (flag: boolean) => void;
+  chains: NetworkKeys[];
 }
 const searchUsersHistory = async ({
   address,
   loadingStateCallback,
   hasErrorCallback,
+  chains,
 }: searchUsersHistoryProps): Promise<getTImelineDataReturn | false> => {
   hasErrorCallback(false);
 
@@ -27,12 +30,28 @@ const searchUsersHistory = async ({
   }
   loadingStateCallback(2);
 
-  const inBoundTransfers = await getUsersHistory({
-    to: searchAddress,
-  });
+  let inBoundTransfers = [];
+  for (let i = 0; i < chains.length; i++) {
+    const chain = chains[i];
+    let tempOutbound = await getUsersHistory({
+      to: searchAddress,
+      chain: chain,
+    });
+    inBoundTransfers = [...inBoundTransfers, ...tempOutbound];
+  }
+
   loadingStateCallback(3);
 
-  const outBound = await getUsersHistory({ from: searchAddress });
+  let outBound = [];
+  for (let i = 0; i < chains.length; i++) {
+    const chain = chains[i];
+    let tempOutbound = await getUsersHistory({
+      from: searchAddress,
+      chain: chain,
+    });
+    outBound = [...outBound, ...tempOutbound];
+  }
+
   loadingStateCallback(4);
   if (outBound.length === 0 && inBoundTransfers.length === 0) {
     loadingStateCallback(0);

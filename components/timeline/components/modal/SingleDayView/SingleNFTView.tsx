@@ -221,6 +221,7 @@ const SingleNFTView = ({
             NFTData={NFTData}
             verified={verified}
             mediaFormat={mediaFormat}
+            chain={transactionData.chain}
           />
           <InformationDescription>
             {metadata.description}

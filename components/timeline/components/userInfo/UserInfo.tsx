@@ -10,7 +10,6 @@ import UserStats from "./components/stats/UserStats";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import FilterOptions from "./components/FilterOptions";
-import UsersVotingArea from "./components/voting/UsersVotingArea";
 import { device } from "constants/media";
 import StateSkeleton from "components/common/SkeletonLoader";
 import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
@@ -284,9 +283,11 @@ function UserInformation({
           </AddressLabel>
         )}
       </AddressContainer>
+
       {walletAddress && walletAddress !== usersWalletAddress && (
         <AddToSpyListButton />
       )}
+
       {
         <VotingArea>
           <WalletsVotingArea

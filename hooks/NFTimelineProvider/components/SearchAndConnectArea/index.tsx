@@ -11,6 +11,7 @@ import FilterOptions from "components/timeline/components/userInfo/components/Fi
 import useNFTimelineProvider from "hooks/NFTimelineProvider/hooks/useNFTimelineProvider";
 import OpenSpyListButton from "components/spyList/OpenSpyListButton";
 import SpyListModal from "components/spyList/spyListModal";
+import ChainSelector from "hooks/web3/components/ChainSelector";
 
 const Wrapper = styled.div`
   justify-content: center;
@@ -89,7 +90,8 @@ function SearchAndConnectArea({
   badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
-  const { getSpyList, spyList } = useNFTimelineProvider();
+  const { getSpyList, spyList, onSelectedChainChange } =
+    useNFTimelineProvider();
   const { userProvider, walletAddress } = useWeb3Provider();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -116,6 +118,16 @@ function SearchAndConnectArea({
             <Input
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Wallet Address or ENS"
+            />
+            <ChainSelector
+              availableChains={[
+                "ETH_MAINNET",
+                "MATIC_MAINNET",
+                "ARB_MAINNET",
+                "OPT_MAINNET",
+              ]}
+              onSelectedChain={onSelectedChainChange}
+              notForProvider
             />
             {ensError && (
               <EnsWarning>*ENS not recognised, please try another</EnsWarning>

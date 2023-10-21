@@ -1,14 +1,17 @@
 /** @format */
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
+import { AssetTransferData } from "helpers/dataSorting/sortUsersHistory";
 import alchemyGetAssetTransfers, {
   alchemyGetAssetTransfersOptions,
 } from "hooks/web3/api/alchemyGetAssetTransfers";
+import { NetworkKeys } from "hooks/web3/types/Chains";
 
 export interface GetUSersHistoryProps {
   from?: string;
   to?: string;
   startingBlock?: string;
   endingBlock?: string;
+  chain: NetworkKeys;
 }
 
 const getUsersHistory = async ({
@@ -16,7 +19,8 @@ const getUsersHistory = async ({
   to,
   startingBlock,
   endingBlock,
-}: GetUSersHistoryProps): Promise<AssetTransfersWithMetadataResult[]> => {
+  chain,
+}: GetUSersHistoryProps): Promise<AssetTransferData[]> => {
   const transfers = [];
   let pageKey: string | undefined = undefined;
   let options: alchemyGetAssetTransfersOptions = {
@@ -26,7 +30,9 @@ const getUsersHistory = async ({
 
   //  Reusable getData function
   const search = async (options: alchemyGetAssetTransfersOptions) =>
-    await alchemyGetAssetTransfers(options).then((result) => result.result);
+    await alchemyGetAssetTransfers(options, chain).then(
+      (result) => result.result
+    );
 
   //  Start of 2021 block - "0xAA2644"
   //  Set the start & end blocks if there
@@ -40,7 +46,10 @@ const getUsersHistory = async ({
   //  Get the first run of data
   const batchedTXData = await search(options);
   console.log("batchedTXData : ", batchedTXData);
-  batchedTXData.transfers.forEach((tx) => transfers.push(tx));
+  batchedTXData.transfers.forEach((tx) => {
+    tx.chain = chain;
+    transfers.push(tx);
+  });
 
   //  Check if there is an other page of data
   //  Set the pageKey to the next page of data

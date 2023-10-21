@@ -1,5 +1,8 @@
 /** @format */
 
+import { Network } from "alchemy-sdk";
+import { NetworkKeys } from "../types/Chains";
+
 export interface alchemyGetAssetTransfersOptions {
   fromAddress?: string;
   toAddress?: string;
@@ -18,8 +21,11 @@ export type alchemyGetAssetTransferCategoryType =
   | "erc1155"
   | "erc20";
 
+
+
 const alchemyGetAssetTransfers = async (
-  options: alchemyGetAssetTransfersOptions
+  options: alchemyGetAssetTransfersOptions,
+  network: NetworkKeys = "ETH_MAINNET"
 ) => {
   if (!!!options.fromAddress && !!!options.toAddress)
     throw "Need to provide at least a To or From";
@@ -35,7 +41,7 @@ const alchemyGetAssetTransfers = async (
     headers: { "Content-Type": "application/json" },
     body: data,
   };
-  const baseURL = `https://eth-mainnet.alchemyapi.io/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`;
+  const baseURL = `https://${Network[network]}.alchemyapi.io/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`;
 
   const returnedData = await fetch(baseURL, requestOptions)
     .then((result) => result.json())

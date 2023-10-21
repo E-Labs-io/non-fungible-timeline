@@ -1,10 +1,11 @@
 /** @format */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
 import shortenTokenId from "helpers/shorternTokenId";
 import { device } from "constants/media";
+import { NetworkKeys } from "hooks/web3/types/Chains";
 
 const BadgeArea = styled.div`
   width: 100%;
@@ -23,6 +24,8 @@ const BadgeArea = styled.div`
 `;
 
 const InfoBadge = styled.div`
+  flex-direction: row;
+  display: flex;
   border-radius: 10px;
   border-color: black;
   border-width: 2px;
@@ -38,19 +41,33 @@ interface SingleDayViewBadgesProps {
   mediaFormat: string;
   verified: boolean;
   NFTData: SingleNFTDataType;
+  chain: NetworkKeys;
 }
 
 function SingleDayViewBadges({
   mediaFormat,
   NFTData,
   verified,
+  chain,
 }: SingleDayViewBadgesProps) {
+  const [chainLabel, setChainLabel] = useState<string>();
+
+  useEffect(() => {
+    if (!chainLabel) {
+      if (chain === "ETH_MAINNET") setChainLabel("Ethereum");
+      if (chain === "OPT_MAINNET") setChainLabel("Optimism");
+      if (chain === "MATIC_MAINNET") setChainLabel("Polygon");
+      if (chain === "ARB_MAINNET") setChainLabel("Arbitrim");
+      console.log(chainLabel);
+    }
+  });
+
   return (
     <BadgeArea>
       <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
       <InfoBadge>{mediaFormat}</InfoBadge>
       <InfoBadge>{NFTData.contract_type}</InfoBadge>
-      <InfoBadge>Ethereum</InfoBadge>
+      <InfoBadge>{chainLabel}</InfoBadge>
       {verified && <InfoBadge>Verified</InfoBadge>}
     </BadgeArea>
   );

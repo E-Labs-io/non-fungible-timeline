@@ -22,6 +22,8 @@ import { addNewSpy, deleteFromSpyList, getUsersSpyList } from "../api/spyList";
 import { useWeb3Provider } from "hooks/web3";
 import { deleteVote } from "../api/deleteVote";
 import { checkIfWalletVoted } from "../api/getWalletsVotingData";
+import { ActiveChainIndex, NetworkKeys } from "hooks/web3/types/Chains";
+import { availableChains } from "hooks/web3/constants/avalabuleChains";
 
 export const NFTimelineProviderContext = createContext(
   {} as NFTimelineProviderContextType
@@ -139,6 +141,25 @@ const NFTimelineProvider = ({ children }) => {
       });
       setTimelineFilters(newFilters);
     }
+  };
+
+  /**
+   * Chain Selection
+   */
+
+  const [selectedChains, setSelectedChains] =
+    useState<ActiveChainIndex>(availableChains);
+
+  const onSelectedChainChange = (
+    action: "add" | "remove",
+    chain: NetworkKeys
+  ) => {
+    console.log("NFTimeline Provider : chain selected : ", action, chain);
+    const preStorage = selectedChains;
+    setSelectedChains({
+      ...preStorage,
+      [chain]: action === "add" ? true : false,
+    });
   };
 
   /**
@@ -313,6 +334,8 @@ const NFTimelineProvider = ({ children }) => {
         activeAddress,
         allBallotRankings,
         spyList,
+        selectedChains,
+        onSelectedChainChange,
       }}
     >
       {children}

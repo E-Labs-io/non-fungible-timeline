@@ -12,6 +12,8 @@ import useNFTimelineProvider, {
 } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
 import { LoadingStates } from "types/stateTypes";
+import { NetworkKeys } from "hooks/web3/types/Chains";
+import { availableChains } from "hooks/web3/constants/avalabuleChains";
 
 const ConnectionContainer = styled.div`
   height: fit-content;
@@ -77,10 +79,16 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
         searchedAddress.getAddress()
       );
       if (!isLocal) {
+        const chains = [];
+        Object.keys(availableChains).forEach((key) => {
+          if (availableChains[key]) chains.push(key);
+        });
+        console.log("Searching userhist on chians: ", chains);
         const usersTimeline = await searchUsersHistory({
           address: searchedAddress,
           loadingStateCallback: stateChangeHandler,
           hasErrorCallback: setEnsError,
+          chains,
         });
 
         if (usersTimeline) {

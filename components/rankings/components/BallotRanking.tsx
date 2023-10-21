@@ -18,6 +18,7 @@ import { LoadingStates } from "types/stateTypes";
 import getSortedBallotRankings from "../helpers/sortRankings";
 import RankCard from "./RankCard";
 import RankingTable from "./RankingTable";
+import { availableChains } from "hooks/web3/constants/avalabuleChains";
 
 interface BallotRankingProps {
   maxRankings?: number;
@@ -124,10 +125,15 @@ function BallotRanking({
     setActiveAddress(null);
     if (!check) {
       // Logic to search for the data though API
+      const chains = [];
+      Object.keys(availableChains).forEach((key) => {
+        if (availableChains[key]) chains.push(key);
+      });
       const usersTimeline = await searchUsersHistory({
         address: address,
         loadingStateCallback: stateChangeHandler,
         hasErrorCallback: () => {},
+        chains,
       });
 
       if (usersTimeline) {

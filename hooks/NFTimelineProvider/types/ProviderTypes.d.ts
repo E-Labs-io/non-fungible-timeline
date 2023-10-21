@@ -7,6 +7,8 @@ import { type } from "os";
 import { VerifiedContractData } from "./verifiedContractsTypes";
 import { Ballot, Votes } from "./VotingTypes";
 import AddressBook from "hooks/web3/helpers/AddressManager";
+import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
+import { ActiveChainIndex, NetworkKeys } from "hooks/web3/types/Chains";
 
 export interface NFTimelineProviderContextType {
   submitVote: submitVote;
@@ -35,6 +37,8 @@ export interface NFTimelineProviderContextType {
   activeAddress: Address;
   allBallotRankings: AllBallotRankingData;
   spyList: AddressBook;
+  selectedChains: ActiveChainIndex;
+  onSelectedChainChange: onChainSelection;
 }
 
 export type addTimelineFilter = (filterOptions: timelineFilterStore) => void;
@@ -107,3 +111,8 @@ export type removeVote = (
   voterAddress: string,
   votedForAddress: string
 ) => Promise<boolean>;
+
+export type onChainSelection = (
+  action: "add" | "remove",
+  chain: NetworkKeys
+) => void;
