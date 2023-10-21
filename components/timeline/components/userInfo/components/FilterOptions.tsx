@@ -8,6 +8,10 @@ import styled from "styled-components";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { filtersInitalState } from "hooks/NFTimelineProvider/types/FilterTypes";
 import { device } from "constants/media";
+import ChainSelector from "hooks/web3/components/ChainSelector";
+import { availableChains } from "hooks/web3/constants/avalabuleChains";
+import { Tooltip } from "react-tooltip";
+import { NetworkKeys } from "hooks/web3/types/Chains";
 
 const Container = styled.div`
   transition: all 0.3s linear;
@@ -72,6 +76,8 @@ function FilterOptions({}: FilterOptionsProps) {
     removeTimelineFilter,
     removeAllTimelineFilters,
     timelineFilters,
+    selectedChains,
+    onSelectedChainChange,
   } = useNFTimelineProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [activeFilters, setActiveFilters] = useState<filtersInitalState>();
@@ -80,7 +86,7 @@ function FilterOptions({}: FilterOptionsProps) {
     date: false,
     verified: false,
     order: false,
-    chain: false,
+    chain: true,
   };
 
   useEffect(() => {
@@ -99,6 +105,7 @@ function FilterOptions({}: FilterOptionsProps) {
 
   const handleResetAllFilters = () => {
     dispatch({ type: "dateChange", payload: initialState });
+    
     removeAllTimelineFilters();
     setActiveFilters(initState);
   };
@@ -135,6 +142,16 @@ function FilterOptions({}: FilterOptionsProps) {
     }
   };
 
+  const handleToggleChainFilter = (
+    action: "add" | "remove",
+    chain: NetworkKeys
+  ) => {
+    onSelectedChainChange(action, chain);
+    const newChains = selectedChains;
+    newChains[chain] = action === "add" ? true : false;
+    addTimelineFilter({ filterType: "chain", optionA: newChains });
+  };
+
   const dateToLocal = (date) => new Date(date).toLocaleDateString();
   const handleOnDateChange = (data) =>
     dispatch({ type: "dateChange", payload: data });
@@ -151,6 +168,22 @@ function FilterOptions({}: FilterOptionsProps) {
             status={timelineFilters && activeFilters?.verified}
             tooltip="Only show NFTs from verified contracts"
             id="verifiedToggle"
+          />
+        </SwitchContainer>
+      </FilterInsert>
+      <FilterInsert>
+        Show selected chains{" "}
+        <SwitchContainer>
+          <ChainSelector
+            availableChains={[
+              "ETH_MAINNET",
+              "MATIC_MAINNET",
+              "ARB_MAINNET",
+              "OPT_MAINNET",
+            ]}
+            notForProvider
+            activeChainStream={selectedChains}
+            onSelectedChain={handleToggleChainFilter}
           />
         </SwitchContainer>
       </FilterInsert>

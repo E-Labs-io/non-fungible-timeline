@@ -4,6 +4,7 @@ import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { timelineFilterStore } from "hooks/NFTimelineProvider/types/FilterTypes";
 import { checkIfValidContract } from "hooks/NFTimelineProvider/types/ProviderTypes";
 import { combinedHistory } from "../TimeLine";
+import { NetworkKeys } from "hooks/web3/types/Chains";
 
 const filterFilteredDays = (
   history: combinedHistory,
@@ -15,7 +16,44 @@ const filterFilteredDays = (
   const isData = filters.find((a) => a.filterType === "date");
   const isVerified = filters.find((a) => a.filterType === "verified");
   const isOrder = filters.find((a) => a.filterType === "order");
+  const isChain = filters.find((a) => a.filterType === "chain");
 
+  console.log("FILETERS : ", filters);
+
+  if (isChain) {
+    // Get teh active Chains
+    const chains = [];
+    Object.keys(isChain.optionA).forEach((chain) => {
+      if (isChain.optionA[chain]) chains.push(chain);
+    });
+    const filtered: combinedHistory = [];
+    for (let day = 0; day < filteredHistory.length; day++) {
+      //  For each day, lets check if the contracts are allowed
+      //  Set the vars to collect allowed data
+      const allowedHash: string[] = [];
+      const allowedSortedData: sortedHashData = {};
+      //  Get the original data
+      const dayData = filteredHistory[day];
+      const hashes = dayData[2];
+      const contracts = dayData[3];
+
+      hashes.forEach((hash) => {
+        contracts[hash].forEach((contract) => {
+          if (chains.includes(contract.chain)) {
+            allowedSortedData[hash]
+              ? allowedSortedData[hash].push(contract)
+              : (allowedSortedData[hash] = [contract]);
+          }
+        });
+        if (!!allowedSortedData[hash] && allowedSortedData[hash].length > 0)
+          allowedHash.push(hash);
+      });
+      if (allowedHash.length > 0)
+        filtered.push([dayData[0], dayData[1], allowedHash, allowedSortedData]);
+    }
+    console.log("Filter : Chains : Filtered History ; ", filtered);
+    filteredHistory = filtered;
+  }
   if (!!isData) {
     const filtered: combinedHistory = [];
     //  Filter for days

@@ -37,13 +37,18 @@ const NFTimelineProvider = ({ children }) => {
   const [verifiedContractList, setVerifiedContractList] =
     useState<VerifiedContractData[]>();
   const [storedMetadata, setStoredMetadata] = useState<StoredMetadataType>({
-    ethereum: {},
+    ETH_MAINNET: {},
+    MATIC_MAINNET: {},
+    OPT_MAINNET: {},
+    ARB_MAINNET: {},
   });
+  const [selectedChains, setSelectedChains] =
+    useState<ActiveChainIndex>(availableChains);
   const [timelineData, setTimelineData] = useState<addressCollection>({});
   const [activeTimeline, setActiveTimeline] = useState<addressSplitHistory>();
   const [activeAddress, setActiveAddress] = useState<Address>();
   const [timelineFilters, setTimelineFilters] = useState<timelineFilterStore[]>(
-    []
+    [{ filterType: "chain", optionA: availableChains }]
   );
 
   const [initalRankingLoad, setInitalRankingLoad] = useState<boolean>(false);
@@ -76,12 +81,12 @@ const NFTimelineProvider = ({ children }) => {
     let metadata: SingleNFTDataType;
 
     if (
-      !!storedMetadata.ethereum &&
-      !!storedMetadata.ethereum[contractAddress] &&
-      !!storedMetadata.ethereum[contractAddress][tokenId]
+      !!storedMetadata.ETH_MAINNET &&
+      !!storedMetadata.ETH_MAINNET[contractAddress] &&
+      !!storedMetadata.ETH_MAINNET[contractAddress][tokenId]
     ) {
       //  If the metadata is stored locally
-      metadata = storedMetadata.ethereum[contractAddress][tokenId];
+      metadata = storedMetadata.ETH_MAINNET[contractAddress][tokenId];
     } else {
       //  If not local get from API
       metadata = await getTokenMetadata(network, contractAddress, tokenId);
@@ -91,7 +96,7 @@ const NFTimelineProvider = ({ children }) => {
       };
       setStoredMetadata({
         ...storedMetadata,
-        ethereum: { [contractAddress]: { [tokenId]: metadata } },
+        ETH_MAINNET: { [contractAddress]: { [tokenId]: metadata } },
       });
     }
     return metadata;
@@ -131,7 +136,8 @@ const NFTimelineProvider = ({ children }) => {
     }
   };
 
-  const removeAllTimelineFilters = () => setTimelineFilters([]);
+  const removeAllTimelineFilters = () =>
+    setTimelineFilters([{ filterType: "chain", optionA: availableChains }]);
 
   const removeTimelineFilter = (filterType: timelineFilterTypes) => {
     if (timelineFilters) {
@@ -146,9 +152,6 @@ const NFTimelineProvider = ({ children }) => {
   /**
    * Chain Selection
    */
-
-  const [selectedChains, setSelectedChains] =
-    useState<ActiveChainIndex>(availableChains);
 
   const onSelectedChainChange = (
     action: "add" | "remove",

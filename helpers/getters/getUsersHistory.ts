@@ -45,7 +45,7 @@ const getUsersHistory = async ({
 
   //  Get the first run of data
   const batchedTXData = await search(options);
-  console.log("batchedTXData : ", batchedTXData);
+  console.log("batchedTXData : ", chain, " : ", batchedTXData);
   batchedTXData.transfers.forEach((tx) => {
     tx.chain = chain;
     transfers.push(tx);

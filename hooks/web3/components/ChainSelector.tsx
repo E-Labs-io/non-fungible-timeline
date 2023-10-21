@@ -49,6 +49,7 @@ export interface ChianSelectorProps {
   onSelectedChain?: (action: "add" | "remove", chain: NetworkKeys) => void;
   style?: ChainSelectorStyles;
   notForProvider?: true;
+  activeChainStream?: ActiveChainIndex;
 }
 
 export interface ChainSelectorStyles {
@@ -62,6 +63,7 @@ const ChainSelector = ({
   onSelectedChain,
   style,
   notForProvider,
+  activeChainStream,
 }: ChianSelectorProps) => {
   const { selectedChains, onSelectedChainChange } = useWeb3Provider();
   const [activeChains, setActiveChains] =
@@ -85,6 +87,14 @@ const ChainSelector = ({
       return;
     }
   });
+
+  useEffect(() => {
+    selectedChains && setActiveChains(selectedChains);
+  }, [selectedChains]);
+
+  useEffect(() => {
+    activeChainStream && setActiveChains(activeChainStream);
+  }, [activeChainStream]);
 
   const onSelection = (chainId: NetworkKeys) => {
     if (activeChains[chainId]) {
@@ -117,7 +127,7 @@ const ChainSelector = ({
             <ChainIconSVG src={ChainIcons[chainId].icon} />
           </ChainIconContainer>
         ))}
-      <Tooltip id="ChainSelector" place="bottom" delayShow={3000} />
+      <Tooltip id="ChainSelector" place="bottom" delayShow={1500} />
     </Wrapper>
   );
 };

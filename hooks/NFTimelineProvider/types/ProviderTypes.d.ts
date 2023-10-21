@@ -91,7 +91,7 @@ export type getBallotsType = () => Promise<Ballot[]>;
 export type getBallotDataType = (ballotTitle: string) => Promise<Ballot>;
 
 export type StoredMetadataType = {
-  ethereum: {
+  [chain in NetworkKeys]?: {
     [contractAddress: string]: { [tokenId: string]: SingleNFTDataType };
   };
 };
