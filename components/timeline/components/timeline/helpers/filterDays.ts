@@ -18,8 +18,8 @@ const filterFilteredDays = (
   const isOrder = filters.find((a) => a.filterType === "order");
   const isChain = filters.find((a) => a.filterType === "chain");
 
-  console.log("FILETERS : ", filters);
-
+  console.log("FILTERS : ", filters);
+  //  Selected chain check
   if (isChain) {
     // Get teh active Chains
     const chains = [];
@@ -51,9 +51,9 @@ const filterFilteredDays = (
       if (allowedHash.length > 0)
         filtered.push([dayData[0], dayData[1], allowedHash, allowedSortedData]);
     }
-    console.log("Filter : Chains : Filtered History ; ", filtered);
     filteredHistory = filtered;
   }
+  //  Date ranges check
   if (!!isData) {
     const filtered: combinedHistory = [];
     //  Filter for days
@@ -66,6 +66,7 @@ const filterFilteredDays = (
 
     filteredHistory = filtered;
   }
+  //  Verified Contract Checks
   if (!!isVerified) {
     const filtered: combinedHistory = [];
     //  Filter for verified contracts
@@ -97,6 +98,7 @@ const filterFilteredDays = (
     //  Save the filtered contracts as the history
     filteredHistory = filtered;
   }
+  //  Revers order check
   if (!!isOrder) {
     const filtered = [];
     for (let i = filteredHistory.length; i > 0; i--) {

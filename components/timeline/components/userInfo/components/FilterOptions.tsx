@@ -68,6 +68,13 @@ const SwitchContainer = styled.div`
 
   width: auto;
 `;
+const ChainSelectorContainer = styled.div`
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  width: 100%;
+`;
 
 interface FilterOptionsProps {}
 function FilterOptions({}: FilterOptionsProps) {
@@ -105,7 +112,7 @@ function FilterOptions({}: FilterOptionsProps) {
 
   const handleResetAllFilters = () => {
     dispatch({ type: "dateChange", payload: initialState });
-    
+
     removeAllTimelineFilters();
     setActiveFilters(initState);
   };
@@ -173,7 +180,7 @@ function FilterOptions({}: FilterOptionsProps) {
       </FilterInsert>
       <FilterInsert>
         Show selected chains{" "}
-        <SwitchContainer>
+        <ChainSelectorContainer>
           <ChainSelector
             availableChains={[
               "ETH_MAINNET",
@@ -185,7 +192,7 @@ function FilterOptions({}: FilterOptionsProps) {
             activeChainStream={selectedChains}
             onSelectedChain={handleToggleChainFilter}
           />
-        </SwitchContainer>
+        </ChainSelectorContainer>
       </FilterInsert>
       <FilterInsert>
         Show latest first

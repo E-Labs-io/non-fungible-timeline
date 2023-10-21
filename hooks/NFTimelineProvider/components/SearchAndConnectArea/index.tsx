@@ -90,7 +90,7 @@ function SearchAndConnectArea({
   badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
-  const { getSpyList, spyList, onSelectedChainChange } =
+  const { getSpyList, spyList, onSelectedChainChange, selectedChains } =
     useNFTimelineProvider();
   const { userProvider, walletAddress } = useWeb3Provider();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -127,6 +127,7 @@ function SearchAndConnectArea({
                 "OPT_MAINNET",
               ]}
               onSelectedChain={onSelectedChainChange}
+              activeChainStream={selectedChains}
               notForProvider
             />
             {ensError && (

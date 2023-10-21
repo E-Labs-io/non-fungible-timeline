@@ -119,15 +119,16 @@ const NFTimelineProvider = ({ children }) => {
    */
   const addTimelineFilter = (filterOptions: timelineFilterStore) => {
     let i = null;
-    if (!!timelineFilters) {
+    if (timelineFilters.length > 0) {
       timelineFilters.forEach((filter, index) => {
         if (filter.filterType === filterOptions.filterType) {
+          console.log("Filter Indext Chance : ", i);
           i = index;
         }
       });
     }
 
-    if (!!i) {
+    if (i) {
       let newFilters = timelineFilters;
       newFilters[i] = filterOptions;
       setTimelineFilters(newFilters);
@@ -136,8 +137,10 @@ const NFTimelineProvider = ({ children }) => {
     }
   };
 
-  const removeAllTimelineFilters = () =>
+  const removeAllTimelineFilters = () => {
     setTimelineFilters([{ filterType: "chain", optionA: availableChains }]);
+    setSelectedChains(availableChains);
+  };
 
   const removeTimelineFilter = (filterType: timelineFilterTypes) => {
     if (timelineFilters) {
