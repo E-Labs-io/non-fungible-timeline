@@ -51,6 +51,9 @@ const filterFilteredDays = (
       if (allowedHash.length > 0)
         filtered.push([dayData[0], dayData[1], allowedHash, allowedSortedData]);
     }
+    console.log("Filtered for networks : ", isChain);
+    console.log("Filtered  : ", filtered);
+
     filteredHistory = filtered;
   }
   //  Date ranges check

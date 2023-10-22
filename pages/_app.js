@@ -10,11 +10,12 @@ import { NFTimelineProvider } from "hooks/NFTimelineProvider";
 
 import "../styles/css/timeline.min.css";
 import "react-tooltip/dist/react-tooltip.css";
+import { availableChains } from "hooks/web3/constants/avalabuleChains";
 export default function App({ Component, pageProps }) {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <UserWeb3Provider>
+        <UserWeb3Provider allowedChains={availableChains}>
           <NFTimelineProvider>
             <GlobalStyles />
             <Component {...pageProps} />
@@ -24,4 +25,3 @@ export default function App({ Component, pageProps }) {
     </>
   );
 }
-

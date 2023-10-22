@@ -65,7 +65,7 @@ export default class MyDocument extends Document {
           gtag('config', '${process.env.GOOGLE_ANALYTICS_TAG}');
         `}
           </Script>
-          <title>{siteTitle}</title>
+
           <meta name="description" content={description} />
           <meta
             name="keywords"

@@ -75,6 +75,17 @@ function TimeLine({
   const [isSmallScreen, setSmallScreen] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("Timeline new filter : ", timelineFilters);
+    setIsReady(false);
+    let history = filterFilteredDays(
+      combineHistory(sortedInHistory, sortedOutHistory),
+      timelineFilters,
+      checkIfValidContract
+    );
+    setSortedData(history);
+  }, [timelineFilters]);
+
+  useEffect(() => {
     if (!isSmallScreen && width <= tablet) {
       setSmallScreen(true);
     } else if (isSmallScreen && width > tablet) setSmallScreen(false);
@@ -96,18 +107,6 @@ function TimeLine({
       setIsReady(true);
     }
   });
-
-  useEffect(() => {
-    const active = checkIfFilterIsActive();
-
-    setIsReady(false);
-    let history = filterFilteredDays(
-      combineHistory(sortedInHistory, sortedOutHistory),
-      timelineFilters,
-      checkIfValidContract
-    );
-    setSortedData(history);
-  }, [timelineFilters]);
 
   const addButton = () => (
     <LoadMoreButton>

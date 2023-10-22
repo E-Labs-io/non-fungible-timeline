@@ -118,22 +118,29 @@ const NFTimelineProvider = ({ children }) => {
    * Timeline Filter Management
    */
   const addTimelineFilter = (filterOptions: timelineFilterStore) => {
-    let i = null;
-    if (timelineFilters.length > 0) {
-      timelineFilters.forEach((filter, index) => {
-        if (filter.filterType === filterOptions.filterType) {
-          console.log("Filter Indext Chance : ", i);
-          i = index;
-        }
-      });
-    }
+    let i: boolean | number = false;
 
-    if (i) {
-      let newFilters = timelineFilters;
-      newFilters[i] = filterOptions;
-      setTimelineFilters(newFilters);
+    if (filterOptions.filterType === "chain") {
+      const filter = timelineFilters;
+      filter[0] = filterOptions.optionA;
+      setTimelineFilters(filter);
+      console.log("new filters : ", filter);
     } else {
-      setTimelineFilters([...timelineFilters, filterOptions]);
+      if (timelineFilters.length > 0) {
+        timelineFilters.forEach((filter, index) => {
+          if (filter.filterType === filterOptions.filterType) {
+            i = index;
+          }
+        });
+      }
+
+      if (i) {
+        let newFilters = timelineFilters;
+        newFilters[i] = filterOptions;
+        setTimelineFilters(newFilters);
+      } else {
+        setTimelineFilters([...timelineFilters, filterOptions]);
+      }
     }
   };
 

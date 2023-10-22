@@ -12,6 +12,7 @@ import useNFTimelineProvider from "hooks/NFTimelineProvider/hooks/useNFTimelineP
 import OpenSpyListButton from "components/spyList/OpenSpyListButton";
 import SpyListModal from "components/spyList/spyListModal";
 import ChainSelector from "hooks/web3/components/ChainSelector";
+import { NetworkKeys } from "hooks/web3/types/Chains";
 
 const Wrapper = styled.div`
   justify-content: center;
@@ -90,14 +91,26 @@ function SearchAndConnectArea({
   badAddressError,
 }: ConnectionAreaProps) {
   const [isFiltersOpen, setFiltersOpen] = useState(false);
-  const { getSpyList, spyList, onSelectedChainChange, selectedChains } =
-    useNFTimelineProvider();
+  const {
+    getSpyList,
+    spyList,
+    onSelectedChainChange,
+    addTimelineFilter,
+    selectedChains,
+  } = useNFTimelineProvider();
   const { userProvider, walletAddress } = useWeb3Provider();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (walletAddress && !spyList) getSpyList(walletAddress);
   });
+
+  const handleChainSelect = (action: "add" | "remove", chain: NetworkKeys) => {
+    onSelectedChainChange(action, chain);
+    const newChains = selectedChains;
+    newChains[chain] = action === "add" ? true : false;
+    addTimelineFilter({ filterType: "chain", optionA: newChains });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -126,7 +139,7 @@ function SearchAndConnectArea({
                 "ARB_MAINNET",
                 "OPT_MAINNET",
               ]}
-              onSelectedChain={onSelectedChainChange}
+              onSelectedChain={handleChainSelect}
               activeChainStream={selectedChains}
               notForProvider
             />

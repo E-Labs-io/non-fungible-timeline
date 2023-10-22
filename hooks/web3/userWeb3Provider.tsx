@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState, createContext } from "react";
+import React, { useEffect, useState, createContext, ReactNode } from "react";
 import {
   connectToAlchemyProvider,
   getAddresses,
@@ -42,46 +42,30 @@ export interface UserWeb3ProviderContextType {
 
 export type GivenProviderAllowance = "alchemy";
 
-export const UserWeb3Context = createContext({
-  localProvider: null,
-  addressBook: null,
-  walletAddress: "",
-  shortWalletAddress: "",
-  userProvider: null,
-  auxStorage: {},
-  userSigner: null,
-  selectedChains: {
-    ETH_MAINNET: true,
-    OPT_MAINNET: false,
-    ARB_MAINNET: false,
-    MATIC_MAINNET: false,
-  },
-  useEnsResolver: (network: string) => Promise,
-  updateAuxStorage: (param: string, value: any) => {},
-  connectToUsersProvider: (userAction: boolean) => {},
-  web3API: null,
-  userSignMessage: (signer: ethers.Signer, message: string) => {},
-  disconnectProvider: () => {},
-  connectToGivenProvider: (
-    provider: GivenProviderAllowance,
-    network: string
-  ) => {},
-  onSelectedChainChange: (action: "add" | "remove", chain: NetworkKeys) => {},
-} as UserWeb3ProviderContextType);
+export const UserWeb3Context = createContext({} as UserWeb3ProviderContextType);
 
-export const APIKeys = {
-  alchemy: {
-    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
-
-    network: Network.ETH_MAINNET,
-    maxRetries: 10,
-  },
+export const APIKeys = (chain: NetworkKeys) => {
+  return {
+    alchemy: {
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+      network: Network[chain],
+      maxRetries: 10,
+    },
+  };
 };
 
-const AlchemyAPI = alchemyAPI(APIKeys.alchemy);
+const AlchemyAPI = alchemyAPI(APIKeys("ETH_MAINNET").alchemy);
 export const web3API = AlchemyAPI;
 
-const UserWeb3Provider = ({ children }) => {
+export interface UserWeb3ProviderProps {
+  children?: ReactNode;
+  allowedChains?: ActiveChainIndex;
+}
+
+const UserWeb3Provider = ({
+  children,
+  allowedChains,
+}: UserWeb3ProviderProps) => {
   const [localProvider, setLocalProvider] =
     useState<ethers.providers.Provider>();
   const [userProvider, setUserProvider] = useState(null);
@@ -92,7 +76,7 @@ const UserWeb3Provider = ({ children }) => {
   const [providerInterface, setProviderInterface] = useState(null);
 
   const [selectedChains, setSelectedChains] =
-    useState<ActiveChainIndex>(availableChains);
+    useState<ActiveChainIndex>(allowedChains);
 
   const onSelectedChainChange = (
     action: "add" | "remove",
