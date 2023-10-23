@@ -178,7 +178,7 @@ function FilterOptions({}: FilterOptionsProps) {
           />
         </SwitchContainer>
       </FilterInsert>
-      <FilterInsert>
+      {/*  <FilterInsert>
         Show selected chains{" "}
         <ChainSelectorContainer>
           <ChainSelector
@@ -193,7 +193,7 @@ function FilterOptions({}: FilterOptionsProps) {
             onSelectedChain={handleToggleChainFilter}
           />
         </ChainSelectorContainer>
-      </FilterInsert>
+      </FilterInsert> */}
       <FilterInsert>
         Show latest first
         <SwitchContainer>
