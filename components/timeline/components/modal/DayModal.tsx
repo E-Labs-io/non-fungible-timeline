@@ -2,7 +2,7 @@
 import { device } from "constants/media";
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
-import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import { NFTMetaDataType, SingleNFTDataType } from "e-labs_web3provider";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { dailyHistory } from "../timeline/TimeLine";

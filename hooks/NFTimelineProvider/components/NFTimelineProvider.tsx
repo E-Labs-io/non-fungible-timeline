@@ -1,7 +1,13 @@
 /** @format */
 
-import Address from "hooks/web3/helpers/Address";
-import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import {
+  Address,
+  AddressBook,
+  ActiveChainIndex,
+  NetworkKeys,
+  useWeb3Provider,
+  SingleNFTDataType,
+} from "e-labs_web3provider";
 import React, { useEffect, useState, createContext } from "react";
 import { ApiError } from "types/genericTypes";
 import { getAllRankingData } from "../api/getRankingData";
@@ -17,13 +23,10 @@ import {
 } from "../types/ProviderTypes";
 import { AllBallotRankingData, Ranks } from "../types/RankingTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
-import AddressBook from "hooks/web3/helpers/AddressManager";
 import { addNewSpy, deleteFromSpyList, getUsersSpyList } from "../api/spyList";
-import { useWeb3Provider } from "hooks/web3";
 import { deleteVote } from "../api/deleteVote";
 import { checkIfWalletVoted } from "../api/getWalletsVotingData";
-import { ActiveChainIndex, NetworkKeys } from "hooks/web3/types/Chains";
-import { availableChains } from "hooks/web3/constants/avalabuleChains";
+import { availableChains } from "../../../constants/chains";
 
 export const NFTimelineProviderContext = createContext(
   {} as NFTimelineProviderContextType

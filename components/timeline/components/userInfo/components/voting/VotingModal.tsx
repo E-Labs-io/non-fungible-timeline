@@ -3,8 +3,8 @@
 import { Button, Loader } from "components/common";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import postVote from "hooks/NFTimelineProvider/api/postVote";
-import { useWeb3Provider } from "hooks/web3";
-import WalletEtherscanLink from "hooks/web3/components/WalletEtherlink";
+import { useWeb3Provider } from "e-labs_web3provider";
+import { WalletEtherscanLink } from "e-labs_web3provider";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { votingCategoriesType, votingCategoryList } from "types/votingTypes";

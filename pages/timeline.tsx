@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 import config from "config/config";
 import { MainPage } from "components/timeline";
-import { useWeb3Provider } from "hooks/web3";
 import { Layout } from "components/common";
 
 const HomeContainer = styled.div`

@@ -2,8 +2,8 @@
 
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
-import { useWeb3Provider } from "hooks/web3";
-import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
+import { useWeb3Provider } from "e-labs_web3provider";
+import { buildNetworkScanLink } from "e-labs_web3provider";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import UserStats from "./components/stats/UserStats";
@@ -12,7 +12,7 @@ import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import FilterOptions from "./components/FilterOptions";
 import { device } from "constants/media";
 import StateSkeleton from "components/common/SkeletonLoader";
-import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
+import { shortenWalletAddress } from "e-labs_web3provider";
 import { votingCategoriesType, votingCategoryList } from "types/votingTypes";
 import WalletsVotingArea from "./components/voting/UsersVotingArea";
 import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";

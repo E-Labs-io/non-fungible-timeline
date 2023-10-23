@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import zeroAddress from "hooks/web3/utils/zeroAddress";
-import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
+import { NFTMetaDataType, SingleNFTDataType } from "e-labs_web3provider";
+import { zeroAddress } from "e-labs_web3provider";
+import { checkIfIPFSUrl } from "e-labs_web3provider";
 import {
   sortedHistoryData,
   TokenIds,
 } from "helpers/dataSorting/sortUsersHistory";
 import shortenTokenId from "helpers/shorternTokenId";
-import  useNFTimelineProvider  from "hooks/NFTimelineProvider";
-import NFTMedia from "hooks/web3/components/NFTMedia";
+import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import { NFTMedia } from "e-labs_web3provider";
 
 //////  CARD BUILD
 const SingleCard = styled.div`

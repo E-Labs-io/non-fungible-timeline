@@ -3,8 +3,6 @@
 import React, { useState, useRef, useContext, useMemo } from "react";
 import FocusLock from "react-focus-lock";
 import styled, { css } from "styled-components";
-import Image from "next/image";
-import Link from "next/link";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
@@ -14,8 +12,7 @@ import { useOnClickOutside } from "hooks/component/useOnClickOutside";
 import { device } from "constants/media";
 import useWindowSize from "hooks/window/useWindowSize";
 import FlatMenu from "./components/FlatMenu";
-import { UserWeb3Context } from "hooks/web3/userWeb3Provider";
-import { ExtraStyleProps } from "types/genericTypes";
+
 import { useRouter } from "next/router";
 
 const StyledHeader = styled.header`

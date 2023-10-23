@@ -7,13 +7,13 @@ import {
   TokenIds,
 } from "../../../../helpers/dataSorting/sortUsersHistory";
 import useWindowSize from "hooks/window/useWindowSize";
-import zeroAddress from "hooks/web3/utils/zeroAddress";
-import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
+import { zeroAddress } from "e-labs_web3provider";
+import { checkIfIPFSUrl } from "e-labs_web3provider";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { dailyHistory } from "./TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
-import NFTMedia from "hooks/web3/components/NFTMedia";
+import { NFTMedia } from "e-labs_web3provider";
 import { device, mobileL, mobileM, mobileS } from "constants/media";
 
 const Wrapper = styled.div`

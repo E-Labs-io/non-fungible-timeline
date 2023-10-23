@@ -8,7 +8,7 @@ import { ExtraStyleProps } from "types/genericTypes";
 import { device, laptop, tablet } from "constants/media";
 import useWindowSize from "hooks/window/useWindowSize";
 
-import { ConnectButton } from "hooks/web3";
+import { Web3ConnectButton } from "e-labs_web3provider";
 
 /**
  *   transform: ${({ open }) => (open ? "translateY(55px)" : "translateY(0)")};
@@ -154,7 +154,7 @@ function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
         {renderMenuItems()}
         {width < tablet && (
           <ConnectContainer>
-            <ConnectButton onClick={() => props.setOpen(false)} />
+            <Web3ConnectButton onClick={() => props.setOpen(false)} />
           </ConnectContainer>
         )}
         {width < laptop && (

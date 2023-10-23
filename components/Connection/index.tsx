@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { isAddress } from "ethers/lib/utils";
-import { useWeb3Provider, Address } from "../../hooks/web3";
+import { useWeb3Provider, Address } from "e-labs_web3provider";
 import useNFTimelineProvider, {
   searchUsersHistory,
   SearchAndConnectArea,
@@ -12,8 +12,8 @@ import useNFTimelineProvider, {
 } from "hooks/NFTimelineProvider";
 import { useRouter } from "next/router";
 import { LoadingStates } from "types/stateTypes";
-import { NetworkKeys } from "hooks/web3/types/Chains";
-import { availableChains } from "hooks/web3/constants/avalabuleChains";
+import { NetworkKeys } from "e-labs_web3provider";
+import { availableChains } from "e-labs_web3provider";
 
 const ConnectionContainer = styled.div`
   height: fit-content;

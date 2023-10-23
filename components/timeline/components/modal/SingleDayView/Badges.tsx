@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import { SingleNFTDataType } from "e-labs_web3provider";
 import shortenTokenId from "helpers/shorternTokenId";
 import { device } from "constants/media";
-import { NetworkKeys } from "hooks/web3/types/Chains";
+import { NetworkKeys } from "e-labs_web3provider";
 
 const BadgeArea = styled.div`
   width: 100%;

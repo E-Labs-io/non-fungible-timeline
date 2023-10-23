@@ -1,7 +1,7 @@
 /** @format */
 
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
-import { NetworkKeys } from "hooks/web3/types/Chains";
+import { NetworkKeys } from "e-labs_web3provider";
 
 export interface AssetTransferData extends AssetTransfersWithMetadataResult {
   chain: NetworkKeys;

@@ -7,7 +7,7 @@ import {
   faPlus,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import { useWeb3Provider } from "hooks/web3";
+import { useWeb3Provider } from "e-labs_web3provider";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";

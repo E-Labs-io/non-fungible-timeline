@@ -1,14 +1,17 @@
 /** @format */
 
 import { ethers } from "ethers";
-import Address from "hooks/web3/helpers/Address";
-import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import {
+  Address,
+  AddressBook,
+  ActiveChainIndex,
+  NetworkKeys,
+  SingleNFTDataType,
+} from "e-labs_web3provider";
 import { type } from "os";
 import { VerifiedContractData } from "./verifiedContractsTypes";
 import { Ballot, Votes } from "./VotingTypes";
-import AddressBook from "hooks/web3/helpers/AddressManager";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
-import { ActiveChainIndex, NetworkKeys } from "hooks/web3/types/Chains";
 
 export interface NFTimelineProviderContextType {
   submitVote: submitVote;

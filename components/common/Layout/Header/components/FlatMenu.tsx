@@ -4,10 +4,10 @@ import React, { useContext, useState } from "react";
 import Link from "next/link";
 import styled, { useTheme } from "styled-components";
 import { Button, Toast, ToastCall } from "components/common";
-import { useWeb3Provider } from "hooks/web3";
+import { useWeb3Provider } from "e-labs_web3provider";
 import "react-toastify/dist/ReactToastify.css";
 import Burger from "./Burger";
-import Web3ConnectButton from "hooks/web3/components/ConnectButton";
+import { Web3ConnectButton } from "e-labs_web3provider";
 import { theme } from "styles/theme";
 import ToastTransaction from "components/common/Toast/components/ChainTransactionToast";
 

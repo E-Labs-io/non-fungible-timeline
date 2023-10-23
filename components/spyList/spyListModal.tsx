@@ -1,11 +1,10 @@
 /** @format */
 
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
-import { Address, useWeb3Provider } from "hooks/web3";
+import { Address, useWeb3Provider, AddressBook } from "e-labs_web3provider";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import AddressBook from "hooks/web3/helpers/AddressManager";
 import { useEffect, useState } from "react";
 import StateSkeleton from "components/common/SkeletonLoader";
 
@@ -104,8 +103,7 @@ export default function SpyListModal({
         You are currently spying on {list ? list.addressCount() : 0} wallets.
       </InfoArea>
       <TableWrapper>
-        {
-          list &&
+        {list &&
           list
             .getAddressBook()
             .map((address: Address, key: number) => (

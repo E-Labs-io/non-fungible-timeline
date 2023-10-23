@@ -10,7 +10,7 @@ import useNFTimelineProvider, {
   VoteRankData,
 } from "hooks/NFTimelineProvider";
 import LoadingNotice from "hooks/NFTimelineProvider/components/SearchAndConnectArea/loadingNotice";
-import { useWeb3Provider, Address } from "hooks/web3";
+import { useWeb3Provider, Address } from "e-labs_web3provider";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -18,7 +18,7 @@ import { LoadingStates } from "types/stateTypes";
 import getSortedBallotRankings from "../helpers/sortRankings";
 import RankCard from "./RankCard";
 import RankingTable from "./RankingTable";
-import { availableChains } from "hooks/web3/constants/avalabuleChains";
+import { availableChains } from "e-labs_web3provider";
 
 interface BallotRankingProps {
   maxRankings?: number;

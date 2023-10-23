@@ -1,6 +1,6 @@
 /** @format */
 
-import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import { SingleNFTDataType } from "e-labs_web3provider";
 
 export const getTokenMetadata = async (
   network: string,

@@ -4,13 +4,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGears, faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
-import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
 import { Tooltip } from "react-tooltip";
 import handleClickOpenURLInNewTab from "hooks/window/openLinkInNewTab";
-import buildOpenSeaLink from "hooks/web3/helpers/openseaLink";
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import { SingleNFTDataType } from "hooks/web3/types/nftTypes";
-import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
+
+import {
+  checkIfIPFSUrl,
+  buildOpenSeaLink,
+  buildNetworkScanLink,
+  SingleNFTDataType,
+} from "e-labs_web3provider";
 
 const IconContainer = styled.div`
   justify-content: space-around;

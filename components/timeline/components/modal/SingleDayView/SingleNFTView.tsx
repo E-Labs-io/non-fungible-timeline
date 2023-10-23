@@ -1,17 +1,21 @@
 /** @format */
 
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import zeroAddress from "hooks/web3/utils/zeroAddress";
-import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
-import { checkIfIPFSUrl } from "hooks/web3/helpers/isIPFS";
-import { shortenWalletAddress } from "hooks/web3/helpers/textHelpers";
-import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import useNFTimelineProvider from "hooks/NFTimelineProvider";
 import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
 
-import NFTMedia from "hooks/web3/components/NFTMedia";
+import {
+  NFTMedia,
+  NFTMetaDataType,
+  SingleNFTDataType,
+  shortenWalletAddress,
+  buildNetworkScanLink,
+  zeroAddress,
+  checkIfIPFSUrl,
+} from "e-labs_web3provider";
 import SingleNFTViewIcons from "./Icons";
 import SingleDayViewBadges from "./Badges";
 import getMediaFormat from "helpers/media/getMediaFormat";

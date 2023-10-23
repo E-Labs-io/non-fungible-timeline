@@ -1,8 +1,8 @@
 /** @format */
 
 import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
-import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
-import { NFTMetaDataType, SingleNFTDataType } from "hooks/web3/types/nftTypes";
+import { buildNetworkScanLink } from "e-labs_web3provider";
+import { NFTMetaDataType, SingleNFTDataType } from "e-labs_web3provider";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import SmallNFTCard from "../SmallNFTCard";

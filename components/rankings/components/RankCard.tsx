@@ -1,13 +1,13 @@
 /** @format */
 
 import { VoteRankData } from "hooks/NFTimelineProvider/types/RankingTypes";
-import Address from "hooks/web3/helpers/Address";
+import {Address} from "e-labs_web3provider";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import StateSkeleton from "components/common/SkeletonLoader";
 import { ethers } from "ethers";
-import { useWeb3Provider } from "hooks/web3";
+import { useWeb3Provider } from "e-labs_web3provider";
 import { device, mobileM } from "constants/media";
 import useWindowSize from "hooks/window/useWindowSize";
 
