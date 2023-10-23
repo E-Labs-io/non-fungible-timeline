@@ -132,7 +132,7 @@ function SearchAndConnectArea({
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Wallet Address or ENS"
             />
-            {/*    <ChainSelector
+              <ChainSelector
               availableChains={[
                 "ETH_MAINNET",
                 "MATIC_MAINNET",
@@ -142,7 +142,7 @@ function SearchAndConnectArea({
               onSelectedChain={handleChainSelect}
               activeChainStream={selectedChains}
               notForProvider
-            /> */}
+            /> 
             {ensError && (
               <EnsWarning>*ENS not recognised, please try another</EnsWarning>
             )}
