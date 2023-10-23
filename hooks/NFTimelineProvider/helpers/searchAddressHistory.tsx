@@ -3,9 +3,8 @@
 import compileHistoryIntoDays from "helpers/dataSorting/compileHistoryIntoDays";
 import sortUsersHistory from "helpers/dataSorting/sortUsersHistory";
 import getUsersHistory from "helpers/getters/getUsersHistory";
-import Address from "hooks/web3/helpers/Address";
 import { getTImelineDataReturn } from "../types/ProviderTypes";
-import { NetworkKeys } from "hooks/web3/types/Chains";
+import { NetworkKeys, Address } from "e-labs_web3provider";
 
 interface searchUsersHistoryProps {
   address: Address;

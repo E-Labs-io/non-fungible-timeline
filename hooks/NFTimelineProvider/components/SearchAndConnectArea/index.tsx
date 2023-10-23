@@ -3,7 +3,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button, Modal } from "../../../../components/common";
-import { ConnectButton, useWeb3Provider } from "../../../web3";
+import {
+  Web3ConnectButton,
+  useWeb3Provider,
+  NetworkKeys,
+  ChainSelector,
+} from "e-labs_web3provider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import LoadingNotice from "./loadingNotice";
@@ -11,8 +16,6 @@ import FilterOptions from "components/timeline/components/userInfo/components/Fi
 import useNFTimelineProvider from "hooks/NFTimelineProvider/hooks/useNFTimelineProvider";
 import OpenSpyListButton from "components/spyList/OpenSpyListButton";
 import SpyListModal from "components/spyList/spyListModal";
-import ChainSelector from "hooks/web3/components/ChainSelector";
-import { NetworkKeys } from "hooks/web3/types/Chains";
 
 const Wrapper = styled.div`
   justify-content: center;
@@ -123,7 +126,7 @@ function SearchAndConnectArea({
         {loadingState === 0 && (
           <>
             <br />
-            <ConnectButton />
+            <Web3ConnectButton />
             Or
             {userProvider && (
               <OpenSpyListButton handleClick={() => setIsOpen(true)} />
@@ -132,7 +135,7 @@ function SearchAndConnectArea({
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Wallet Address or ENS"
             />
-              <ChainSelector
+            <ChainSelector
               availableChains={[
                 "ETH_MAINNET",
                 "MATIC_MAINNET",
@@ -142,7 +145,7 @@ function SearchAndConnectArea({
               onSelectedChain={handleChainSelect}
               activeChainStream={selectedChains}
               notForProvider
-            /> 
+            />
             {ensError && (
               <EnsWarning>*ENS not recognised, please try another</EnsWarning>
             )}

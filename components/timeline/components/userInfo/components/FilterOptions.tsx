@@ -8,10 +8,7 @@ import styled from "styled-components";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { filtersInitalState } from "hooks/NFTimelineProvider/types/FilterTypes";
 import { device } from "constants/media";
-import ChainSelector from "hooks/web3/components/ChainSelector";
-import { availableChains } from "hooks/web3/constants/avalabuleChains";
-import { Tooltip } from "react-tooltip";
-import { NetworkKeys } from "hooks/web3/types/Chains";
+import { NetworkKeys, ChainSelector } from "e-labs_web3provider";
 
 const Container = styled.div`
   transition: all 0.3s linear;
