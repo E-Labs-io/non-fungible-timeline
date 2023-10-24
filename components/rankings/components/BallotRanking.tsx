@@ -69,7 +69,7 @@ function BallotRanking({
               setProvider(userProvider);
               setReady(true);
             } else {
-              connectToGivenProvider("alchemy", "mainnet").then((prov) => {
+              connectToGivenProvider("alchemy", "ETH_MAINNET").then((prov) => {
                 setProvider(prov);
                 setReady(true);
               });

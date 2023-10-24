@@ -1,6 +1,6 @@
 /** @format */
 import { ethers } from "ethers";
-import { buildNetworkScanLink } from "hooks/web3/helpers/etherscanLink";
+import { buildNetworkScanLink } from "e-labs_web3provider";
 import React, { useState, useEffect, useContext } from "react";
 import styled, { useTheme, keyframes } from "styled-components";
 

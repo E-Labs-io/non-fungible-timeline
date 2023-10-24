@@ -1,11 +1,8 @@
 /** @format */
 import { AssetTransfersWithMetadataResult } from "alchemy-sdk";
 import { AssetTransferData } from "helpers/dataSorting/sortUsersHistory";
-import {
-  NetworkKeys,
-  alchemyGetAssetTransfersOptions,
-  alchemyGetAssetTransfers,
-} from "e-labs_web3provider";
+import { NetworkKeys, alchemyGetAssetTransfers } from "e-labs_web3provider";
+import { alchemyGetAssetTransfersOptions } from "e-labs_web3provider/build/api";
 
 export interface GetUSersHistoryProps {
   from?: string;
