@@ -12,7 +12,7 @@ import { checkIfIPFSUrl } from "e-labs_web3provider";
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
 import { dailyHistory } from "./TimeLine";
 import shortenTokenId from "helpers/shorternTokenId";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import { NFTMedia } from "e-labs_web3provider";
 import { device, mobileL, mobileM, mobileS } from "constants/media";
 
@@ -165,9 +165,9 @@ const FrontCard = ({
         setTxData(toShow);
         setShowToken(toShow.groupedTokenIds[0]);
         getTokenMetadata(
-          "eth",
           toShow.contractAddress,
-          toShow.groupedTokenIds[0].hex
+          toShow.groupedTokenIds[0].hex,
+          toShow.chain
         )
           .then((nft) => {
             if (!!nft.metadata.image) {

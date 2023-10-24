@@ -1,7 +1,7 @@
 /** @format */
 
-import { VoteRankData } from "hooks/NFTimelineProvider/types/RankingTypes";
-import {Address} from "e-labs_web3provider";
+import { VoteRankData } from "providers/NFTimelineProvider/types/RankingTypes";
+import { Address } from "e-labs_web3provider";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 

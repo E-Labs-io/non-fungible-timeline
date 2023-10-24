@@ -3,7 +3,7 @@
 import {
   AllBallotRankingData,
   VoteRankData,
-} from "hooks/NFTimelineProvider/types/RankingTypes";
+} from "providers/NFTimelineProvider/types/RankingTypes";
 
 const getSortedBallotRankings = (
   allRankingData: AllBallotRankingData

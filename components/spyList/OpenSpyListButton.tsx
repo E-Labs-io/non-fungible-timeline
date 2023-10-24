@@ -1,6 +1,6 @@
 /** @format */
 
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
 import { useWeb3Provider } from "e-labs_web3provider";

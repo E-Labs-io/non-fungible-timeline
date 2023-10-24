@@ -2,7 +2,7 @@
 
 import { device, mobileL } from "constants/media";
 import initialVotingState from "constants/votingInit";
-import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
+import { WalletsVotes } from "providers/NFTimelineProvider/types/VotingTypes";
 import useWindowSize from "hooks/window/useWindowSize";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";

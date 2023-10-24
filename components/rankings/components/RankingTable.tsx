@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { VoteRankData } from "hooks/NFTimelineProvider";
+import { VoteRankData } from "providers/NFTimelineProvider";
 import { Address } from "e-labs_web3provider";
 import RankCard from "./RankCard";
 import { device } from "constants/media";

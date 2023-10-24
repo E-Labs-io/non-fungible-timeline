@@ -10,7 +10,7 @@ import {
   TokenIds,
 } from "helpers/dataSorting/sortUsersHistory";
 import shortenTokenId from "helpers/shorternTokenId";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import { NFTMedia } from "e-labs_web3provider";
 
 //////  CARD BUILD

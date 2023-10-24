@@ -1,8 +1,8 @@
 /** @format */
 
 import { sortedHashData } from "helpers/dataSorting/compileHistoryIntoDays";
-import { timelineFilterStore } from "hooks/NFTimelineProvider/types/FilterTypes";
-import { checkIfValidContract } from "hooks/NFTimelineProvider/types/ProviderTypes";
+import { timelineFilterStore } from "providers/NFTimelineProvider/types/FilterTypes";
+import { checkIfValidContract } from "providers/NFTimelineProvider/types/ProviderTypes";
 import { combinedHistory } from "../TimeLine";
 import { NetworkKeys } from "e-labs_web3provider";
 

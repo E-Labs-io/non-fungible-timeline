@@ -1,8 +1,8 @@
 /** @format */
 
 import { Button, Loader } from "components/common";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
-import postVote from "hooks/NFTimelineProvider/api/postVote";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
+import postVote from "providers/NFTimelineProvider/api/postVote";
 import { useWeb3Provider } from "e-labs_web3provider";
 import { WalletEtherscanLink } from "e-labs_web3provider";
 import React, { useState, useEffect } from "react";

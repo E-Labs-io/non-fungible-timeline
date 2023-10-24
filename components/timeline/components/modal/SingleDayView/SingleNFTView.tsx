@@ -4,8 +4,8 @@ import { sortedHistoryData } from "helpers/dataSorting/sortUsersHistory";
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
-import { VerifiedContractData } from "hooks/NFTimelineProvider/types/verifiedContractsTypes";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
+import { VerifiedContractData } from "providers/NFTimelineProvider/types/verifiedContractsTypes";
 
 import {
   NFTMedia,

@@ -6,7 +6,7 @@ import TimeLine, { dailyHistory } from "./components/timeline/TimeLine";
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
 import DayModal from "./components/modal/DayModal";
 import UserInformation from "./components/userInfo/UserInfo";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import { useRouter } from "next/router";
 import VotingModal from "./components/userInfo/components/voting/VotingModal";
 import { votingCategoriesType, votingCategoryList } from "types/votingTypes";

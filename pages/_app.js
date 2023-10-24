@@ -6,7 +6,7 @@ import { GlobalStyles } from "styles/globalStyles";
 import { theme } from "styles/theme";
 import UserWeb3Provider from "e-labs_web3provider";
 import "../styles/timeline-loadmore.css";
-import { NFTimelineProvider } from "hooks/NFTimelineProvider";
+import { NFTimelineProvider } from "providers/NFTimelineProvider";
 
 import "../styles/css/timeline.min.css";
 import "react-tooltip/dist/react-tooltip.css";

@@ -12,7 +12,7 @@ const HomeContainer = styled.div`
   position: absolute;
   width: 100vw;
   min-height: 100vh;
-  background: ${({ theme }) => theme.coloredTheme.gradient};
+  background: ${({ theme }) => theme.singleTheme.gradientBackground};
   display: flex;
   flex-direction: column;
   align-items: center;

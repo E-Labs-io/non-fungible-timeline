@@ -8,8 +8,8 @@ import useNFTimelineProvider, {
   AllBallotRankingData,
   Ranks,
   VoteRankData,
-} from "hooks/NFTimelineProvider";
-import LoadingNotice from "hooks/NFTimelineProvider/components/SearchAndConnectArea/loadingNotice";
+} from "providers/NFTimelineProvider";
+import LoadingNotice from "providers/NFTimelineProvider/components/SearchAndConnectArea/loadingNotice";
 import { useWeb3Provider, Address } from "e-labs_web3provider";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -70,8 +70,10 @@ function BallotRanking({
               setReady(true);
             } else {
               connectToGivenProvider("alchemy", "ETH_MAINNET").then((prov) => {
-                setProvider(prov);
-                setReady(true);
+                if (prov) {
+                  setProvider(prov);
+                  setReady(true);
+                } else setReady(false);
               });
             }
           } else
@@ -90,10 +92,14 @@ function BallotRanking({
                   setProvider(userProvider);
                   setReady(true);
                 } else {
-                  connectToGivenProvider("alchemy", "mainnet").then((prov) => {
-                    setProvider(prov);
-                    setReady(true);
-                  });
+                  connectToGivenProvider("alchemy", "ETH_MAINNET").then(
+                    (prov) => {
+                      if (prov) {
+                        setProvider(prov);
+                        setReady(true);
+                      } else setReady(false);
+                    }
+                  );
                 }
               }
             });

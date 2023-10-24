@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import LoadingNotice from "./loadingNotice";
 import FilterOptions from "components/timeline/components/userInfo/components/FilterOptions";
-import useNFTimelineProvider from "hooks/NFTimelineProvider/hooks/useNFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider/hooks/useNFTimelineProvider";
 import OpenSpyListButton from "components/spyList/OpenSpyListButton";
 import SpyListModal from "components/spyList/spyListModal";
 
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
 `;
 
 const ConnectionArea = styled.div`
-  background-color: ${({ theme }) => theme.coloredTheme.transparentBG};
+  background-color: ${({ theme }) => theme.singleTheme.accentColor};
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
@@ -38,7 +38,7 @@ const ConnectionArea = styled.div`
   justify-content: center;
   padding: 5px;
   row-gap: 5px;
-  box-shadow: ${({ theme }) => theme.shadow.innerShadow};
+  box-shadow: ${({ theme }) => theme.singleTheme.shadow.innerShadow};
 `;
 
 const Input = styled.input`
@@ -107,6 +107,8 @@ function SearchAndConnectArea({
   useEffect(() => {
     if (walletAddress && !spyList) getSpyList(walletAddress);
   });
+
+
 
   const handleChainSelect = (action: "add" | "remove", chain: NetworkKeys) => {
     onSelectedChainChange(action, chain);

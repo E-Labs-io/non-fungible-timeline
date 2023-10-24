@@ -7,7 +7,7 @@ import {
   votingWalletsStatsReturn,
 } from "types/votingTypes";
 import initialVotingState from "constants/votingInit";
-import { Votes } from "hooks/NFTimelineProvider/types";
+import { Votes } from "providers/NFTimelineProvider/types";
 import { device } from "constants/media";
 
 const CategoryContainer = styled.div`

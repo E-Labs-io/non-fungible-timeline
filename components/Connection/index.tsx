@@ -9,7 +9,7 @@ import useNFTimelineProvider, {
   SearchAndConnectArea,
   addressSplitHistory,
   getTImelineDataReturn,
-} from "hooks/NFTimelineProvider";
+} from "providers/NFTimelineProvider";
 import { useRouter } from "next/router";
 import { LoadingStates } from "types/stateTypes";
 import { NetworkKeys } from "e-labs_web3provider";
@@ -58,6 +58,10 @@ function Connection({ state, handleStateChange }: ConnectionProps) {
       stateChangeHandler(0);
     }
   }, [connected, userProvider, walletAddress]);
+
+  useEffect(() => {
+    setSearchInput(walletAddress);
+  }, [walletAddress]);
 
   const stateChangeHandler = (state: LoadingStates) => {
     handleStateChange(state);

@@ -10,7 +10,7 @@ import {
 import { useWeb3Provider } from "e-labs_web3provider";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 
 const Container = styled.div``;
 const Box = styled.button`

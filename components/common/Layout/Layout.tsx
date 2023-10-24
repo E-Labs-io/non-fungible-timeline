@@ -11,7 +11,7 @@ const LayoutContainer = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => (theme ? theme.coloredTheme.gradient : "white")};
+  background: ${({ theme }) => (theme ? theme.singleTheme.gradient : "white")};
   overflow: ${({ open }) => (open ? "hidden" : "scroll")};
 `;
 

@@ -1,7 +1,7 @@
 /** @format */
 
+import { ThemeProps } from "e-labs_generic-components";
 import { createGlobalStyle } from "styled-components";
-import { themeInterface, ThemeProps } from "./theme";
 
 export const GlobalStyles = createGlobalStyle<ThemeProps>`
   html, body {
@@ -14,15 +14,15 @@ export const GlobalStyles = createGlobalStyle<ThemeProps>`
     box-sizing: border-box;
   }
   body {
-    background: ${({ theme }) => theme.coloredTheme.gradient};
-    color: ${({ theme }) => theme.coloredTheme.color};
+    background: ${({ theme }) => theme.singleTheme.gradientBackground};
+    color: ${({ theme }) => theme.singleTheme.color};
     min-height: 100vh;
     text-rendering: optimizeLegibility;
     font-family: ${({ theme }) => theme.fontFamily.mainFont}
   }
 
   a {
-    color: ${({ theme }) => theme.primaryHover};
+    color: ${({ theme }) => theme.singleTheme.primaryHover};
     text-decoration: none;
   }
 `;

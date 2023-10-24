@@ -2,11 +2,11 @@
 
 import { Button } from "components/common";
 import ToggleSwitch from "components/common/ToggleSwitch";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import React, { useState, useEffect, useReducer } from "react";
 import styled from "styled-components";
 import { DateRangeInput } from "@datepicker-react/styled";
-import { filtersInitalState } from "hooks/NFTimelineProvider/types/FilterTypes";
+import { filtersInitalState } from "providers/NFTimelineProvider/types/FilterTypes";
 import { device } from "constants/media";
 import { NetworkKeys, ChainSelector } from "e-labs_web3provider";
 
@@ -175,7 +175,7 @@ function FilterOptions({}: FilterOptionsProps) {
           />
         </SwitchContainer>
       </FilterInsert>
-       <FilterInsert>
+      <FilterInsert>
         Show selected chains{" "}
         <ChainSelectorContainer>
           <ChainSelector
@@ -190,7 +190,7 @@ function FilterOptions({}: FilterOptionsProps) {
             onSelectedChain={handleToggleChainFilter}
           />
         </ChainSelectorContainer>
-      </FilterInsert> 
+      </FilterInsert>
       <FilterInsert>
         Show latest first
         <SwitchContainer>

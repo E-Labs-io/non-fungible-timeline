@@ -21,7 +21,7 @@ import {
   sortedHashData,
 } from "helpers/dataSorting/compileHistoryIntoDays";
 import combineHistory from "helpers/dataSorting/combinedSortedHistory";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import filterFilteredDays from "./helpers/filterDays";
 import useWindowSize from "hooks/window/useWindowSize";
 import { mobileL, tablet } from "constants/media";

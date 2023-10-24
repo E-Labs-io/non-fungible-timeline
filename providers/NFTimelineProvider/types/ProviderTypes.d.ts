@@ -81,12 +81,15 @@ export type postVoteType = (
   voteDate: Votes
 ) => Promise<number>;
 
-export type submitVote = (ballotId: string, voteDate: Votes) => Promise<number>;
+export type submitVote = (
+  ballotId: string,
+  voteDate: Votes
+) => Promise<number | false>;
 
 export type getTokenMetadataType = (
-  network: string,
   contractAddress: string,
-  tokenId: string
+  tokenId: string,
+  chain: NetworkKeys
 ) => Promise<SingleNFTDataType>;
 
 export type getBallotsType = () => Promise<Ballot[]>;

@@ -1,7 +1,7 @@
 /** @format */
 
 import { compileHistoryIntoDaysReturn } from "helpers/dataSorting/compileHistoryIntoDays";
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import { useWeb3Provider } from "e-labs_web3provider";
 import { buildNetworkScanLink } from "e-labs_web3provider";
 import React, { useState, useEffect } from "react";
@@ -15,8 +15,8 @@ import StateSkeleton from "components/common/SkeletonLoader";
 import { shortenWalletAddress } from "e-labs_web3provider";
 import { votingCategoriesType, votingCategoryList } from "types/votingTypes";
 import WalletsVotingArea from "./components/voting/UsersVotingArea";
-import { getWalletsVotingData } from "hooks/NFTimelineProvider/api/getWalletsVotingData";
-import { WalletsVotes } from "hooks/NFTimelineProvider/types/VotingTypes";
+import { getWalletsVotingData } from "providers/NFTimelineProvider/api/getWalletsVotingData";
+import { WalletsVotes } from "providers/NFTimelineProvider/types/VotingTypes";
 import { Modal } from "components/common";
 import VotingModal from "./components/voting/VotingModal";
 import AddToSpyListButton from "components/spyList/AddToSpyListButton";

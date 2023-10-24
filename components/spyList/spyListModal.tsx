@@ -1,6 +1,6 @@
 /** @format */
 
-import useNFTimelineProvider from "hooks/NFTimelineProvider";
+import useNFTimelineProvider from "providers/NFTimelineProvider";
 import { Address, useWeb3Provider, AddressBook } from "e-labs_web3provider";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

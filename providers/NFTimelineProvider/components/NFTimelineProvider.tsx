@@ -7,6 +7,7 @@ import {
   NetworkKeys,
   useWeb3Provider,
   SingleNFTDataType,
+  NetworkNameToChainID,
 } from "e-labs_web3provider";
 import React, { useEffect, useState, createContext } from "react";
 import { ApiError } from "types/genericTypes";
@@ -14,12 +15,19 @@ import { getAllRankingData } from "../api/getRankingData";
 import postVote from "../api/postVote";
 import getTokenMetadata from "../hooks/getTokenMetadata";
 import getVerifiedContractList from "../hooks/getVerifiedContracts";
-import { NFTimelineProviderContextType, Votes } from "../types";
-import { timelineFilterStore, timelineFilterTypes } from "../types/FilterTypes";
+import { NFTimelineProviderContextType } from "../types";
+import { timelineFilterStore } from "../types/FilterTypes";
 import {
   addressCollection,
   addressSplitHistory,
+  addTimelineFilter,
+  checkIfAddressVoted,
+  getTokenMetadataType,
+  removeAllTimelineFilters,
+  removeTimelineFilter,
+  removeVote,
   StoredMetadataType,
+  submitVote,
 } from "../types/ProviderTypes";
 import { AllBallotRankingData, Ranks } from "../types/RankingTypes";
 import { VerifiedContractData } from "../types/verifiedContractsTypes";
@@ -76,30 +84,30 @@ const NFTimelineProvider = ({ children }) => {
    *  Metadata Management
    */
 
-  const getMetadata = async (
-    network: string,
+  const getMetadata: getTokenMetadataType = async (
     contractAddress: string,
-    tokenId: string
-  ): Promise<SingleNFTDataType> => {
+    tokenId: string,
+    chain: NetworkKeys
+  ) => {
     let metadata: SingleNFTDataType;
 
     if (
-      !!storedMetadata.ETH_MAINNET &&
-      !!storedMetadata.ETH_MAINNET[contractAddress] &&
-      !!storedMetadata.ETH_MAINNET[contractAddress][tokenId]
+      !!storedMetadata[chain] &&
+      !!storedMetadata[chain][contractAddress] &&
+      !!storedMetadata[chain][contractAddress][tokenId]
     ) {
       //  If the metadata is stored locally
-      metadata = storedMetadata.ETH_MAINNET[contractAddress][tokenId];
+      metadata = storedMetadata[chain][contractAddress][tokenId];
     } else {
       //  If not local get from API
-      metadata = await getTokenMetadata(network, contractAddress, tokenId);
-      const update = {
-        ...storedMetadata,
-        ethereum: { [contractAddress]: { [tokenId]: metadata } },
-      };
+      metadata = await getTokenMetadata(
+        NetworkNameToChainID[chain].ticker,
+        contractAddress,
+        tokenId
+      );
       setStoredMetadata({
         ...storedMetadata,
-        ETH_MAINNET: { [contractAddress]: { [tokenId]: metadata } },
+        [chain]: { [contractAddress]: { [tokenId]: metadata } },
       });
     }
     return metadata;
@@ -120,7 +128,7 @@ const NFTimelineProvider = ({ children }) => {
   /**
    * Timeline Filter Management
    */
-  const addTimelineFilter = (filterOptions: timelineFilterStore) => {
+  const addTimelineFilter: addTimelineFilter = (filterOptions) => {
     let i: boolean | number = false;
 
     if (filterOptions.filterType === "chain") {
@@ -147,12 +155,12 @@ const NFTimelineProvider = ({ children }) => {
     }
   };
 
-  const removeAllTimelineFilters = () => {
+  const removeAllTimelineFilters: removeAllTimelineFilters = () => {
     setTimelineFilters([{ filterType: "chain", optionA: availableChains }]);
     setSelectedChains(availableChains);
   };
 
-  const removeTimelineFilter = (filterType: timelineFilterTypes) => {
+  const removeTimelineFilter: removeTimelineFilter = (filterType) => {
     if (timelineFilters) {
       const newFilters: timelineFilterStore[] = [];
       timelineFilters.forEach((filter) => {
@@ -215,10 +223,7 @@ const NFTimelineProvider = ({ children }) => {
   const getBallotRankings = (ballotId: string): Ranks =>
     allBallotRankings[ballotId];
 
-  const submitVote = async (
-    ballotId: string,
-    voteData: Votes
-  ): Promise<number> =>
+  const submitVote: submitVote = async (ballotId, voteData) =>
     userSignMessage(
       userSigner,
       `NFTimeline: Giving ${activeAddress} a vote for ${ballotId}`
@@ -232,11 +237,11 @@ const NFTimelineProvider = ({ children }) => {
           })
         : false
     );
-  const removeVote = async (
-    ballotId: string,
-    voterAddress: string,
-    votedForAddress: string
-  ): Promise<boolean> =>
+  const removeVote: removeVote = async (
+    ballotId,
+    voterAddress,
+    votedForAddress
+  ) =>
     checkIfAddressVoted(ballotId, voterAddress, votedForAddress).then(
       (result) =>
         result
@@ -251,11 +256,11 @@ const NFTimelineProvider = ({ children }) => {
           : false
     );
 
-  const checkIfAddressVoted = async (
-    ballotId: string,
-    voterAddress: string,
-    votedForAddress: string
-  ): Promise<boolean> =>
+  const checkIfAddressVoted: checkIfAddressVoted = async (
+    ballotId,
+    voterAddress,
+    votedForAddress
+  ) =>
     checkIfWalletVoted(ballotId, voterAddress, votedForAddress).then(
       (result) => result
     );
