@@ -121,4 +121,4 @@ export type removeVote = (
 export type onChainSelection = (
   action: "add" | "remove",
   chain: NetworkKeys
-) => void;
+) => ActiveChainIndex;

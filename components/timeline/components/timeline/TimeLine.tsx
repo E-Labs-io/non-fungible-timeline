@@ -137,10 +137,7 @@ function TimeLine({
     return style;
   };
 
-  const checkIfFilterIsActive = () => {
-    if (timelineFilters && timelineFilters.length > 0) return true;
-    else return false;
-  };
+  
 
   return (
     <Container>

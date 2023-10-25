@@ -130,12 +130,11 @@ const NFTimelineProvider = ({ children }) => {
    */
   const addTimelineFilter: addTimelineFilter = (filterOptions) => {
     let i: boolean | number = false;
-
+    const currentFilters = timelineFilters;
+    console.log("addTimelineFilter : new filters : ", filterOptions);
     if (filterOptions.filterType === "chain") {
-      const filter = timelineFilters;
-      filter[0] = filterOptions.optionA;
-      setTimelineFilters(filter);
-      console.log("new filters : ", filter);
+      currentFilters[0] = filterOptions;
+      setTimelineFilters(currentFilters);
     } else {
       if (timelineFilters.length > 0) {
         timelineFilters.forEach((filter, index) => {
@@ -144,11 +143,9 @@ const NFTimelineProvider = ({ children }) => {
           }
         });
       }
-
       if (i) {
-        let newFilters = timelineFilters;
-        newFilters[i] = filterOptions;
-        setTimelineFilters(newFilters);
+        currentFilters[i] = filterOptions;
+        setTimelineFilters(currentFilters);
       } else {
         setTimelineFilters([...timelineFilters, filterOptions]);
       }
@@ -166,6 +163,7 @@ const NFTimelineProvider = ({ children }) => {
       timelineFilters.forEach((filter) => {
         if (filter.filterType !== filterType) newFilters.push(filter);
       });
+      setSelectedChains(availableChains);
       setTimelineFilters(newFilters);
     }
   };
@@ -180,10 +178,10 @@ const NFTimelineProvider = ({ children }) => {
   ) => {
     console.log("NFTimeline Provider : chain selected : ", action, chain);
     const preStorage = selectedChains;
-    setSelectedChains({
-      ...preStorage,
-      [chain]: action === "add" ? true : false,
-    });
+    preStorage[chain] = action === "add" ? true : false;
+    setSelectedChains(preStorage);
+
+    return preStorage;
   };
 
   /**

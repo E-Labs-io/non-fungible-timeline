@@ -109,7 +109,6 @@ function FilterOptions({}: FilterOptionsProps) {
 
   const handleResetAllFilters = () => {
     dispatch({ type: "dateChange", payload: initialState });
-
     removeAllTimelineFilters();
     setActiveFilters(initState);
   };
@@ -150,10 +149,11 @@ function FilterOptions({}: FilterOptionsProps) {
     action: "add" | "remove",
     chain: NetworkKeys
   ) => {
-    onSelectedChainChange(action, chain);
-    const newChains = selectedChains;
-    newChains[chain] = action === "add" ? true : false;
+    const newChains = onSelectedChainChange(action, chain);
+    setActiveFilters({ ...activeFilters, chain: true });
+    console.log("timelineFilters before state update:", timelineFilters);
     addTimelineFilter({ filterType: "chain", optionA: newChains });
+    console.log("timelineFilters after state update:", timelineFilters);
   };
 
   const dateToLocal = (date) => new Date(date).toLocaleDateString();

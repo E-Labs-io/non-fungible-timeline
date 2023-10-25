@@ -18,7 +18,7 @@ const filterFilteredDays = (
   const isOrder = filters.find((a) => a.filterType === "order");
   const isChain = filters.find((a) => a.filterType === "chain");
 
-  console.log("FILTERS : ", filters);
+  // console.log("filterFilteredDays : FILTERS : ", filters);
   //  Selected chain check
   if (isChain) {
     // Get teh active Chains
@@ -51,8 +51,8 @@ const filterFilteredDays = (
       if (allowedHash.length > 0)
         filtered.push([dayData[0], dayData[1], allowedHash, allowedSortedData]);
     }
-    console.log("Filtered for networks : ", isChain);
-    console.log("Filtered  : ", filtered);
+    //console.log("Filtered for networks : ", isChain);
+    //console.log("Filtered  : ", filtered);
 
     filteredHistory = filtered;
   }
