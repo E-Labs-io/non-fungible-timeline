@@ -137,8 +137,6 @@ function TimeLine({
     return style;
   };
 
-  
-
   return (
     <Container>
       {isReady && (

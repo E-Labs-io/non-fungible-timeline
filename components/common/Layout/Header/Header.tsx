@@ -14,8 +14,9 @@ import useWindowSize from "hooks/window/useWindowSize";
 import FlatMenu from "./components/FlatMenu";
 
 import { useRouter } from "next/router";
+import Image from "next/image";
 
-const StyledHeader = styled.header`
+const StyledHeader = styled.div`
   position: relative;
   height: 55px;
   display: flex;
@@ -45,7 +46,7 @@ const LogoImageContainer = styled.div`
   flex-direction: row;
 `;
 
-const Logo = styled.img`
+const Logo = styled(Image)`
   height: 60px; // adjust this value as needed
   align-items: center;
   justify-content: center;
@@ -93,7 +94,7 @@ const menuItems = [
 
 const Header = ({ onBack, onMenu }) => {
   const [open, setOpen] = useState(false);
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
   const router = useRouter();
   const headerRef = useRef();
   const menuId = "main-menu";
@@ -125,7 +126,12 @@ const Header = ({ onBack, onMenu }) => {
         </HeaderSection>
         <HeaderSection>
           <LogoImageContainer>
-            <Logo onClick={goHome} src="/images/logo-short_gradient-01.png" />
+            <Logo
+              onClick={goHome}
+              src="/images/logo-short_gradient-01.png"
+              width={width ? width * 0.35 : 300}
+              height="60"
+            />
           </LogoImageContainer>
         </HeaderSection>
         <HeaderSection>

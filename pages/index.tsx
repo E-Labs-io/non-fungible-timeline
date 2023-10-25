@@ -7,6 +7,8 @@ import Introduction from "components/Connection/Introduction";
 import BallotRanking from "components/rankings/components/BallotRanking";
 import { device } from "constants/media";
 import { LoadingStates } from "types/stateTypes";
+import Image from "next/image";
+import { useWindowSize } from "e-labs_generic-components";
 
 const HomeContainer = styled.div`
   position: absolute;
@@ -42,7 +44,7 @@ const LogoImageContainer = styled.div`
   padding-top: 50px;
 `;
 
-const Logo = styled.img`
+const Logo = styled(Image)`
   width: 60%;
   height: 100%;
   @media ${device.tablet} {
@@ -53,10 +55,15 @@ const Logo = styled.img`
 const Home = () => {
   const [loadingState, setLoadingState] = useState<LoadingStates>();
   const handelStateChange = (state) => setLoadingState(state);
+  const { width, height } = useWindowSize();
   return (
     <HomeContainer>
       <LogoImageContainer>
-        <Logo src="/images/logo-long_gradient-01.png" />
+        <Logo
+          src="/images/logo-long_gradient-01.png"
+          width={width ? width * 0.6 : 1000}
+          height={height ? height * 0.1 : 75}
+        />
       </LogoImageContainer>
       <ConnectionContainer>
         <Introduction />

@@ -149,11 +149,11 @@ function FilterOptions({}: FilterOptionsProps) {
     action: "add" | "remove",
     chain: NetworkKeys
   ) => {
-    const newChains = onSelectedChainChange(action, chain);
-    setActiveFilters({ ...activeFilters, chain: true });
-    console.log("timelineFilters before state update:", timelineFilters);
+    const newChains = selectedChains;
+    newChains[chain] = action === "add" ? true : false;
     addTimelineFilter({ filterType: "chain", optionA: newChains });
-    console.log("timelineFilters after state update:", timelineFilters);
+    setActiveFilters({ ...activeFilters, chain: true });
+    onSelectedChainChange(action, chain);
   };
 
   const dateToLocal = (date) => new Date(date).toLocaleDateString();

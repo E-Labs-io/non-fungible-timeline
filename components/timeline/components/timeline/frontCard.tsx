@@ -154,8 +154,6 @@ const FrontCard = ({
 
   const [showToken, setShowToken] = useState<TokenIds>();
 
-  const network = "mainnet";
-
   useEffect(() => {
     if (!ready && !loading) {
       if (!!transactionDataBase) {
@@ -174,7 +172,6 @@ const FrontCard = ({
               const urlParsed = checkIfIPFSUrl(nft.metadata.image);
               setImageUrl(urlParsed);
             } else {
-              console.log("DIDN'T GET METADATA");
             }
             setReady(true);
             setLoading(false);

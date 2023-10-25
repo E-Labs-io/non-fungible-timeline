@@ -130,25 +130,28 @@ const NFTimelineProvider = ({ children }) => {
    */
   const addTimelineFilter: addTimelineFilter = (filterOptions) => {
     let i: boolean | number = false;
-    const currentFilters = timelineFilters;
+    const currentFilters: timelineFilterStore[] = [];
     console.log("addTimelineFilter : new filters : ", filterOptions);
-    if (filterOptions.filterType === "chain") {
-      currentFilters[0] = filterOptions;
+
+    if (timelineFilters.length > 0) {
+      timelineFilters.forEach((filter, index) => {
+        if (filter.filterType !== filterOptions.filterType) {
+          currentFilters.push(filter);
+        }
+      });
+    }
+    if (i) {
+      console.log(
+        "Updating filter at index : ",
+        i,
+        " for ",
+        filterOptions.filterType
+      );
+      currentFilters.push(filterOptions);
       setTimelineFilters(currentFilters);
     } else {
-      if (timelineFilters.length > 0) {
-        timelineFilters.forEach((filter, index) => {
-          if (filter.filterType === filterOptions.filterType) {
-            i = index;
-          }
-        });
-      }
-      if (i) {
-        currentFilters[i] = filterOptions;
-        setTimelineFilters(currentFilters);
-      } else {
-        setTimelineFilters([...timelineFilters, filterOptions]);
-      }
+      console.log("New Filter : ", filterOptions);
+      setTimelineFilters([...timelineFilters, filterOptions]);
     }
   };
 
@@ -163,7 +166,6 @@ const NFTimelineProvider = ({ children }) => {
       timelineFilters.forEach((filter) => {
         if (filter.filterType !== filterType) newFilters.push(filter);
       });
-      setSelectedChains(availableChains);
       setTimelineFilters(newFilters);
     }
   };
