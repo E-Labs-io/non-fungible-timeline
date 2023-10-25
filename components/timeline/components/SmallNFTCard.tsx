@@ -99,7 +99,7 @@ function SmallNFTCard({
           tokenId.hex,
           transactionData.chain
         ).then((nft) => {
-          console.log("SmallNFTCard : Got NFT : ", nft);
+          //console.log("SmallNFTCard : Got NFT : ", nft);
           setNFTData(nft);
           setMetadata(nft.metadata);
           if (!!nft.metadata?.image) {

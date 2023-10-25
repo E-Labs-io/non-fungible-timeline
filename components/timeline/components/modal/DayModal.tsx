@@ -69,8 +69,9 @@ const DayModal = ({ allDayData }: DayModalProps) => {
     transactionData: sortedHistoryData
   ) => {
     setSelectedNFT(null);
+    console.log(metadata);
     const toView = {
-      NFTData,
+      NFTData: Array.isArray(NFTData) ? NFTData[0] : NFTData,
       metadata,
       transactionData,
     };

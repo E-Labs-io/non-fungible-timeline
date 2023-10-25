@@ -24,7 +24,7 @@
     "babel-plugin-macros": "^3.1.0",
     "cors": "^2.8.5",
     "e-labs_generic-components": "^1.0.20",
-    "e-labs_web3provider": "^1.1.6",
+    "e-labs_web3provider": "^1.1.7",
     "ethers": "^5.6.4",
     "fs": "^0.0.1-security",
     "ipfs-api": "^26.1.2",

@@ -103,13 +103,13 @@ const SingleNFTView = ({
   closeView,
   direction,
 }: SingleNFTViewProps) => {
-  const { checkIfValidContract, verifiedContractList } =
+  const { checkIfValidContract, getTokenMetadata, verifiedContractList } =
     useNFTimelineProvider();
   const [verified, setVerified] = useState(undefined);
   const [verifiedData, setVerifiedData] = useState<VerifiedContractData>();
   const [loading, setLoading] = useState(false);
   const [mediaFormat, setMediaFormat] = useState("image");
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>();
 
   const figureMethod = () => {
     let method;
@@ -174,16 +174,37 @@ const SingleNFTView = ({
   };
 
   useEffect(() => {
-    if (!imageUrl && metadata?.image && !loading) {
+    if (!imageUrl && !loading) {
       setLoading(true);
-      console.log("update image url");
-      const urlParsed = checkIfIPFSUrl(metadata.image);
-      setImageUrl(urlParsed);
-      const format = getMediaFormat(urlParsed);
-      setMediaFormat(format);
-      setLoading(false);
+      setMediaFormat("");
+      setImageUrl("");
+      // console.log("update image url");
+
+      if (metadata?.image) {
+        const urlParsed = checkIfIPFSUrl(metadata.image);
+        setImageUrl(urlParsed);
+        const format = getMediaFormat(urlParsed);
+        setMediaFormat(format);
+        setLoading(false);
+      } else {
+        getTokenMetadata(
+          NFTData.token_address,
+          NFTData.token_id,
+          transactionData.chain
+        )
+          .then((nft) => {
+            if (!!nft.metadata?.image) {
+              const urlParsed = checkIfIPFSUrl(nft.metadata?.image);
+              setImageUrl(urlParsed);
+              const format = getMediaFormat(urlParsed);
+              setMediaFormat(format);
+            }
+            setLoading(false);
+          })
+          .catch((error) => console.log("Error getting token data: ", error));
+      }
     }
-  }, [metadata]);
+  });
 
   useEffect(() => {
     if (!!!verified && verifiedContractList && !loading) {

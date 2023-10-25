@@ -96,12 +96,10 @@ const NFTimelineProvider = ({ children }) => {
       !!storedMetadata[chain][contractAddress] &&
       !!storedMetadata[chain][contractAddress][tokenId]
     ) {
-      console.log("local metadata");
       //  If the metadata is stored locally
       metadata = storedMetadata[chain][contractAddress][tokenId];
     } else if (chain) {
       //  If not local get from API
-      console.log("api metadata");
 
       metadata = await getTokenMetadata(chain, contractAddress, tokenId);
       setStoredMetadata({

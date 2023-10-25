@@ -170,7 +170,7 @@ const FrontCard = ({
             if (!!nft.metadata?.image) {
               const urlParsed = checkIfIPFSUrl(nft.metadata?.image);
               setImageUrl(urlParsed);
-            } 
+            }
             setReady(true);
             setLoading(false);
           })
@@ -210,7 +210,7 @@ const FrontCard = ({
       <SingleCard onClick={() => handleOpenModal(allData)}>
         <TopImageContainer>
           <NFTMedia
-            mediaUrl={imageUrl}
+            mediaUrl={imageUrl && imageUrl}
             width={getImageSizing(width, "width")}
             height={getImageSizing(width, "height")}
             colorA="#41bdff"
