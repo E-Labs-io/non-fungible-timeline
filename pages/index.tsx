@@ -9,6 +9,8 @@ import { device } from "constants/media";
 import { LoadingStates } from "types/stateTypes";
 import Image from "next/image";
 import { useWindowSize } from "e-labs_generic-components";
+import { theme } from "styles/theme";
+
 
 const HomeContainer = styled.div`
   position: absolute;

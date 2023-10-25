@@ -18,16 +18,14 @@ const Container = styled.div`
 const AboutContainer = styled.div`
   width: 85%;
   max-height: 400px;
-
-  background-color: ${({ theme }) => theme.coloredTheme.transparentBG};
+  background-color: "#ffff";
   border-radius: 20px;
   border-width: 1px;
   border-style: none;
-  border-color: ${({ theme }) => theme.coloredTheme.borderColor};
-
+  border-color: ${({ theme }) => theme.singleTheme.border.color};
 
   justify-content: center;
-  box-shadow: ${({ theme }) => theme.shadow.innerShadow};
+  box-shadow: ${({ theme }) => theme.singleTheme.shadow.innerShadow};
   padding: 10px;
   padding-left: 20px;
   padding-bottom: 10px;
@@ -46,7 +44,7 @@ const AboutTitle = styled.h2`
   font-size: 40px;
   font-weight: 500;
   text-align: center;
-  color: ${({ theme }) => theme.primaryLight};
+  color: ${({ theme }) => theme.singleTheme.color};
   margin: auto;
 
   @media ${device.tablet} {

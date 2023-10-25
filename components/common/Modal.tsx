@@ -85,8 +85,8 @@ function Modal({
           {!removeCross && (
             <Button
               fontSize="14px"
-              color={theme.primaryDark}
-              backgroundColor={theme.primaryLight}
+              color={theme.singleTheme.color}
+              backgroundColor={"#dddddda3"}
               onClick={onRequestClose}
               padding="5px 10px"
             >

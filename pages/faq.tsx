@@ -17,14 +17,13 @@ const Wrapper = styled.div`
 
   align-items: center;
   padding: 20px;
-
 `;
 
 const Title = styled.h2`
   font-size: 40px;
   font-weight: 500;
   text-align: center;
-  color: ${({ theme }) => theme.primaryLight};
+  color: ${({ theme }) => theme.singleTheme.color};
   margin: auto;
   @media ${device.tablet} {
     font-size: 32px;
@@ -41,7 +40,6 @@ function FAQ() {
       <About />
       <Wrapper>
         <Title>F.A.Q.</Title>
-
         <TextExpandList data={faqQuestions} />
       </Wrapper>
     </Layout>

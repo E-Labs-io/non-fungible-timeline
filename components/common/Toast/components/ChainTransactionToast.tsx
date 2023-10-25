@@ -1,6 +1,6 @@
 /** @format */
 import { ethers } from "ethers";
-import { buildNetworkScanLink } from "e-labs_web3provider";
+import { NetworkKeys, buildNetworkScanLink } from "e-labs_web3provider";
 import React, { useState, useEffect, useContext } from "react";
 import styled, { useTheme, keyframes } from "styled-components";
 
@@ -20,7 +20,7 @@ interface ToastTransactionProps {
   title: string;
   messages?: string[];
   txHash?: string;
-  network?: string;
+  network?: NetworkKeys;
   width?: string;
   height?: string;
 }
