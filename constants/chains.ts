@@ -1,6 +1,6 @@
 /** @format */
 import { ActiveChainIndex } from "e-labs_web3provider";
-const availableChains: ActiveChainIndex = {
+const availableChains: Readonly<ActiveChainIndex> = {
   ETH_MAINNET: true,
   OPT_MAINNET: true,
   ARB_MAINNET: true,

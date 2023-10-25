@@ -85,6 +85,7 @@ function FilterOptions({}: FilterOptionsProps) {
   } = useNFTimelineProvider();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [activeFilters, setActiveFilters] = useState<filtersInitalState>();
+  const [chians, setChains] = useState(selectedChains);
 
   const initState = {
     date: false,
@@ -92,6 +93,10 @@ function FilterOptions({}: FilterOptionsProps) {
     order: false,
     chain: true,
   };
+
+  useEffect(() => {
+    setChains(selectedChains);
+  }, [selectedChains]);
 
   useEffect(() => {
     if (!!!activeFilters) {
@@ -186,7 +191,7 @@ function FilterOptions({}: FilterOptionsProps) {
               "OPT_MAINNET",
             ]}
             notForProvider
-            activeChainStream={selectedChains}
+            activeChainStream={chians}
             onSelectedChain={handleToggleChainFilter}
           />
         </ChainSelectorContainer>

@@ -108,9 +108,8 @@ const SingleNFTView = ({
   const [verified, setVerified] = useState(undefined);
   const [verifiedData, setVerifiedData] = useState<VerifiedContractData>();
   const [loading, setLoading] = useState(false);
-  const [imageLoading, setImageLoading] = useState<boolean>(true);
   const [mediaFormat, setMediaFormat] = useState("image");
-  const [imageUrl, setImageUrl] = useState<string>(null);
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   const figureMethod = () => {
     let method;
@@ -137,7 +136,7 @@ const SingleNFTView = ({
       <Text>
         <InlineLine
           href={buildNetworkScanLink({
-            network: "eth",
+            network: transactionData.chain,
             txHash: transactionData.hash,
           })}
           target={"blank"}
@@ -149,11 +148,11 @@ const SingleNFTView = ({
           href={buildNetworkScanLink(
             method === "Minted" || method === "Burned"
               ? {
-                  network: "eth",
+                  network: transactionData.chain,
                   address: transactionData.contractAddress,
                 }
               : {
-                  network: "eth",
+                  network: transactionData.chain,
                   address:
                     joiner === " from "
                       ? transactionData.from
@@ -175,21 +174,19 @@ const SingleNFTView = ({
   };
 
   useEffect(() => {
-    if (!!!imageUrl && imageLoading && metadata.image) {
-      const urlParsed = checkIfIPFSUrl(metadata.image);
-      setImageUrl(urlParsed);
-      const format = getMediaFormat(urlParsed);
-      setMediaFormat(format);
-    }
-    if (metadata && imageUrl && checkIfIPFSUrl(metadata.image) !== imageUrl) {
-      setImageLoading(true);
-      const urlParsed = checkIfIPFSUrl(metadata.image);
-      setImageUrl(urlParsed);
-      const format = getMediaFormat(urlParsed);
-      setMediaFormat(format);
-    }
-    if (!!!verified && verifiedContractList && !loading) {
+    if (!imageUrl && metadata?.image && !loading) {
       setLoading(true);
+      console.log("update image url");
+      const urlParsed = checkIfIPFSUrl(metadata.image);
+      setImageUrl(urlParsed);
+      const format = getMediaFormat(urlParsed);
+      setMediaFormat(format);
+      setLoading(false);
+    }
+  }, [metadata]);
+
+  useEffect(() => {
+    if (!!!verified && verifiedContractList && !loading) {
       let isValied = checkIfValidContract(transactionData.contractAddress);
       if (isValied !== false) {
         setVerified(true);
@@ -206,18 +203,16 @@ const SingleNFTView = ({
       <CloseView onClick={closeView}>Back</CloseView>
       <ViewArea>
         <NFTMedia
-          mediaUrl={metadata.image}
+          mediaUrl={imageUrl}
           width="296px"
           height="296px"
           colorA="#41bdff"
           colorB="#f448ee"
           color="white"
           index="SingleNFTShow"
-          videoControls
-          autoPlayVideo
         />
         <InformationContainer>
-          <InformationTextLarge>{metadata.name}</InformationTextLarge>
+          <InformationTextLarge>{metadata?.name}</InformationTextLarge>
           {verified && (
             <InformationTextMedium>{verifiedData?.name}</InformationTextMedium>
           )}
@@ -225,10 +220,10 @@ const SingleNFTView = ({
             NFTData={NFTData}
             verified={verified}
             mediaFormat={mediaFormat}
-            chain={transactionData.chain}
+            chain={transactionData?.chain}
           />
           <InformationDescription>
-            {metadata.description}
+            {metadata?.description}
           </InformationDescription>
           <br />
           <InformationTextMedium>{figureMethod()}</InformationTextMedium>

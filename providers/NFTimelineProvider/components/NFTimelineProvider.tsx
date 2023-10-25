@@ -96,15 +96,14 @@ const NFTimelineProvider = ({ children }) => {
       !!storedMetadata[chain][contractAddress] &&
       !!storedMetadata[chain][contractAddress][tokenId]
     ) {
+      console.log("local metadata");
       //  If the metadata is stored locally
       metadata = storedMetadata[chain][contractAddress][tokenId];
-    } else {
+    } else if (chain) {
       //  If not local get from API
-      metadata = await getTokenMetadata(
-        NetworkNameToChainID[chain].ticker,
-        contractAddress,
-        tokenId
-      );
+      console.log("api metadata");
+
+      metadata = await getTokenMetadata(chain, contractAddress, tokenId);
       setStoredMetadata({
         ...storedMetadata,
         [chain]: { [contractAddress]: { [tokenId]: metadata } },
@@ -129,10 +128,7 @@ const NFTimelineProvider = ({ children }) => {
    * Timeline Filter Management
    */
   const addTimelineFilter: addTimelineFilter = (filterOptions) => {
-    let i: boolean | number = false;
     const currentFilters: timelineFilterStore[] = [];
-    console.log("addTimelineFilter : new filters : ", filterOptions);
-
     if (timelineFilters.length > 0) {
       timelineFilters.forEach((filter, index) => {
         if (filter.filterType !== filterOptions.filterType) {
@@ -140,23 +136,17 @@ const NFTimelineProvider = ({ children }) => {
         }
       });
     }
-    if (i) {
-      console.log(
-        "Updating filter at index : ",
-        i,
-        " for ",
-        filterOptions.filterType
-      );
-      currentFilters.push(filterOptions);
-      setTimelineFilters(currentFilters);
-    } else {
-      console.log("New Filter : ", filterOptions);
-      setTimelineFilters([...timelineFilters, filterOptions]);
-    }
+    currentFilters.push(filterOptions);
+    setTimelineFilters(currentFilters);
   };
 
   const removeAllTimelineFilters: removeAllTimelineFilters = () => {
-    setTimelineFilters([{ filterType: "chain", optionA: availableChains }]);
+    setTimelineFilters([
+      {
+        filterType: "chain",
+        optionA: availableChains,
+      },
+    ]);
     setSelectedChains(availableChains);
   };
 
@@ -178,7 +168,6 @@ const NFTimelineProvider = ({ children }) => {
     action: "add" | "remove",
     chain: NetworkKeys
   ) => {
-    console.log("NFTimeline Provider : chain selected : ", action, chain);
     const preStorage = selectedChains;
     preStorage[chain] = action === "add" ? true : false;
     setSelectedChains(preStorage);

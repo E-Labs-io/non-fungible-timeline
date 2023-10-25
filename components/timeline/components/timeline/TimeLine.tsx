@@ -75,7 +75,6 @@ function TimeLine({
   const [isSmallScreen, setSmallScreen] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("Timeline new filter : ", timelineFilters);
     setIsReady(false);
     let history = filterFilteredDays(
       combineHistory(sortedInHistory, sortedOutHistory),

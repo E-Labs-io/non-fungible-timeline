@@ -94,11 +94,16 @@ function SmallNFTCard({
     if (!ready && !loading) {
       if (!!contractAddress) {
         setLoading(true);
-        getTokenMetadata("eth", contractAddress, tokenId.hex).then((nft) => {
+        getTokenMetadata(
+          contractAddress,
+          tokenId.hex,
+          transactionData.chain
+        ).then((nft) => {
+          console.log("SmallNFTCard : Got NFT : ", nft);
           setNFTData(nft);
           setMetadata(nft.metadata);
-          if (!!nft.metadata.image) {
-            const urlParsed = checkIfIPFSUrl(nft.metadata.image);
+          if (!!nft.metadata?.image) {
+            const urlParsed = checkIfIPFSUrl(nft.metadata?.image);
             setImageUrl(urlParsed);
             setReady(true);
             setLoading(false);

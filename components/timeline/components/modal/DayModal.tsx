@@ -31,7 +31,6 @@ interface DayModalProps {
 const DayModal = ({ allDayData }: DayModalProps) => {
   const selectedNFTRef = useRef(null);
   const { getTokenMetadata } = useNFTimelineProvider();
-  const [loading, setLoading] = useState(false);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [selectedNFT, setSelectedNFT] = useState<{
     NFTData: SingleNFTDataType;
@@ -40,13 +39,12 @@ const DayModal = ({ allDayData }: DayModalProps) => {
   }>();
 
   useEffect(() => {
-    if (allDayData && allDayData[2].length === 1 && !loading) {
-      setLoading(true);
+    if (allDayData && allDayData[2].length === 1) {
       if (allDayData[3][allDayData[2][0]][0].groupedTokenIds.length === 1) {
         getTokenMetadata(
-          "ethereum",
           allDayData[3][allDayData[2][0]][0].contractAddress,
-          allDayData[3][allDayData[2][0]][0].tokenId.hex
+          allDayData[3][allDayData[2][0]][0].tokenId.hex,
+          allDayData[3][allDayData[2][0]][0].chain
         ).then((data: SingleNFTDataType) => {
           const toView = {
             NFTData: data,
@@ -58,7 +56,7 @@ const DayModal = ({ allDayData }: DayModalProps) => {
         });
       }
     }
-  }, [loading, allDayData]);
+  }, [allDayData]);
 
   const scrollToTop = () =>
     selectedNFTRef &&
@@ -87,9 +85,9 @@ const DayModal = ({ allDayData }: DayModalProps) => {
     <Wrapper overlay={showOverlay} ref={selectedNFTRef}>
       {showOverlay && (
         <SingleNFTView
-          NFTData={selectedNFT.NFTData}
-          metadata={selectedNFT.metadata}
-          transactionData={selectedNFT.transactionData}
+          NFTData={selectedNFT && selectedNFT?.NFTData}
+          metadata={selectedNFT && selectedNFT?.metadata}
+          transactionData={selectedNFT?.transactionData}
           closeView={handleCloseModal}
           direction={allDayData[0]}
         />

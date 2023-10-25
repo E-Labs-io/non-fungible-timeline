@@ -24,7 +24,10 @@ const BadgeArea = styled.div`
 `;
 
 const InfoBadge = styled.div`
+  width: max-content;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   display: flex;
   border-radius: 10px;
   border-color: black;
@@ -58,13 +61,12 @@ function SingleDayViewBadges({
       if (chain === "OPT_MAINNET") setChainLabel("Optimism");
       if (chain === "MATIC_MAINNET") setChainLabel("Polygon");
       if (chain === "ARB_MAINNET") setChainLabel("Arbitrim");
-      console.log(chainLabel);
     }
   });
 
   return (
     <BadgeArea>
-      <InfoBadge># {shortenTokenId(NFTData.token_id)}</InfoBadge>
+      <InfoBadge># {shortenTokenId(NFTData?.token_id)}</InfoBadge>
       <InfoBadge>{mediaFormat}</InfoBadge>
       <InfoBadge>{NFTData.contract_type}</InfoBadge>
       <InfoBadge>{chainLabel}</InfoBadge>

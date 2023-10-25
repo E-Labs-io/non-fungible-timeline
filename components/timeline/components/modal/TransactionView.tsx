@@ -78,7 +78,7 @@ function TransactionView({
         <Etherscan>
           <InlineLink
             href={buildNetworkScanLink({
-              network: "eth",
+              network: txData[0].chain,
               txHash: txHash,
             })}
             target="blank"

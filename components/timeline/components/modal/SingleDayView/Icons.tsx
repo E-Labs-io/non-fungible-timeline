@@ -67,7 +67,7 @@ function SingleNFTViewIcons({
             handleClickOpenURLInNewTab(
               buildOpenSeaLink({
                 address: transactionData.contractAddress,
-                tokenId: NFTData.token_id,
+                tokenId: NFTData?.token_id,
               })
             )
           }
@@ -81,7 +81,7 @@ function SingleNFTViewIcons({
           onClick={() =>
             handleClickOpenURLInNewTab(
               buildNetworkScanLink({
-                network: "eth",
+                network: transactionData.chain,
                 address: transactionData.contractAddress,
                 tokenId: Number(NFTData.token_id),
               })
@@ -89,20 +89,22 @@ function SingleNFTViewIcons({
           }
         />
       </IconFrame>
-      <IconFrame
-        id="mediaButton"
-        data-tooltip-content="View raw media"
-        onClick={() =>
-          handleClickOpenURLInNewTab(checkIfIPFSUrl(NFTData.metadata.image))
-        }
-      >
-        <FontAwesomeIcon size="2x" icon={faPhotoFilm} />
-      </IconFrame>
+      {NFTData?.metadata?.image && (
+        <IconFrame
+          id="mediaButton"
+          data-tooltip-content="View raw media"
+          onClick={() =>
+            handleClickOpenURLInNewTab(checkIfIPFSUrl(NFTData?.metadata?.image))
+          }
+        >
+          <FontAwesomeIcon size="2x" icon={faPhotoFilm} />
+        </IconFrame>
+      )}
       <IconFrame
         id="metadataButton"
         data-tooltip-content="View raw metadata"
         onClick={() =>
-          handleClickOpenURLInNewTab(checkIfIPFSUrl(NFTData.token_uri))
+          handleClickOpenURLInNewTab(checkIfIPFSUrl(NFTData?.token_uri))
         }
       >
         <FontAwesomeIcon size="2x" icon={faGears} />

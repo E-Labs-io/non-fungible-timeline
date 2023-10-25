@@ -1,13 +1,13 @@
 /** @format */
 
-import { SingleNFTDataType } from "e-labs_web3provider";
+import { NetworkKeys, SingleNFTDataType } from "e-labs_web3provider";
 
 const url = process.env.NEXT_PUBLIC_NFT_SERVER
   ? process.env.NEXT_PUBLIC_NFT_SERVER
   : "http://localhost:3003";
 
 const getTokenMetadata = async (
-  network: string,
+  network: NetworkKeys,
   contractAddress: string,
   tokenId: string
 ): Promise<SingleNFTDataType> => {

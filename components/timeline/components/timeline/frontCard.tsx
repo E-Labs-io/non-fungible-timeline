@@ -158,7 +158,6 @@ const FrontCard = ({
     if (!ready && !loading) {
       if (!!transactionDataBase) {
         setLoading(true);
-        let format;
         const toShow: sortedHistoryData = transactionDataBase[txHashes[0]][0];
         setTxData(toShow);
         setShowToken(toShow.groupedTokenIds[0]);
@@ -168,11 +167,10 @@ const FrontCard = ({
           toShow.chain
         )
           .then((nft) => {
-            if (!!nft.metadata.image) {
-              const urlParsed = checkIfIPFSUrl(nft.metadata.image);
+            if (!!nft.metadata?.image) {
+              const urlParsed = checkIfIPFSUrl(nft.metadata?.image);
               setImageUrl(urlParsed);
-            } else {
-            }
+            } 
             setReady(true);
             setLoading(false);
           })
@@ -182,7 +180,7 @@ const FrontCard = ({
   });
 
   const getTXDate = (toShow) => {
-    const fullDate = new Date(toShow.timestamp);
+    const fullDate = new Date(toShow?.timestamp);
     const toShowDate = fullDate.toLocaleDateString();
     return toShowDate;
   };

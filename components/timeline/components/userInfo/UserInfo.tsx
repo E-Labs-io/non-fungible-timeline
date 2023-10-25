@@ -274,7 +274,7 @@ function UserInformation({
         {addressCheck.finished && (
           <AddressLabel
             href={buildNetworkScanLink({
-              network: "eth",
+              network: "ETH_MAINNET",
               address: usersWalletAddress,
             })}
             target="blank"
