@@ -32,7 +32,7 @@ const BurgerWrapper = styled.div<ExtraStyleProps>`
     width: 32px;
     height: 4px;
     background: ${({ theme, open }) =>
-      open ? theme.primaryDark : theme.primaryLight};
+      open ? theme.singleTheme.color : theme.singleTheme.color};
     border-radius: 10px;
     transition: all 0.3s linear;
     position: relative;

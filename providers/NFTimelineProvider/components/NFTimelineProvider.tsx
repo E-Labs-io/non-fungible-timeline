@@ -261,7 +261,6 @@ const NFTimelineProvider = ({ children }) => {
     if (walletAddress && !spyList) getSpyList(walletAddress);
   });
   const getSpyList = async (usersAddress: string): Promise<AddressBook> => {
-    console.log("getting spy list");
     setSpyList(null);
     const spyAddressBook = new AddressBook(userProvider, {
       addressOrEns: usersAddress,

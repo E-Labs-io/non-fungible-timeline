@@ -8,14 +8,13 @@ import BallotRanking from "components/rankings/components/BallotRanking";
 import { LoadingStates } from "types/stateTypes";
 
 const Wrapper = styled.div`
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   display: flex;
   flex-direction: column;
   column-gap: 50px;
   width: 100%;
-  min-height: 100vh;
-
+  min-height: 100%;
 `;
 
 interface RankingProps {}
@@ -27,9 +26,9 @@ export default function Ranking(props: RankingProps) {
     <Layout>
       <Wrapper>
         <BallotRanking
-          maxRankings={15}
           loadingState={loadingState}
           handelStateChange={handelStateChange}
+          individualBallots
         />
       </Wrapper>
     </Layout>

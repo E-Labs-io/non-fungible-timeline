@@ -19,17 +19,20 @@ import getSortedBallotRankings from "../helpers/sortRankings";
 import RankCard from "./RankCard";
 import RankingTable from "./RankingTable";
 import { availableChains } from "e-labs_web3provider";
+import RankingBallotTable from "./RankingBalletTable";
 
 interface BallotRankingProps {
   maxRankings?: number;
   handelStateChange: (state) => void;
   loadingState?: LoadingStates;
+  individualBallots?: true;
 }
 
 function BallotRanking({
   maxRankings,
   handelStateChange,
   loadingState,
+  individualBallots,
 }: BallotRankingProps) {
   const { connectToGivenProvider, userProvider } = useWeb3Provider();
   const {
@@ -166,7 +169,7 @@ function BallotRanking({
             <LoadingNotice loadingState={loadingState} />
           </LoadingOver>
         )}
-        {ready && loadingState === 0 && (
+        {ready && loadingState === 0 && !individualBallots && (
           <RankingTable
             handelAddressSelect={handelAddressSelect}
             ballotIds={ballotIds}
@@ -174,6 +177,17 @@ function BallotRanking({
             maxRankings={maxRankings}
           />
         )}
+        {ready &&
+          loadingState === 0 &&
+          individualBallots &&
+          ballotIds.map((id) => (
+            <RankingBallotTable
+              handelAddressSelect={handelAddressSelect}
+              ballotId={id}
+              ballotRankings={ballotRankings[id]}
+              maxRankings={maxRankings ?? ballotRankings[id].length}
+            />
+          ))}
       </Container>
     </Wrapper>
   );
@@ -186,13 +200,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 15px;
 `;
 
 const Title = styled.div`
   font-size: 2rem;
   display: flex;
-  justify-content: left;
-  text-align: left;
+  justify-content: center;
+  text-align: center;
   width: 100%;
   padding-left: 10%;
   :hover {
@@ -210,7 +225,9 @@ const Container = styled.div`
   border: 1px none #ddd;
   border-radius: 10px;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
+  row-gap: 10px;
 `;
 
 const LoadingOver = styled.div`

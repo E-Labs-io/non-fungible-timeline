@@ -99,7 +99,7 @@ const MadeByText = styled.div`
   position: absolute;
 
   right: 20px;
-  color: ${({ theme }) => theme.primaryDark};
+  color: black;
 
   a {
     margin-left: 3px;
@@ -108,7 +108,7 @@ const MadeByText = styled.div`
     padding: 0 0;
     font-weight: bold;
     letter-spacing: 0.2rem;
-    color: ${({ theme }) => theme.primaryDark};
+    color: black;
     text-decoration: none;
     transition: color 0.3s linear;
     @media (max-width: ${({ theme }) => theme.mobile}) {
@@ -116,7 +116,7 @@ const MadeByText = styled.div`
     }
     &:hover {
       opacity: 0.7;
-      color: ${({ theme }) => theme.primaryHover};
+      color: ${({ theme }) => theme.singleTheme.primaryHover};
     }
   }
 `;
@@ -161,7 +161,7 @@ function Menu({ showSmallMenu, menuItems, open, ...props }: MenuProps) {
           <MadeByContainer>
             <MadeByText>
               made by{" "}
-              <a href="https://twitter.com/e_labs_io" target={"blank"}>
+              <a href="https://e-labs.co.uk" target={"blank"}>
                 E_LABS
               </a>
             </MadeByText>

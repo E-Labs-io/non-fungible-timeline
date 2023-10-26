@@ -6,6 +6,7 @@ import { Layout, TextExpandList } from "components/common";
 import faqQuestions from "constants/faqQuestions";
 import About from "components/faq/About";
 import FAQComponent from "components/faq/faqComponent";
+import { useWindowSize } from "e-labs_generic-components";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,13 +35,13 @@ function FAQ() {
   ];
 
   const [activeSection, setActiveSection] = useState(0);
-  const sectionHeight = window.innerHeight;
+  const { height } = useWindowSize();
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
 
     const handleScroll = (e) => {
-      const scrollDistance = sectionHeight * activeSection;
+      const scrollDistance = height * activeSection;
 
       if (e.deltaY > 0 && activeSection < sections.length - 1) {
         setActiveSection(activeSection + 1);
@@ -63,7 +64,7 @@ function FAQ() {
         scrollContainer.removeEventListener("wheel", handleScroll);
       }
     };
-  }, [activeSection, sectionHeight]);
+  }, [activeSection, height]);
 
   return (
     <Layout>
