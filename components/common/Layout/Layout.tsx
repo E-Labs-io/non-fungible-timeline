@@ -10,18 +10,20 @@ import Header from "./Header/Header";
 const LayoutContainer = styled.div`
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background: ${({ theme }) => (theme ? theme.singleTheme.gradient : "white")};
   overflow: ${({ open }) => (open ? "hidden" : "scroll")};
+  //overflow: hidden;
 `;
 
 const Main = styled.div`
   font-family: "Ubuntu", sans-serif;
   position: relative;
-
   width: 100vw;
-  height: 100vh - 55px;
+  height: calc(100vh - 55px); // Use calc() to calculate the height correctly
   overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const Layout: NextPage = ({ children }) => {
