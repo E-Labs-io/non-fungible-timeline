@@ -35,6 +35,8 @@ export interface FAQComponentProps {
 const FAQComponent: FC<FAQComponentProps> = ({ faqQuestions }) => {
   return (
     <Container>
+      <br />
+      <br />
       <Title>F.A.Q.</Title>
       <TextExpandList data={faqQuestions} />
     </Container>

@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const AboutContainer = styled.div`
   width: 70%;
-  height: 50%;
+  max-height: 50%;
   border-radius: 20px;
   border: 1px solid ${({ theme }) => "#cfafaff"};
   box-shadow: ${({ theme }) => theme.singleTheme.shadow.innerShadow};

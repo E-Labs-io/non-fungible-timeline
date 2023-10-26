@@ -20,7 +20,9 @@ const Section = styled.div`
   min-height: 100vh;
   position: relative;
   transform: translateY(${(props) => (props.active ? "0" : "100%")});
-  transition: transform 0.5s ease;
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  padding: 20px;
 `;
 
 function FAQ() {
